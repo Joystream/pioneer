@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { generatePath, Link } from 'react-router-dom'
+import { generatePath, Link, useHistory } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 
 import { BadgeStatusCss } from '@/common/components/BadgeStatus'
@@ -18,25 +18,33 @@ export interface CategoryCardProps {
 }
 
 export const CategoryCard = ({ className, category, archivedStyles }: CategoryCardProps) => {
+  const history = useHistory()
+
   const hoverComponent = useMemo(() => {
+    const handleSubcategoryClick = (e: React.MouseEvent, subcategoryId: string) => {
+      e.preventDefault()
+      e.stopPropagation()
+      history.push(generatePath(ForumRoutes.category, { id: subcategoryId }))
+    }
+
     return (
       <CategoriesBox className="category-subcategories">
         {category.subcategories.length &&
           category.subcategories.map((subcategory) => (
-            <StyledBadge key={subcategory.title} to={generatePath(ForumRoutes.category, { id: subcategory.id })}>
+            <StyledBadge key={subcategory.title} onClick={(e) => handleSubcategoryClick(e, subcategory.id)}>
               {subcategory.title}
             </StyledBadge>
           ))}
       </CategoriesBox>
     )
-  }, [category.subcategories.length])
+  }, [category.subcategories, history])
 
   return (
     <Box
       className={className}
-      archivedStyles={archivedStyles}
+      $archivedStyles={archivedStyles}
       to={generatePath(ForumRoutes.category, { id: category.id })}
-      ignoreHover={!category.subcategories.length}
+      $ignoreHover={!category.subcategories.length}
     >
       <div>
         <TextBig bold value black>
@@ -56,11 +64,15 @@ export const CategoryCard = ({ className, category, archivedStyles }: CategoryCa
   )
 }
 
-const StyledBadge = styled(Link)`
+const StyledBadge = styled.button`
   ${BadgeStatusCss}
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
 `
 
-const Box = styled(Link)<{ archivedStyles?: boolean; ignoreHover?: boolean }>`
+const Box = styled(Link)<{ $archivedStyles?: boolean; $ignoreHover?: boolean }>`
   display: flex;
   column-gap: 15px;
   border: 1px solid ${Colors.Black[100]};
@@ -114,8 +126,8 @@ const Box = styled(Link)<{ archivedStyles?: boolean; ignoreHover?: boolean }>`
     }
   }
 
-  ${({ archivedStyles }) =>
-    archivedStyles &&
+  ${({ $archivedStyles }) =>
+    $archivedStyles &&
     css`
       background-color: ${Colors.Black[50]};
     `}
@@ -124,8 +136,8 @@ const Box = styled(Link)<{ archivedStyles?: boolean; ignoreHover?: boolean }>`
     display: none;
   }
 
-  ${({ ignoreHover }) =>
-    !ignoreHover &&
+  ${({ $ignoreHover }) =>
+    !$ignoreHover &&
     css`
       :hover {
         .category-subcategories {

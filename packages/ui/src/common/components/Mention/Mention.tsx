@@ -299,7 +299,7 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
   )
 }
 
-const Container = styled.div`
+const Container = styled.span`
   vertical-align: bottom;
   display: inline-flex;
   column-gap: 5.33px;

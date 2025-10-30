@@ -9,22 +9,25 @@ import { TextBig, TextMedium } from '@/common/components/typography'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { CategoryCard } from '@/forum/components/CategoryCard/CategoryCard'
+import { PostCard } from '@/forum/components/PostCard/PostCard'
 import { ThreadCard } from '@/forum/components/ThreadCard/ThreadCard'
 import { ThreadCardSkeleton } from '@/forum/components/ThreadCard/ThreadCardSkeleton'
 import { useForumCategories } from '@/forum/hooks/useForumCategories'
+import { useLatestForumPosts } from '@/forum/hooks/useLatestForumPosts'
 import { useLatestForumThreads } from '@/forum/hooks/useLatestForumThreads'
 
 export const ForumMain = () => {
   const { isLoading: isLoadingCategories, forumCategories } = useForumCategories({ isRoot: true })
   const isRefetched = useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['GetForumCategories'] })
   const { threads, isLoading: isLoadingThreads } = useLatestForumThreads(10)
-  const isLoading = isLoadingCategories || isLoadingThreads
+  const { posts, isLoading: isLoadingPosts } = useLatestForumPosts(10)
+  const isLoading = isLoadingCategories || isLoadingThreads || isLoadingPosts
 
   if (isLoading && !isRefetched) {
     return <Loading />
   }
 
-  if (!forumCategories?.length && !threads.length) {
+  if (!forumCategories?.length && !threads.length && !posts.length) {
     return <EmptyPagePlaceholder title="There aren't any forum categories yet" copy="" button={null} />
   }
 
@@ -35,7 +38,7 @@ export const ForumMain = () => {
           title="Latest threads"
           items={
             threads.length ? (
-              threads.map((thread) => <StyledThreadCard thread={thread} />)
+              threads.map((thread) => <StyledThreadCard key={thread.id} thread={thread} />)
             ) : (
               <TextBig>There are not latest threads</TextBig>
             )
@@ -43,6 +46,21 @@ export const ForumMain = () => {
         />
       ) : (
         <HorizontalScroller title="Latest threads" items={<ThreadCardSkeleton count={10} />} />
+      )}
+
+      {!isLoadingPosts ? (
+        <HorizontalScroller
+          title="Latest posts"
+          items={
+            posts.length ? (
+              posts.map((post) => <StyledPostCard key={post.id} post={post} />)
+            ) : (
+              <TextBig>There are no latest posts</TextBig>
+            )
+          }
+        />
+      ) : (
+        <HorizontalScroller title="Latest posts" items={<ThreadCardSkeleton count={10} />} />
       )}
 
       {forumCategories?.length ? (
@@ -82,4 +100,8 @@ const StyledThreadCard = styled(ThreadCard)`
   @media (max-width: 424px) {
     min-width: 288px;
   }
+`
+
+const StyledPostCard = styled(PostCard)`
+  min-width: 330px;
 `
