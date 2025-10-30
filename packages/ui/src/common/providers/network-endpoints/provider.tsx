@@ -18,6 +18,7 @@ const EndpointsSchema = Yup.object().shape({
   queryNodeEndpoint: Yup.string().required(),
   queryNodeEndpointSubscription: Yup.string(),
   membershipFaucetEndpoint: Yup.string(),
+  backendEndpoint: Yup.string(),
 })
 
 export const NetworkEndpointsProvider = ({ children }: Props) => {
@@ -25,6 +26,7 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
   const [endpoints, setEndpoints] = useState<NetworkEndpoints>()
   const [autoConfEndpoints, storeAutoConfEndpoints] = useLocalStorage<NetworkEndpoints>('auto_network_config')
   const [isLoading, setIsLoading] = useState(false)
+  const [customEndpoints] = useLocalStorage<NetworkEndpoints>('custom_endpoint')
 
   const updateNetworkConfig = useCallback(
     async (configEndpoint: string) => {
@@ -75,11 +77,17 @@ export const NetworkEndpointsProvider = ({ children }: Props) => {
       setEndpoints(endpoints)
     } else if (network === 'auto-conf' && endpointsAreDefined(autoConfEndpoints)) {
       setEndpoints(autoConfEndpoints)
+    } else if (network === 'custom') {
+      if (endpointsAreDefined(customEndpoints)) {
+        setEndpoints(customEndpoints)
+      } else {
+        setEndpoints(DEFAULT_NETWORK.endpoints)
+      }
     } else {
       setNetwork(DEFAULT_NETWORK.type)
       setEndpoints(DEFAULT_NETWORK.endpoints)
     }
-  }, [network])
+  }, [network, customEndpoints])
 
   if (!endpointsAreDefined(endpoints) || isLoading) {
     return <Loading text="Loading network endpoints" />

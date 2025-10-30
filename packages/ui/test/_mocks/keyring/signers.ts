@@ -1,16 +1,16 @@
 export const alice = {
   name: 'alice',
-  address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
 }
 export const aliceStash = {
   name: 'alice_stash',
-  address: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+  address: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
 }
 export const bob = {
   name: 'bob',
-  address: '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty',
+  address: 'j4RbTjvPyaufVVoxVGk5vEKHma1k7j5ZAQCaAL9qMKQWKAswW',
 }
 export const bobStash = {
   name: 'bob_stash',
-  address: '5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc',
+  address: 'j4X5AiyNC4497MpJLtyGdgEAS4JjDEjkRvtUPgZkiYudW5zox',
 }

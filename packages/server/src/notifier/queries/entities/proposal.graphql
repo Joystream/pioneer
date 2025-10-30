@@ -1,0 +1,13 @@
+query GetProposalDiscussionPost($id: ID!) {
+  proposalDiscussionPostByUniqueInput(where: { id: $id }) {
+    author {
+      handle
+    }
+    discussionThread {
+      proposal {
+        id
+        title
+      }
+    }
+  }
+}

@@ -50,7 +50,6 @@ export const ThreadFilters: FC<ThreadFiltersProps> = ({ withinDates, onApply, ch
         onApply={() => update()}
         onClear={() => update({ date: undefined })}
         inputSize="xs"
-        inputWidth="auto"
       />
     </ThreadFiltersBox>
   )
@@ -61,10 +60,21 @@ const ThreadFiltersBox = styled(FilterBox)`
     display: flex;
     align-items: center;
     gap: 8px;
+
+    @media (max-width: 424px) {
+      flex-direction: column;
+      align-items: start;
+      > * {
+        width: 100%;
+      }
+    }
   }
 
   ${SelectContainer} {
-    flex-basis: 220px;
+    @media (min-width: 425px) {
+      flex-basis: 220px;
+      width: 245px;
+    }
   }
 `
 

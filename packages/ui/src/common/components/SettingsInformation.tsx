@@ -22,11 +22,26 @@ export const SettingsInformation = ({ title, icon, children }: SettingsInformati
   )
 }
 
+export const SettingsWarningInformation = ({ title, icon, children }: SettingsInformationProps) => {
+  return (
+    <WarningWrapper>
+      <DetailsItemWrapper>
+        {icon}
+        <StyledDetailsText bold>{title}</StyledDetailsText>
+      </DetailsItemWrapper>
+      {children}
+    </WarningWrapper>
+  )
+}
+
 export const NetworkDetailsWrapper = styled.div`
   background-color: ${Colors.Blue[50]};
   padding: 16px;
 `
-
+export const WarningWrapper = styled.div`
+  background-color: ${Colors.Warning[50]};
+  padding: 16px;
+`
 export const DetailsItemWrapper = styled.div`
   display: flex;
 `

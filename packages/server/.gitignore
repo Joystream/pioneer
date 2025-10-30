@@ -1,0 +1,8 @@
+node_modules
+__generated__
+dist
+
+# Keep environment variables out of version control
+.env
+
+.react-email

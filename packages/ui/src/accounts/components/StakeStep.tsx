@@ -11,6 +11,7 @@ import { getErrorMessage, hasError } from '@/common/components/forms/FieldError'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium, TokenValue } from '@/common/components/typography'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { formatTokenValue } from '@/common/model/formatters'
 import { VoteForCouncilEvent, VoteForCouncilMachineState } from '@/council/modals/VoteForCouncil/machine'
 
@@ -35,6 +36,7 @@ export const StakeStep = ({
   state,
   errors,
 }: StakeStepProps) => {
+  const { isMobile, size } = useResponsive()
   const selectAccountFilter = useCallback(
     (account: Account) => !accountsFilter || accountsFilter(account),
     [accountsFilter]
@@ -48,7 +50,7 @@ export const StakeStep = ({
           <InputComponent
             label="Select account for Staking"
             required
-            inputSize="l"
+            inputSize={isMobile ? 'xxl' : 'l'}
             tooltipText="If someone voted for a candidate in an election, they will and can recover their stake at a later time. Importantly, a vote which was devoted to a losing candidate can be freed the moment the election cycle is over, while a vote which was devoted to a winner can only be freed after the announcing period of the next election begins. The idea behind this asymmetry is to more closely expose the winners to the consequences of their decision."
             tooltipLinkURL="https://handbook.joystream.org/system/council"
           >
@@ -59,6 +61,7 @@ export const StakeStep = ({
               minBalance={minStake}
               lockType={stakeLock}
               filter={selectAccountFilter}
+              variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'}
             />
           </InputComponent>
         </RowGapBlock>

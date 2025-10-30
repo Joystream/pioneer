@@ -1,26 +1,208 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
+  push: { branches: [dev, main] }
   pull_request:
 
 jobs:
-  test:
-    timeout-minutes: 60
+  install:
+    timeout-minutes: 10
     strategy:
-      matrix:
-        node: ['14.x']
-        os: [ubuntu-latest]
+      matrix: { node: ["18.x"], os: [ubuntu-latest] }
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
       - name: Use Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-      - run: yarn install --frozen-lockfile
-      - run: yarn lint
-      - run: yarn build
-      - run: yarn ci-test --silent
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn --immutable
+
+      - name: Verify formatting
+        run: yarn lint
+
+  ui-unit-tests:
+    needs: install
+    timeout-minutes: 60
+    strategy:
+      matrix: { node: ["18.x"], os: [ubuntu-latest] }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn --immutable
+
+      - name: Build Pioneer
+        working-directory: packages/ui
+        run: yarn build
+
+      - name: Run tests
+        working-directory: packages/ui
+        run: node --max_old_space_size=7000 --expose-gc $(yarn bin jest) --logHeapUsage --silent
+
+  interaction-tests:
+    needs: install
+    timeout-minutes: 60
+    strategy:
+      # Temporary fix for: https://github.com/microsoft/playwright/issues/30368
+      matrix: { node: ["18.x"], os: [ubuntu-22.04] }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn --immutable
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Get the Storybook preview deployment url
+        run: |
+          if [ "$PREFIX" == 'git-fork' ]; then
+            BRANCH=$(echo -n '${{ env.LABEL }}' | sed 's/:/-/')
+          else
+            BRANCH=$(echo -n '${{ env.LABEL }}' | cut -d ':' -f2-)
+          fi
+
+          URL_BRANCH=$(echo -n "$BRANCH" | sed 's/\//-/' | tr -d '/#' | tr -c '[:alnum:]' '-' | tr '[:upper:]' '[:lower:]')
+          SUBDOMAIN="${{ env.PROJECT }}-${{ env.PREFIX }}-$URL_BRANCH-joystream"
+
+          if [ ${#SUBDOMAIN} -gt 63 ]; then
+            HASH=$(echo -n "${{ env.PREFIX }}-${BRANCH}${{ env.PROJECT }}" | sha256sum | head -c 6)
+            SUBDOMAIN="$(echo -n "$SUBDOMAIN" | head -c 46 | sed -e 's/[^-]$/\0-/')$HASH-joystream"
+          fi
+
+          echo "VERCEL_DEPLOYMENT_URL=$SUBDOMAIN.vercel.app" >> "$GITHUB_ENV"
+        env:
+          PROJECT: pioneer-2-storybook
+          PREFIX: ${{ github.event.pull_request.head.repo.fork && 'git-fork' || 'git' }}
+          LABEL: ${{ github.event.pull_request.head.label || github.ref_name }}
+
+      - name: Wait for the deployment to complete
+        run: |
+          while true; do
+            RES=$(curl -L 'https://api.vercel.com/v13/deployments/${{ env.VERCEL_DEPLOYMENT_URL }}')
+            STATUS=$(echo -n "$RES" | jq -r '.status')
+            SHA=$(echo -n "$RES" | jq -r '.meta.githubCommitSha')
+
+
+            if [ "$SHA" == 'null' ] || [ "$STATUS" == 'null' ]; then
+              echo -e "\nError the JSON response is missing expected fields:\n\n$RES\n" >&2
+              exit 5
+            fi
+
+            if [ "$SHA" == '${{ env.COMMIT_SHA }}' ] && [ "$STATUS" == 'READY' ]; then
+              exit 0
+            fi
+
+            echo -e '\nWait for the Storybook deployment...\n\n'
+            sleep 20
+          done
+        env:
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Run Storybook tests
+        working-directory: packages/ui
+        run: yarn test-storybook
+        env:
+          TARGET_URL: https://${{ env.VERCEL_DEPLOYMENT_URL }}
+
+  backend-integration-tests:
+    needs: install
+    timeout-minutes: 60
+    strategy:
+      matrix: { node: ["18.x"], os: [ubuntu-latest] }
+    runs-on: ${{ matrix.os }}
+
+    services:
+      db:
+        image: postgres
+        env: { POSTGRES_PASSWORD: "postgres" }
+        ports: ["5432:5432"]
+        # Set health checks to wait until Postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn --immutable
+
+      - name: Build
+        working-directory: packages/server
+        run: yarn build
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+
+      - name: Run tests
+        working-directory: packages/server
+        run: node $(yarn bin jest) --runInBand --silent
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres

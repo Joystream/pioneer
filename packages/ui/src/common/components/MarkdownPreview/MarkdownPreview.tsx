@@ -6,8 +6,9 @@ import { Root } from 'react-markdown/lib/rehype-filter'
 import remarkGfm from 'remark-gfm'
 import styled from 'styled-components'
 
-import { Mention, MentionType } from '@/common/components/Mention'
+import { Mention } from '@/common/components/Mention'
 import { UserImage } from '@/common/components/UserImage/UserImage'
+import { MentionType } from '@/common/hooks/useMentions'
 
 import { ModeratedItem } from '../ModeratedItem'
 
@@ -92,11 +93,12 @@ const MarkdownImage = styled(UserImage)`
 `
 
 const mentionTypesMap: Record<string, MentionType> = {
-  'member-id': 'member',
-  'proposal-id': 'proposal',
-  'proposal-post-id': 'proposalDiscussionEntry',
-  'thread-id': 'forumThread',
-  'forum-post-id': 'forumPost',
-  'application-id': 'application',
-  'opening-id': 'opening',
+  'member-id': MentionType.Member,
+  'proposal-id': MentionType.Proposal,
+  'proposal-post-id': MentionType.ProposalPost,
+  'thread-id': MentionType.ForumThread,
+  'forum-post-id': MentionType.ForumPost,
+  'application-id': MentionType.Application,
+  'opening-id': MentionType.Opening,
+  role: MentionType.Role,
 }

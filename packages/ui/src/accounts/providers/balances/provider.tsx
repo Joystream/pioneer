@@ -25,6 +25,8 @@ export const BalancesContextProvider = (props: Props) => {
   )
 
   const balances = useMemo(() => {
+    if (!addresses.length) return {}
+
     if (!isLoading && result)
       return result.reduce((acc, balance, index) => {
         return {
@@ -32,7 +34,7 @@ export const BalancesContextProvider = (props: Props) => {
           ...acc,
         }
       }, {} as AddressToBalanceMap)
-  }, [result])
+  }, [result, addresses])
 
   return <BalancesContext.Provider value={balances}>{props.children}</BalancesContext.Provider>
 }

@@ -59,7 +59,7 @@ export const useHasRequiredStake = (stake: BN, lock: LockType) => {
     }
   }
 
-  const accountsWithLockedFounds = compatibleAccounts.reduce((acc, [compatibleAccountAddress, balances]) => {
+  const accountsWithLockedFunds = compatibleAccounts.reduce((acc, [compatibleAccountAddress, balances]) => {
     const total = balances.total
 
     let otherAccountsSum = BN_ZERO
@@ -85,7 +85,7 @@ export const useHasRequiredStake = (stake: BN, lock: LockType) => {
   return {
     hasRequiredStake,
     accountsWithCompatibleLocks:
-      accountsWithLockedFounds && isEmptyObject(accountsWithLockedFounds) ? null : accountsWithLockedFounds,
+      accountsWithLockedFunds && isEmptyObject(accountsWithLockedFunds) ? null : accountsWithLockedFunds,
     accountsWithTransferableBalance: null,
   }
 }

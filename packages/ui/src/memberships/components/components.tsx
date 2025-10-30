@@ -11,7 +11,6 @@ import { MemberInfoWrapProps } from './types'
 
 export const MemberHead = styled.div`
   display: grid;
-  grid-area: memberhead;
   grid-auto-flow: column;
   align-items: center;
   grid-column-gap: 4px;

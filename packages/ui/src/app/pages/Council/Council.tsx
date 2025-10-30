@@ -1,19 +1,30 @@
 import React, { useMemo, useState } from 'react'
+import styled from 'styled-components'
 
 import { PageHeaderWithHint } from '@/app/components/PageHeaderWithHint'
 import { PageLayout } from '@/app/components/PageLayout'
 import { ActivitiesBlock } from '@/common/components/Activities/ActivitiesBlock'
+import { AboutText, BlockTimeWrapper } from '@/common/components/BlockTime'
+import { BlockInfo } from '@/common/components/BlockTime/BlockInfo'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { SidePanel } from '@/common/components/page/SidePanel'
-import { BlockDurationStatistics, MultiValueStat, Statistics } from '@/common/components/statistics'
+import {
+  BlockDurationStatistics,
+  MultiValueStat,
+  StatisticItem,
+  StatisticItemSpacedContent,
+  StatisticLabel,
+  Statistics,
+} from '@/common/components/statistics'
 import { NotFoundText } from '@/common/components/typography/NotFoundText'
 import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
-import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
+import { formatDateString, MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBN } from '@/common/utils/bn'
 import { CouncilList, CouncilOrder } from '@/council/components/councilList'
 import { ViewElectionButton } from '@/council/components/ViewElectionButton'
 import { useCouncilActivities } from '@/council/hooks/useCouncilActivities'
 import { useCouncilorWithDetails } from '@/council/hooks/useCouncilorWithDetails'
+import { useCouncilPeriodInformation } from '@/council/hooks/useCouncilPeriodInformation'
 import { useCouncilStatistics } from '@/council/hooks/useCouncilStatistics'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
@@ -31,21 +42,44 @@ export const Council = () => {
 
   const { council, isLoading } = useElectedCouncil()
   const { idlePeriodRemaining, budget, reward } = useCouncilStatistics()
+  const periodInformation = useCouncilPeriodInformation()
+
+  const endsAt = useMemo(
+    () =>
+      periodInformation && council
+        ? {
+            number: periodInformation.periodEnds[3],
+            timestamp: (
+              new Date().getTime() +
+              (periodInformation.periodEnds[3] - periodInformation.currentBlock) * MILLISECONDS_PER_BLOCK
+            ).toString(),
+          }
+        : { number: 0, timestamp: new Date().getTime().toString() },
+    [periodInformation, council]
+  )
+
   const { activities } = useCouncilActivities()
 
   const [order, setOrder] = useState<CouncilOrder>({ key: 'member' })
   const { councilors, isLoading: isLoadingCouncilors } = useCouncilorWithDetails(council)
   const sortedCouncilors = useMemo(() => councilors.sort(sortBy(order)), [councilors])
-  const header = <PageHeaderWithHint title="Council" hintType="council" tabs={<CouncilTabs />} />
+  const header = (
+    <PageHeaderWithHint
+      title={`Council ${council ? '#' + parseInt(council.id, 36) : ''}`}
+      hintType="council"
+      tabs={<CouncilTabs />}
+    />
+  )
 
   const isCouncilorLoading = !isRefetched && (isLoading || isLoadingCouncilors)
 
-  const rewardPerDay = useMemo(() => reward?.period?.mul(reward?.amount ?? asBN(0)) ?? asBN(0), [reward])
+  const rewardPerDay = useMemo(() => reward?.period?.mul(reward?.singleCouncilorAmount ?? asBN(0)) ?? asBN(0), [reward])
+
   const main = (
     <MainPanel>
-      <Statistics>
+      <StatisticsStyle>
         {electionStage === 'inactive' ? (
-          <BlockDurationStatistics title="Normal period remaining length" value={idlePeriodRemaining} />
+          <BlockDurationStatistics title="Idle stage remaining length" value={idlePeriodRemaining} />
         ) : (
           <ViewElectionButton />
         )}
@@ -58,13 +92,35 @@ export const Council = () => {
         />
 
         <MultiValueStat
-          title="Councilor Reward"
+          title="Single Councillor Reward"
           values={[
             { label: 'Per Day', value: rewardPerDay },
             { label: 'Per Week', value: rewardPerDay.mul(asBN(7)) },
           ]}
         />
-      </Statistics>
+
+        <StatisticItem>
+          <StatisticItemSpacedContent style={{ marginBottom: '8px' }}>
+            <StatisticLabel>Started At</StatisticLabel>
+
+            {council && (
+              <CustomBlockTimeWrapper>
+                <AboutText>{formatDateString(council.electedAt.timestamp)}</AboutText>
+                <BlockInfo block={council.electedAt} lessInfo={true} />
+              </CustomBlockTimeWrapper>
+            )}
+          </StatisticItemSpacedContent>
+          <StatisticItemSpacedContent>
+            <StatisticLabel>Estimated end</StatisticLabel>
+            {council && (
+              <CustomBlockTimeWrapper>
+                <AboutText>{formatDateString(Number(endsAt.timestamp))}</AboutText>
+                <BlockInfo block={endsAt} lessInfo={true} />
+              </CustomBlockTimeWrapper>
+            )}
+          </StatisticItemSpacedContent>
+        </StatisticItem>
+      </StatisticsStyle>
 
       {!isCouncilorLoading && sortedCouncilors.length === 0 ? (
         <NotFoundText>There is no council member at the moment</NotFoundText>
@@ -92,3 +148,16 @@ const sortBy = ({ key, isDescending }: CouncilOrder): ((a: Councilor, b: Council
       return (a, b) => (asBN(a[key] ?? 0).gte(asBN(b[key] ?? 0)) ? 1 : -1) * direction
   }
 }
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+`
+const CustomBlockTimeWrapper = styled(BlockTimeWrapper)`
+  grid-row-gap: 2px;
+  min-width: 165px;
+  justify-content: flex-start;
+`

@@ -23,7 +23,7 @@ export const ApplicationStep = ({ questions }: ApplicationStepProps) => {
               question={question.question}
               index={question.index}
               key={question.index}
-              name={`form.question${index}`}
+              name={`form.${index}`}
             />
           ))}
       </RowGapBlock>

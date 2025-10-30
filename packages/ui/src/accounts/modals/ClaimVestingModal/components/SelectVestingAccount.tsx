@@ -4,18 +4,16 @@ import styled from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { filterByText } from '@/accounts/components/SelectAccount/helpers'
-import { InfoValueWithLocks } from '@/accounts/components/SelectAccount/OptionAccount'
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
 import { isValidAddress } from '@/accounts/model/isValidAddress'
 import { Account, AccountOption } from '@/accounts/types'
 import { VestingLockIcon } from '@/common/components/icons/locks/VestingLockIcon'
-import { BalanceInfoInRow } from '@/common/components/Modal'
+import { BalanceInfoInRow, InfoValue } from '@/common/components/Modal'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { Option, OptionsListComponent, Select, SelectedOption } from '@/common/components/selects'
 import { TextMedium, TokenValue } from '@/common/components/typography'
-import { useKeyring } from '@/common/hooks/useKeyring'
 
 interface SelectVestingAccountProps {
   selected?: Account
@@ -30,12 +28,11 @@ export const SelectVestingAccount = ({ selected, onChange, id, disabled }: Selec
   const [search, setSearch] = useState('')
 
   const filteredOptions = useMemo(() => filterByText(options, search), [search, options])
-  const keyring = useKeyring()
 
   const notSelected = !selected || selected?.address !== search
 
   useEffect(() => {
-    if (filteredOptions.length === 0 && isValidAddress(search, keyring) && notSelected) {
+    if (filteredOptions.length === 0 && isValidAddress(search) && notSelected) {
       onChange?.(accountOrNamed(options, search, 'Unsaved account'))
     }
   }, [filteredOptions, search, notSelected])
@@ -91,9 +88,9 @@ export const VestingListItem = ({ option, vestingClaimable }: { option: AccountO
         <VestingLockIcon />
         <TextMedium bold>Vesting</TextMedium>
       </ColumnGapBlock>
-      <InfoValueWithLocks>
+      <InfoValue>
         <TokenValue value={vestingClaimable} />
-      </InfoValueWithLocks>
+      </InfoValue>
     </VestingInfoRow>
   </>
 )

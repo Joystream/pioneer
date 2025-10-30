@@ -6,7 +6,7 @@ import { getMember } from '../../../../test/_mocks/members'
 import { ProposalListItem } from './ProposalListItem'
 
 export default {
-  title: 'Proposals/ProposalListItem',
+  title: 'Pages/Proposals/ProposalList/Current/Components/ProposalListItem',
   component: ProposalListItem,
 } as Meta
 

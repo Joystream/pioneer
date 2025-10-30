@@ -8,12 +8,13 @@ import { TextInlineSmall } from './typography'
 interface Props {
   text?: string
   withoutMargin?: boolean
+  className?: string
 }
 
-export const Loading = ({ text, withoutMargin }: Props) => {
+export const Loading = ({ text, withoutMargin, className }: Props) => {
   return (
     <LoadingWrapper withoutMargin={withoutMargin}>
-      <Loader />
+      <Loader className={className} />
       {text && (
         <TextInlineSmall italic inter lighter>
           {text}

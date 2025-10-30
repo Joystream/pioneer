@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator nexusPrisma {
+  provider = "nexus-prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Member {
+  id              Int            @id
+  name            String
+  email           String?
+  unverifiedEmail String?
+  receiveEmails   Boolean        @default(true)
+  subscriptions   Subscription[]
+  notifications   Notification[]
+}
+
+model Subscription {
+  id                  Int              @id @default(autoincrement())
+  member              Member           @relation(fields: [memberId], references: [id])
+  memberId            Int
+  kind                NotificationKind
+  entityId            String?
+  shouldNotify        Boolean          @default(true)
+  shouldNotifyByEmail Boolean          @default(true)
+
+  @@unique([memberId, kind, entityId])
+  @@index(memberId)
+  @@index(kind)
+  @@index(entityId)
+}
+
+model Notification {
+  id          Int                     @id @default(autoincrement())
+  member      Member                  @relation(fields: [memberId], references: [id])
+  memberId    Int
+  kind        NotificationKind
+  eventId     String
+  entityId    String?
+  emailStatus NotificationEmailStatus @default(PENDING)
+  retryCount  Int                     @default(0)
+  isRead      Boolean                 @default(false)
+
+  @@unique([memberId, eventId])
+  @@index(memberId)
+}
+
+model Store {
+  key   String @id
+  value Json
+}
+
+enum NotificationKind {
+  // ------------------
+  // General
+  // ------------------
+
+  // Forum: PostAddedEvent
+  FORUM_POST_ALL
+  FORUM_POST_MENTION
+  FORUM_POST_REPLY
+  FORUM_THREAD_CREATOR
+  FORUM_THREAD_CONTRIBUTOR
+
+  // Forum: ThreadCreatedEvent
+  FORUM_THREAD_ALL
+  FORUM_THREAD_MENTION
+
+  // Proposal: ProposalCreatedEvent
+  // PROPOSAL_CREATED_ALL
+
+  // Proposal: ProposalStatusUpdatedEvent
+  // PROPOSAL_STATUS_ALL
+  // PROPOSAL_STATUS_CREATOR
+
+  // Proposal: ProposalVotedEvent
+  // PROPOSAL_VOTE_ALL
+  // PROPOSAL_VOTE_CREATOR
+
+  // Proposal: ProposalDiscussionPostCreatedEvent
+  PROPOSAL_DISCUSSION_MENTION
+  PROPOSAL_DISCUSSION_REPLY
+  PROPOSAL_DISCUSSION_CREATOR
+  PROPOSAL_DISCUSSION_CONTRIBUTOR
+  PROPOSAL_DISCUSSION_ALL
+
+  // Referendum
+  ELECTION_ANNOUNCING_STARTED
+  ELECTION_VOTING_STARTED
+  ELECTION_REVEALING_STARTED
+
+  // ------------------
+  // Entity specific
+  // ------------------
+
+  // Forum
+  FORUM_THREAD_ENTITY_POST
+  FORUM_CATEGORY_ENTITY_POST
+  FORUM_CATEGORY_ENTITY_THREAD
+
+  // Proposal
+  // PROPOSAL_ENTITY_STATUS
+  // PROPOSAL_ENTITY_VOTE
+  PROPOSAL_ENTITY_DISCUSSION
+}
+
+enum NotificationEmailStatus {
+  PENDING
+  SENT
+  FAILED
+  IGNORED
+}

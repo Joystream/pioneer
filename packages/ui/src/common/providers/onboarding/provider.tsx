@@ -21,12 +21,12 @@ const hasAccount = (allAccounts: Account[], address: string) => {
 }
 
 const useOnBoarding = (): UseOnBoarding => {
-  const { isLoading: isLoadingAccounts, error: accountsError, hasAccounts, allAccounts, wallet } = useMyAccounts()
+  const { isLoading: isLoadingAccounts, walletState, hasAccounts, allAccounts } = useMyAccounts()
   const { total: totalBalance } = useMyTotalBalances()
   const { isLoading: isLoadingMembers, hasMembers } = useMyMemberships()
   const [membershipAccount, setMembershipAccount] = useLocalStorage<string | undefined>('onboarding-membership-account')
 
-  if (totalBalance.gtn(0) && wallet) {
+  if (totalBalance.gtn(0) || hasMembers) {
     return { isLoading: false, status: 'finished' }
   }
 
@@ -34,17 +34,13 @@ const useOnBoarding = (): UseOnBoarding => {
     return { isLoading: true }
   }
 
-  if (accountsError === 'NO_EXTENSION' || !wallet) {
+  if (!walletState || walletState === 'APP_REJECTED') {
     return { isLoading: false, status: 'installPlugin' }
   }
 
-  if (!hasMembers && (!hasAccounts || !membershipAccount || !hasAccount(allAccounts, membershipAccount))) {
+  if (!hasAccounts || !membershipAccount || !hasAccount(allAccounts, membershipAccount)) {
     return { isLoading: false, status: 'addAccount', setMembershipAccount }
   }
 
-  if (!hasMembers && membershipAccount && hasAccount(allAccounts, membershipAccount)) {
-    return { isLoading: false, status: 'createMembership', membershipAccount, setMembershipAccount }
-  }
-
-  return { isLoading: false, status: 'finished' }
+  return { isLoading: false, status: 'createMembership', membershipAccount, setMembershipAccount }
 }

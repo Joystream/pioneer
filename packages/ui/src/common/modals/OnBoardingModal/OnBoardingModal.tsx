@@ -11,7 +11,7 @@ import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { HorizontalStepper } from '@/common/components/Stepper/HorizontalStepper'
 import { TextMedium } from '@/common/components/typography'
 import { WaitModal } from '@/common/components/WaitModal'
-import { Colors } from '@/common/constants'
+import { BreakPoints, Colors } from '@/common/constants'
 import { useDebounce } from '@/common/hooks/useDebounce'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
@@ -24,17 +24,20 @@ import { OnBoardingMembership } from '@/common/modals/OnBoardingModal/OnBoarding
 import { OnBoardingPlugin } from '@/common/modals/OnBoardingModal/OnBoardingPlugin'
 import { OnBoardingStatus, SetMembershipAccount } from '@/common/providers/onboarding/types'
 import { definedValues } from '@/common/utils'
+import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { MemberFormFields } from '@/memberships/modals/BuyMembershipModal/BuyMembershipFormModal'
 import { BuyMembershipSuccessModal } from '@/memberships/modals/BuyMembershipModal/BuyMembershipSuccessModal'
+import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal'
 import { toExternalResources } from '@/memberships/modals/utils'
 
 export const OnBoardingModal = () => {
-  const { hideModal } = useModal()
+  const { showModal, hideModal } = useModal()
+  const { hasMembers } = useMyMemberships()
   const { status: realStatus, membershipAccount, setMembershipAccount, isLoading } = useOnBoarding()
   const status = useDebounce(realStatus, 50)
   const [state, send] = useMachine(onBoardingMachine)
-  const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string }>()
-  const transactionStatus = useQueryNodeTransactionStatus(!!membershipData?.blockHash, membershipData?.blockHash)
+  const [membershipData, setMembershipData] = useState<{ id: string; blockHash: string; blockNumber: number }>()
+  const transactionStatus = useQueryNodeTransactionStatus(!!membershipData, membershipData?.blockNumber)
   const apolloClient = useApolloClient()
   const [endpoints] = useNetworkEndpoints()
   const statusRef = useRef<OnBoardingStatus>()
@@ -62,6 +65,12 @@ export const OnBoardingModal = () => {
   }, [status, membershipAccount])
 
   useEffect(() => {
+    if (status === 'finished' && !hasMembers) {
+      showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })
+    }
+  }, [status])
+
+  useEffect(() => {
     async function submitNewMembership(form: MemberFormFields) {
       if (!endpoints.membershipFaucetEndpoint) {
         return send({ type: 'ERROR' })
@@ -86,12 +95,12 @@ export const OnBoardingModal = () => {
           body: JSON.stringify(membershipData),
         })
 
-        const { error, memberId, blockHash } = await response.json()
+        const { error, memberId, blockHash, block } = await response.json()
 
         if (error) {
           send({ type: 'ERROR' })
         } else {
-          setMembershipData({ id: parseInt(memberId, 16).toString(), blockHash: blockHash })
+          setMembershipData({ id: memberId, blockHash: blockHash, blockNumber: block })
         }
       } catch (err) {
         send({ type: 'ERROR' })
@@ -183,10 +192,14 @@ const StepperWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 0 52px;
-  height: 80px;
+  max-width: 100vw;
+  padding: 24px 12px;
   position: relative;
   background-color: ${Colors.Black[700]};
+
+  @media (min-width: ${BreakPoints.sm}px) {
+    padding: 24px 52px;
+  }
 `
 
 const StyledModal = styled(ScrolledModal)`

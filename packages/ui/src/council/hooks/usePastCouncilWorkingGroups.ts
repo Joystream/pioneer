@@ -24,7 +24,11 @@ export const usePastCouncilWorkingGroups = (id: string) => {
     workingGroups:
       data &&
       data.workingGroups.map(
-        asPastCouncilWorkingGroup(data.budgetSetEvents, data.rewardPaidEvents, data.newMissedRewardLevelReachedEvents)
+        asPastCouncilWorkingGroup(
+          data.rewardPaidEvents,
+          data.newMissedRewardLevelReachedEvents,
+          data.budgetUpdatedEvents
+        )
       ),
   }
 }

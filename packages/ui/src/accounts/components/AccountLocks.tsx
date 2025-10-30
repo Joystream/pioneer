@@ -72,8 +72,6 @@ export const AccountLocks = ({ locks }: AccountLocksProps) => {
 }
 
 export const AccountLocksWrapper = styled(ColumnGapBlock)`
-  position: absolute;
-  top: 15px;
   align-items: center;
 `
 

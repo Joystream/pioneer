@@ -62,7 +62,7 @@ export const VoteForProposalModalForm = ({ proposal, send, context }: Props) => 
               </RowGapBlock>
             </Row>
             <Row>
-              <ButtonsGroup>
+              <ResponsiveButtonsGroup>
                 <ButtonPrimary
                   size="medium"
                   onClick={() => send('SET_VOTE_STATUS', { status: 'Approve' })}
@@ -87,12 +87,13 @@ export const VoteForProposalModalForm = ({ proposal, send, context }: Props) => 
                   <CrossIcon />
                   Abstain
                 </ButtonPrimary>
-              </ButtonsGroup>
+              </ResponsiveButtonsGroup>
             </Row>
             {isRejected && (
               <InlineToggleWrap>
-                <Label>Slash Proposal </Label>
+                <Label htmlFor="slash-proposal">Slash Proposal </Label>
                 <ToggleCheckbox
+                  id="slash-proposal"
                   falseLabel="No"
                   trueLabel="Yes"
                   checked={context.voteStatus === 'Slash'}
@@ -134,4 +135,20 @@ const ProposalPreviewColumn = styled(ScrollableModalColumn)`
   flex: 0 0 336px;
   flex-direction: column;
   gap: 24px;
+`
+
+const ResponsiveButtonsGroup = styled(ButtonsGroup)`
+  @media(max-width: 1023px){
+    grid-auto-flow: row;
+    grid-row-gap: 8px;
+    width: 100%;
+
+    button, a {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center:
+      gap: 4px;
+    }
+  }
 `

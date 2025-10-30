@@ -1,11 +1,10 @@
-import { KeyringInstance } from '@polkadot/keyring/types'
-import { KeyringStruct } from '@polkadot/ui-keyring/types'
+import { encodeAddress, decodeAddress } from '@polkadot/util-crypto'
 
 import { Address } from '../../common/types'
 
-export function isValidAddress(address: Address, keyring: KeyringInstance | KeyringStruct) {
+export function isValidAddress(address: Address) {
   try {
-    keyring.encodeAddress(keyring.decodeAddress(address))
+    encodeAddress(decodeAddress(address))
   } catch (e) {
     return false
   }

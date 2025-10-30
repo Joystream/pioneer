@@ -17,6 +17,11 @@ import Mention from '@ckeditor/ckeditor5-mention/src/mention'
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph'
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice'
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation'
+import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specialcharacters'
+import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials'
+import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar'
+import Table from '@ckeditor/ckeditor5-table/src/table'
+import emojiData from './EmojiLib.json'
 
 // Plugins to include in the build.
 const plugins = [
@@ -38,6 +43,11 @@ const plugins = [
   PasteFromOffice,
   TextTransformation,
   AutoImage,
+  SpecialCharacters,
+  SpecialCharactersEssentials,
+  TableToolbar,
+  Table,
+  SpecialCharactersExtended,
 ]
 
 ClassicEditor.builtinPlugins = plugins
@@ -62,6 +72,9 @@ function prepareLink({ type, itemId, addon }) {
     case 'member': {
       return `#mention?member-id=${itemId}`
     }
+    case 'role': {
+      return `#mention?role=${itemId}`
+    }
     case 'proposal': {
       return `#mention?proposal-id=${itemId}`
     }
@@ -84,6 +97,10 @@ function prepareLink({ type, itemId, addon }) {
       return ''
     }
   }
+}
+
+function SpecialCharactersExtended(editor) {
+  editor.plugins.get('SpecialCharacters').addItems('Emoji', emojiData, { label: 'Emoji' })
 }
 
 export default {

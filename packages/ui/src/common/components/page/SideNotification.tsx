@@ -130,6 +130,6 @@ export const NotificationsHolderWrapper = styled.div`
   right: 8px;
   grid-row-gap: 8px;
   width: 100%;
-  max-width: 438px;
+  max-width: min(calc(100vw - 16px), 438px);
   z-index: ${ZIndex.sideNotification};
 `

@@ -1,65 +1,157 @@
 # Developer documentation
 
-## Development tools
+## Table of content
+
+- [Pioneer architecture](#)
+- [Development](#development)
+  - [Development tools](#development-tools)
+  - [Pioneer front-end App](#pioneer-front-end-app)
+  - [Pioneer back-end](#pioneer-back-end)
+  - [Testing](#testing)
+  - [Coding standards](#coding-standards)
+  - [Dependencies](#dependencies)
+
+## Pioneer architecture
+
+Pioneer is an application which displays information from and interacts with the Joystream node. This is done in a few way throughout the code base:
+- It mostly interacts directly with the Joystream node by calling extrinsics via the [Polkadot{.js} API](https://github.com/polkadot-js/api).
+- Data are mostly done through the Query Node GraphQL API. However occasionally some data are also read via [Polkadot{.js} API](https://github.com/polkadot-js/api) queries.
+- Pioneer also connect to the [Membership Faucet](https://github.com/Joystream/membership-faucet) to creates memberships.
+
+In addition to these services 3 services memberships Avatars are uploaded and served by `https://atlas-services.joystream.org/avatars`.
+
+Finally Pioneer is composed of 2 services a front-end application and a back-end which handle e-mail notifications. They interact via GraphQL.
+
+Here is a summary of the involved services:
+
+```mermaid
+graph TB
+    subgraph P["<h2>Pioneer<h2/>"]
+        direction TB
+
+        App(("<a href='https://github.com/Joystream/pioneer/tree/dev/packages/ui'><strong>Pioneer App
+        front-end</strong></a>"))
+
+        Backend("<a href='https://github.com/Joystream/pioneer/tree/dev/packages/server'>Pioneer Notification
+        back-end</a> (optional)");
+
+        App<-->|"<a href='https://graphql.org/'>GraphQL</a>
+        Queries/Mutations"| Backend;
+    end
+
+    Faucet("<a href='https://github.com/Joystream/membership-faucet'>Membership Faucet</a>
+    (optional)")
+
+    Upload("Avatar upload
+    servive (optional)")
+
+    RPC[("<a href='https://github.com/Joystream/joystream/tree/master/bin/node'>Joystream
+    node</a>")]
+
+    QN[("<a href='https://github.com/Joystream/joystream/tree/master/query-node'>Joystream
+    Query Node</a>")]
+
+    App--->|"REST API"| Faucet;
+
+    App--->|HTTP POST| Upload
+
+    RPC<-->|"RPC
+    <a href='https://polkadot.js.org/docs/api'>@polkadot/api</a>"| App;
+
+    QN-->|"<a href='https://graphql.org/'>GraphQL</a>
+    Queries/Subscriptions"| App;
+
+    QN-->|"<a href='https://graphql.org/'>GraphQL</a>
+    Queries"| Backend
+
+    RPC<-.->Faucet
+    RPC-.->QN
+```
+
+## Development
+
+### Development tools
 
 In order to work on Pioneer 2 you'll need following tools for development and testing:
 
-- [nodejs](https://nodejs.org) `v14.x`
-- [yarn classic](https://classic.yarnpkg.com/en/docs/install) package manager `v1.22.x`
+- [Node.js](https://nodejs.org) `v18.x` or newer.
+- [yarn](https://yarnpkg.com/getting-started/install)
 
 In order to interact with the Joystream ecosystem
 
-- [Joystream node](https://github.com/Joystream/joystream/tree/master/node) _optional_
-- [Joystream query-node](https://github.com/Joystream/joystream/tree/query_node/query-node) _optional_
+- [Joystream node](https://github.com/Joystream/joystream/tree/master/bin/node) _optional_
+- [Joystream Query node](https://github.com/Joystream/joystream/tree/master/query-node) _optional_
 
-## Tech stack
 
-The Pioneer 2.0 is built using the latest version of [React](https://reactjs.org/). The React development assumes:
+### Pioneer front-end App
 
-- [TypeScript](https://www.typescriptlang.org/) 4.x – using `sctrict:true`
-- Function components & [hooks](https://reactjs.org/docs/hooks-intro.html)
-- [styled components](https://styled-components.com/docs) for CSS
+> [!NOTE]
+> Read more about the Pioneer front-end App architecture and key concepts [here](/packages/ui/README.md).
 
-Libraries
 
-- [Apollo client](https://www.apollographql.com/docs/react/) - to interact with GraphQL
-- [CKEditor 5](https://ckeditor.com/docs/ckeditor5/latest/framework/guides/overview.html) as Markdown editor
-- [xstate](https://xstate.js.org/) state management for complex flows in modals
-- [Yup](https://github.com/jquense/yup#api) validation (partially)
-- [date-fns](https://date-fns.org/docs/Getting-Started) to interact with dates
-- React libraries for: routing, pagination, breadcrumbs, dropzone, etc (see package.json)
+ To start Pioneer run:
+ ```shell
+ yarn start
+ ```
 
-**Note**: To read about the Pioneer 2 architecture & key concepts see [Pioneer 2 readme](/packages/ui/README.md)
+As shown above the Pioneer front-end relies on the state of the Joystream blockchain (exposed by the Joystream node and Query node). Therefore it is necessary to connect Pioneer to instances of the Joystream node and query node or to mock these in order to be able to develop on Pioneer.
 
-### Dependencies
+#### Method 1: Developing on mocks with Storybook
 
-The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` section in [package.json](/package.json) for details. Keeping dependencies in sync prevents "duplicated instances" error while using Polkadot.js API.
+The Pioneer Storybook has several stories rendering entire pages including the pages modal. This can be used to add features and tests. It allows to easily mock any possible chain state and can result in a faster development cycle.
 
-The CKEditor 5 build is available in `packages/markdown-editor` packages. [More on editor development](/packages/markdown-editor/README.md).
-
-### Build tools
-
-The build scripts uses webpack directly (no CRA) as it integrates better with custom webpack extensions (build CKEditor, etc.).
-
-As the Storybook uses Babel a [shared webpack configuration](/packages/ui/dev/webpack.shared.js) for both webpack and storybook was introduced.
-
-To build the project in a development mode using webpack dev server:
-
+To start Storybook run:
 ```shell
-yarn run start
+yarn storybook
 ```
 
-To build a production ready version:
+It should be accessible at `localhost:6006`.
+There are to section particularly useful to develop:
+1. [App](https://pioneer-2-storybook-joystream.vercel.app/?path=/story/app) these stories allow to interact with non domain specific feature like the On boarding flow or the sidebar.
+2. [Pages](https://pioneer-2-storybook-joystream.vercel.app/?path=/story/pages) these stories render the pages based on fully mocked data (which can partially be changed through the stories controls).
 
-```shell
-yarn run build
-```
+> [!IMPORTANT]
+> After developing a feature using a story, the feature should still be tested on the app with an actual network.
 
-## Running Pioneer 2 with local Joystream dev environment
+Read more about the Storybook mocks [here](mocks.md#storybook-mocks).
 
-Read the [Running the Joystream ecosystem locally](testenv.md) docs on how to run Pioneer 2 with the Joystream testnet locally.
+#### Method 2: Connecting to the Joystream main network (Mainnet)
 
-## Coding standards
+Pioneer will by default connect to the Joystream main network. This can be enough to develop or develop feature based on the current version of the Mainnet chain, however changing state of the Mainnet for development is costly, time consuming, and should be avoided in most cases.
+
+> [!TIP]
+> To make sure that Pioneer is connected to the Mainnet go to the Settings on the "Network" tab the "Select Network" should be set to "Mainnet". Additionally "Network Details" section (on the same page) can be checked to make sure the environment variable are indeed pointing to the Mainnet.
+
+#### Method 3: Connecting to a Joystream playgrounds
+
+Alternatively some "playgrounds" are available to help with Pioneer's development, these are networks based on chains with tokens which have no real values and which might be configured to make testing easier (e.g election cycle may run in minutes instead of weeks).
+
+Read how to connect to these networks [here](/packages/ui/README.md#using-custom-joystream-networks).
+
+#### Method 4: Connecting to a local Joystream dev environment
+
+Read the [Running the Joystream ecosystem locally](testenv.md) docs on how to run Pioneer with a local Joystream network.
+
+### Pioneer back-end
+
+> [!NOTE]
+> Read more about the Pioneer backend architecture and key concepts [here](/packages/server/README.md).
+
+To run the Pioneer back-end locally:
+
+1. Install the dependencies: `yarn --immutable`:
+2. Create and configure a `packages/server/.env`.
+3. Prepare the database and generate the code by running either:
+    - `yarn workspace server dev:db:build`: To use docker for the db.
+    - Otherwise `yarn workspace dev:build`: Once the configured db is running.
+4. Start the API server with: `yarn workspace server dev:api`
+5. To run the notifier: `yarn workspace server dev:notify`
+
+### Testing
+
+Read about testing in [testing documentation](tests.md).
+
+### Coding standards
 
 For code quality & standards we rely on ESLint and Prettier. To run both checks execute inside `packages/ui`:
 
@@ -71,149 +163,9 @@ yarn lint
 yarn lint:fix
 ```
 
-## Testing
+### Dependencies
 
-Read more on testing in [testing documentation](tests.md).
+The package.json entries for `@polkadot/*` packages must be set to the exact versions in order to match Joystream dependencies. See `resolutions` section in [package.json](/package.json) for details. Keeping dependencies in sync prevents "duplicated instances" error while using Polkadot.js API.
 
-## Joystream API
+The CKEditor 5 build is available in `packages/markdown-editor` packages. [More on editor development](/packages/markdown-editor/README.md).
 
-Both - the testnet & local development environment expects that a Joystream node instance is available.
-
-Expected URIs:
-
-- local: `ws://127.0.0.1:9944`
-- testnet: `wss://rpc.joystream.org:9944`
-
-### Local environment limitations
-
-Since the local query-node operates on [mocks](mocks.md#query-node-mocks) all of the query-node mocked entities are not present on-chain.
-
-Also, any The second limitation is that any on-chain action is not represented in the query-node mocks.
-
-See [mocking](mocks.md) on how to work with local mocks for development and tests.
-
-### Local environment Accounts
-
-The joystream node should be started in a development mode:
-
-```shell
-joystream-node --dev --tmp --unsafe-ws-external --unsafe-rpc-external --rpc-cors=all --log runtime
-```
-
-The development version uses well-known accounts to store JOY tokens and where `Alice` is a Sudo account. See [tips on how to add them to the extension](#using-well-known-accounts-with-polkadot-js-extension).
-
-## Query-node API
-
-To access the archival state of the chain Pioneer 2 fetch such information from the [query-node](https://github.com/Joystream/joystream/tree/query_node/query-node). It is a GraphQL server that allows a convenient API for querying the data.
-
-The following tools are used to consume GraphQL data:
-- [Apollo Client](https://www.apollographql.com/docs/react/) for accessing GraphQL
-
-### Adding queries
-
-To fetch the data from a GraphQL we use code generated by [GraphQL Code Generator](https://www.graphql-code-generator.com/)
-
-To generate scripts run:
-
-```shell
-yarn run queries:generate
-```
-
-The queries are organized as below:
-- The query-node schema is stored under [@/common/api/schema.graphql](/packages/ui/src/common/api/schemas/schema.graphql)
-- GraphQL's queries are stored per every module, inside `@/module/queries/` folder - you only need to modify those.
-- The `graphq-codegen` will generate React hooks for Apollo Client ([plugin `typescript-react-apollo`](https://www.graphql-code-generator.com/docs/plugins/typescript-react-apollo)) that will be exposed as `@/module/queries` import.
-
-For instance, to query for `memberships`:
-
-Create a `@/memberships/queries/members.graphql` file:
-
-```graphql
-query GetMembers {
-  memberships {
-    id
-    handle
-  }
-}
-```
-
-Then run the `yarn run queries:generate` script.
-
-Use the generated hook in your code:
-
-```ts
-import { useGetMembersQuery } from '@/memberships/queries'
-
-const { loading, data } = useGetMembersQuery()
-```
-
-### Code generation
-
-Some GraphQL related tools use code generation to scaffold types and react hooks from GraphQL schemas and queries.
-
-After updating `packages/ui/src/api` any of `*.graphql` files run `yarn queries:generated` script in the `@joystream/pioneer` package.
-
-# Tips & Tricks
-
-## Connecting to the Joystream node using Polkadot app wallet
-
-You can use the Polkadot apps wallet to browse the Joystream node state and call all available extrinsic.
-
-In order to use the app with Joystream API types you need to upload the correct type `defs.json` from the Joystream repo (using proper branch as well). The full path to file is: `/types/augment/all/defs.json`.
-
-For the `master` branch the `defs.json` use this [link](https://github.com/Joystream/joystream/blob/master/types/augment/all/defs.json):
-
-1. Copy the contents of the [`raw view`](https://raw.githubusercontent.com/Joystream/joystream/master/types/augment/all/defs.json).
-2. Paste to the input on Settings > Developer tab
-3. Switch to a network
-   1. [local](https://polkadot.js.org/apps/?rpc=ws%3A%2F%2F127.0.0.1%3A9944)
-   2. [joystream testnet](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.joystream.org%3A9944)
-
-## Using well-known accounts with Polkadot-js extension
-
-Substrate defines [well-known accounts](https://docs.substrate.io/v3/tools/subkey#well-known-keys) for `Alice`, `Alice_Stash`, `Bob`, `Bob_Stash`, `Charlie`, `Dave`, `Eve` and `Ferdie`.
-
-To add any of the above:
-
-1. Open extension and click plus sign
-2. Select "Import account from pre-existing seed"
-3. Copy the seed from [substrate help page](https://docs.substrate.io/v3/tools/subkey#well-known-keys) as "existing mnemonic seed"
-4. Open advanced and type the derivation path:
-  * For `Alice`, `Bob`, `Charlie`, `Dave`, `Eve` & `Ferdie` use the name as path, e.g. `//Eve`
-  * For `Alice_Stash` and `Bob_Stash` use `//stash` after name, e.g.: `//Bob//stash`
-
-By default, only `Alice`, `Alice_Stash`, `Bob` and `Bob_Stash` accounts has any funds.
-
-## Using custom addresses to connect with node/query node
-
-### Configure at build time
-
-To use custom addresses add the `.env` file in `packages/ui` (example: `packages/ui/.env.example`) and set
-
-1. `REACT_APP_TESTNET_NODE_SOCKET` example `wss://rpc.joystream.org:9944`
-2. `REACT_APP_TESTNET_QUERY_NODE` example `https://query.joystream.org/graphql`
-3. `REACT_APP_TESTNET_QUERY_NODE_SOCKET` example `wss://query.joystream.org/graphql`
-4. `REACT_APP_TESTNET_MEMBERSHIP_FAUCET_URL` example `https://18.234.141.38.nip.io/member-faucet/register`
-
-Please remember to restart the webpack process after each change.
-
-All the variables are required to be configured for the network to be used.
-
-### Auto-configure at runtime
-An auto configuration url can be used to configure pioneer. A url such as `https://playground.test/config.json` can respond with a JSON:
-
-```
-{
-  "websocket_rpc": "wss://rpc-endpoint.com:9944",
-  "graphql_server": "https://joystream.app/server/graphql",
-  "graphql_server_websocket": "wss://joystream.app/server/graphql",
-  "member_faucet": "https://joystream.app/member-faucet/register"
-}
-```
-
-By visiting pioneer with a query `network-config` as below:
-```
-https://pioneer.joystream.app/#/settings?network-config=https://playground.test/config.json
-```
-
-This will save the endpoints locally under the "Auto-conf" network.

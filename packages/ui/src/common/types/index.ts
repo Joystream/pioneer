@@ -9,3 +9,5 @@ export type AnyKeys = {
 }
 
 export type AnyObject = Record<any, any>
+
+export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>

@@ -1,10 +1,13 @@
 import { OpeningMetadata } from '@joystream/metadata-protobuf'
+import { uniq } from 'lodash'
 
+import { isValidAddress } from '@/accounts/model/isValidAddress'
 import { Api } from '@/api'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { metadataToBytes } from '@/common/model/JoystreamNode'
 import { last } from '@/common/utils'
+import { asArrayBuffer } from '@/common/utils/file'
 import { AddNewProposalForm } from '@/proposals/modals/AddNewProposal/helpers'
 import { GroupIdToGroupParam } from '@/working-groups/constants'
 import { GroupIdName } from '@/working-groups/types'
@@ -13,7 +16,7 @@ const idToRuntimeId = (id: string): number => Number(last(id.split('-')))
 
 const getWorkingGroupParam = (groupId: GroupIdName | undefined) => groupId && GroupIdToGroupParam[groupId]
 
-export const getSpecificParameters = (
+export const getSpecificParameters = async (
   api: Api,
   specifics: Omit<AddNewProposalForm, 'triggerAndDiscussion' | 'stakingAccount' | 'proposalDetails'>
 ) => {
@@ -29,17 +32,15 @@ export const getSpecificParameters = (
     }
     case 'fundingRequest': {
       return createType('PalletProposalsCodexProposalDetails', {
-        FundingRequest: [
-          { amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address },
-        ],
+        FundingRequest: specifics?.fundingRequest?.payMultiple
+          ? specifics?.fundingRequest?.accountsAndAmounts
+          : [{ amount: specifics?.fundingRequest?.amount, account: specifics?.fundingRequest?.account?.address }],
       })
     }
     case 'runtimeUpgrade': {
-      const u8a = specifics?.runtimeUpgrade?.runtime
-        ? new Uint8Array(specifics.runtimeUpgrade.runtime)
-        : new Uint8Array()
+      const u8a = new Uint8Array(await asArrayBuffer(specifics?.runtimeUpgrade?.runtime))
       return createType('PalletProposalsCodexProposalDetails', {
-        RuntimeUpgrade: createType('Bytes', u8a),
+        RuntimeUpgrade: createType('Bytes', '0x' + Buffer.from(u8a).toString('hex')),
       })
     }
     case 'createWorkingGroupLeadOpening': {
@@ -185,6 +186,54 @@ export const getSpecificParameters = (
           maxCashoutAllowed: specifics?.updateChannelPayouts.maximumCashoutAllowed,
           channelCashoutsEnabled: specifics.updateChannelPayouts.cashoutEnabled ?? false,
           commitment: specifics.updateChannelPayouts.commitment ?? null,
+        },
+      })
+    }
+    case 'updatePalletFrozenStatus': {
+      return createType('PalletProposalsCodexProposalDetails', {
+        // NOTE: The "SetPalletFozenStatus" typo comes from the runtime so it should be fixed there first.
+        SetPalletFozenStatus: [!specifics.updatePalletFrozenStatus.enable, specifics.updatePalletFrozenStatus.pallet],
+      })
+    }
+    case 'setEraPayoutDampingFactor': {
+      return createType('PalletProposalsCodexProposalDetails', {
+        setEraPayoutDampingFactor: createType('Percent', specifics?.setEraPayoutDampingFactor?.dampingFactor ?? 100),
+      })
+    }
+    case 'decreaseCouncilBudget': {
+      return createType('PalletProposalsCodexProposalDetails', {
+        DecreaseCouncilBudget: specifics.decreaseCouncilBudget?.amount,
+      })
+    }
+    case 'updateTokenPalletTokenConstraints': {
+      const values = specifics.updateTokenPalletTokenConstraints
+      return createType('PalletProposalsCodexProposalDetails', {
+        UpdateTokenPalletTokenConstraints: {
+          maxYearlyRate: createType('Option<Permill>', values?.maxYearlyRate),
+          minAmmSlope: values?.minAmmSlope,
+          minSaleDuration: values?.minSaleDuration,
+          minRevenueSplitDuration: values?.minRevenueSplitDuration,
+          minRevenueSplitTimeToStart: values?.minRevenueSplitTimeToStart,
+          salePlatformFee: createType('Option<Permill>', values?.salePlatformFee),
+          ammBuyTxFees: createType('Option<Permill>', values?.ammBuyTxFees),
+          ammSellTxFees: createType('Option<Permill>', values?.ammSellTxFees),
+          bloatBond: values?.bloatBond,
+        },
+      })
+    }
+    case 'updateArgoBridgeConstraints': {
+      const values = specifics.updateArgoBridgeConstraints
+      return createType('PalletProposalsCodexProposalDetails', {
+        UpdateArgoBridgeConstraints: {
+          operatorAccount: values?.operatorAccount?.address,
+          pauserAccounts: uniq(
+            values?.pauserAccounts?.flatMap((account) =>
+              account?.address && isValidAddress(account.address) ? account.address : []
+            )
+          ),
+          bridgingFee: values?.bridgingFee,
+          thawnDuration: values?.thawnDuration,
+          remoteChains: values?.remoteChains?.filter((chain) => typeof chain === 'number'),
         },
       })
     }

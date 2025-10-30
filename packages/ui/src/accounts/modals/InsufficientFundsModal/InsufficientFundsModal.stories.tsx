@@ -14,6 +14,6 @@ const Template: Story<InsufficientFundsModalProps> = (args) => <InsufficientFund
 export const Default = Template.bind({})
 Default.args = {
   onClose: () => undefined,
-  address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
   amount: new BN(420),
 }

@@ -1,3 +1,4 @@
+import { isUndefined } from 'lodash'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -6,6 +7,7 @@ import { ListItem } from '@/common/components/List'
 import { formatDuration } from '@/common/components/statistics'
 import { DurationValue } from '@/common/components/typography/DurationValue'
 import { Subscription } from '@/common/components/typography/Subscription'
+import { A_DAY } from '@/common/constants'
 import { isDefined } from '@/common/utils'
 import { useCouncilRemainingPeriod } from '@/council/hooks/useCouncilRemainingPeriod'
 import { useElectionStage } from '@/council/hooks/useElectionStage'
@@ -42,20 +44,15 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ h
   const { votes = [] } = useMyCastVotes(electionStage === 'revealing' ? election.cycleId : undefined)
   const timeRemaining = formatDuration(remainingPeriod ?? 0)
 
-  const remainingCalculation = useMemo(() => {
-    const dayChecker = timeRemaining[0][1] === 'd'
-    const dayNumberChecker = timeRemaining[0][0]
-    if (
-      (dayNumberChecker < 1 && dayChecker) ||
-      (timeRemaining[0][1] !== 'd' && timeRemaining[0][1] !== 'w') ||
-      dayNumberChecker === 0
-    ) {
+  const urgency = useMemo(() => {
+    if (isUndefined(remainingPeriod)) return
+    if (remainingPeriod <= A_DAY) {
       return '1day'
     }
-    if (dayNumberChecker > 1 && dayNumberChecker < 3 && dayChecker) {
+    if (remainingPeriod <= 3 * A_DAY) {
       return '3day'
     }
-  }, [])
+  }, [remainingPeriod])
 
   const getCopyMessage = useMemo(() => {
     const urlAddress = '#/election'
@@ -99,7 +96,7 @@ export const ElectionListItem: React.FC<ElectionListItemProps> = React.memo(({ h
     <ElementWrapper>
       <ListItem>
         <TopElementsWrapper>
-          <StyledTriangle deadlineTime={remainingCalculation} />{' '}
+          <StyledTriangle deadlineTime={urgency} />{' '}
           <StyledClosedButton onClick={() => hideForStorage(`${election.cycleId}:${electionStage}`)} />
         </TopElementsWrapper>
         <ContentWrapper>

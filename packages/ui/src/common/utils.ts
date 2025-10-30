@@ -1,3 +1,4 @@
+import { BN } from '@polkadot/util'
 export * from './utils/bn'
 
 import { Reducer } from './types/helpers'
@@ -5,8 +6,6 @@ import { Reducer } from './types/helpers'
 type Obj = Record<string, any>
 
 // Type guards
-
-export const isFunction = (something: unknown): something is CallableFunction => typeof something === 'function'
 
 export const isDefined = <T extends any>(something: T | undefined): something is T => typeof something !== 'undefined'
 
@@ -16,8 +15,11 @@ export const isString = (something: unknown): something is string => typeof some
 
 export const isRecord = (something: unknown): something is Obj => typeof something === 'object' && something !== null
 
-export const whenDefined = <T extends any, R>(something: T | undefined, fn: (something: T) => R): R | undefined => {
-  if (isDefined(something)) return fn(something)
+export const whenDefined = <T extends any, R>(
+  something: T | undefined | null,
+  fn: (something: T) => R
+): R | undefined => {
+  if (isDefined(something) && something !== null) return fn(something)
 }
 
 // Type Casting:
@@ -27,6 +29,10 @@ export const toNumber = (value: any): number => value?.toNumber?.() ?? (isNumber
 // Math:
 
 export const clamp = (min: number, value: number, max: number) => Math.max(min, Math.min(max, value))
+
+export const perbillToPercent = (perbill: BN) => perbill.toNumber() / 10 ** 7
+
+export const permillToPercent = (permill: number) => permill / 10 ** 4
 
 // Objects:
 
@@ -50,7 +56,7 @@ export const equals = <T extends any>(
   reference: T,
   { depth = 1, ...option }: EqualsOption = {}
 ): ((compared: T) => boolean) => {
-  if (depth > 0 && isRecord(reference)) {
+  if (depth && isRecord(reference)) {
     const isEqual = objectEquals(reference, { depth, ...option })
     return (compared) => isRecord(compared) && isEqual(compared)
   } else {
@@ -70,7 +76,7 @@ export const definedValues = <T extends Record<any, any>>(obj: T): T =>
 
 // Lists:
 
-export const dedupeObjects = <T>(list: T[], options?: EqualsOption): T[] =>
+export const dedupeObjects = <T extends Obj>(list: T[], options?: EqualsOption): T[] =>
   list.reduce((remain: T[], item) => [...remain, ...(remain.some(objectEquals(item, options)) ? [] : [item])], [])
 
 export const intersperse = <T extends any, S extends any>(
@@ -137,6 +143,19 @@ export const arrayGroupBy = (items: Item[], key: keyof Item) =>
     {}
   )
 
+// Maps:
+
+export const mapCloneSet = <K extends any, V extends any>(map: Map<K, V>, key: K, value: V): Map<K, V> => {
+  const clone = new Map(map)
+  clone.set(key, value)
+  return clone
+}
+export const mapCloneDelete = <K extends any, V extends any>(map: Map<K, V>, key: K): Map<K, V> => {
+  const clone = new Map(map)
+  clone.delete(key)
+  return clone
+}
+
 // Promises:
 
 type MapperP<T, R> = (value: T, index: number, array: T[] | readonly T[]) => Promise<R>
@@ -145,3 +164,8 @@ export const mapP = <T, R>(list: T[] | readonly T[], mapper: MapperP<T, R>): Pro
 
 export const flatMapP = async <T, R>(list: T[] | readonly T[], mapper: MapperP<T, R | R[]>): Promise<R[]> =>
   Promise.all(flatten(await mapP(list, mapper)))
+
+// Utils
+
+export const cond = <T extends any>(...pairs: [() => any, T][]): T | undefined =>
+  pairs.find(([condition]) => condition())?.[1]

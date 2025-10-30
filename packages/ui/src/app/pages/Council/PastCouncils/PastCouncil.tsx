@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { BlockTime } from '@/common/components/BlockTime'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
@@ -35,9 +35,9 @@ export const PastCouncil = () => {
 
     return (
       <PageHeaderWrapper>
-        <PageHeaderRow showOverflow>
+        <PageHeaderWithButtons showOverflow>
           <PreviousPage showOverflow>
-            <PageTitle>Council #{council.id}</PageTitle>
+            <PageTitle>Council #{parseInt(council.id, 36)}</PageTitle>
           </PreviousPage>
           <ButtonsGroup>
             <CopyButtonTemplate
@@ -48,7 +48,7 @@ export const PastCouncil = () => {
               Copy link
             </CopyButtonTemplate>
           </ButtonsGroup>
-        </PageHeaderRow>
+        </PageHeaderWithButtons>
         <RowGapBlock>
           <BadgesRow space={8}>
             <BadgeStatus inverted size="l">

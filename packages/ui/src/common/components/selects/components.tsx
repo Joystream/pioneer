@@ -1,9 +1,12 @@
 import React, { MouseEventHandler, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
+import { AccountInfoWrap } from '@/accounts/components/AccountInfo'
+
 import {
   Animations,
   BorderRad,
+  BreakPoints,
   Colors,
   Overflow,
   RemoveScrollbar,
@@ -55,13 +58,50 @@ export const SelectToggleButton = ({ isOpen, disabled, onToggleClick }: SelectTo
   </ToggleButton>
 )
 
-export const SelectedOption = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
+export const SelectedOption = styled.div<{ variant?: 's' | 'm' | 'l' }>`
+  ${({ variant }) =>
+    variant === 's'
+      ? css`
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          row-gap: 8px;
+          height: 118px;
+
+          > div {
+            width: fit-content;
+            margin-right: auto;
+          }
+
+          ${AccountInfoWrap} {
+            grid-template-areas:
+              'accountphoto accounttype'
+              'accountphoto accountname'
+              'accountaddress accountaddress';
+          }
+        `
+      : variant === 'm'
+      ? css`
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr;
+
+          ${AccountInfoWrap} {
+            grid-template-areas:
+              'accountphoto accounttype'
+              'accountphoto accountname'
+              'accountaddress accountaddress';
+          }
+        `
+      : css`
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr;
+        `}
+
   align-items: center;
-  padding: 0 4px 0 16px;
   width: 100%;
+  padding: 0 4px 0 16px;
 `
 
 export const EmptyOption = styled.input`
@@ -135,19 +175,33 @@ export const OptionComponentContainer = styled.li<{ disabled?: boolean }>`
 `
 
 export const OptionComponent = styled.div<{ disabled?: boolean }>`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 8px;
+  height: 118px;
+
+  > div {
+    width: fit-content;
+    margin-right: auto;
+  }
+
+  @media (min-width: ${BreakPoints.sm}px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    height: 100%;
+    max-height: ${Sizes.selectHeight};
+  }
+
   align-items: center;
   width: 100%;
-  height: 100%;
   border: none;
   background-color: ${({ disabled }) => (disabled ? Colors.Black[75] : Colors.White)};
   cursor: pointer;
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
   min-height: ${Sizes.selectHeight};
-  max-height: ${Sizes.selectHeight};
   padding: 10px 72px 10px 16px;
 
   &:active,

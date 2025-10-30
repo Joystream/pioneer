@@ -2,6 +2,7 @@ import { Reducer, useEffect, useMemo, useReducer } from 'react'
 
 import { ForumThreadOrderByInput } from '@/common/api/queries'
 import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { merge } from '@/common/utils'
 import { ThreadEmptyFilters, ThreadFiltersState } from '@/forum/components/threads/ThreadFilters'
 import { useGetForumThreadsCountQuery, useGetForumThreadsQuery } from '@/forum/queries'
@@ -31,10 +32,10 @@ export const useForumCategoryThreads = (
 
   const [{ filters, categoryId, isArchive }, refresh] = useReducer(threadOptionReducer, initialOptions)
 
-  const { loading: loadingThreads, data: threadsData } = useGetForumThreadsQuery({
+  const { data: threadsData } = useGetForumThreadsQuery({
     variables: {
       where: where(filters, categoryId, isArchive),
-      orderBy: [ForumThreadOrderByInput.IsStickyDesc, toQueryOrderByInput<ForumThreadOrderByInput>(options.order)],
+      orderBy: [ForumThreadOrderByInput.IsStickyDesc, ...toQueryOrderByInput<ForumThreadOrderByInput>(options.order)],
       ...(!pagination
         ? { limit: 30 }
         : {
@@ -42,15 +43,17 @@ export const useForumCategoryThreads = (
             offset: (pagination.page - 1) * pagination.perPage,
           }),
     },
+    pollInterval: isArchive === false ? MILLISECONDS_PER_BLOCK : 0,
   })
 
-  const { loading: loadingCount, data: countData } = useGetForumThreadsCountQuery({
+  const { data: countData } = useGetForumThreadsCountQuery({
     variables: { where: where(filters, categoryId, isArchive) },
+    pollInterval: isArchive === false ? MILLISECONDS_PER_BLOCK : 0,
   })
   const totalCount = countData?.forumThreadsConnection.totalCount
 
   return {
-    isLoading: loadingThreads || loadingCount,
+    isLoading: !threadsData || !countData,
     threads: threadsData?.forumThreads.map((thread) => asForumThread(thread)) ?? [],
     threadCount: totalCount,
     refresh,

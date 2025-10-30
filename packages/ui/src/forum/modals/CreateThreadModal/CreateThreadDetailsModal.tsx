@@ -51,7 +51,7 @@ export const CreateThreadDetailsModal = ({ breadcrumbs, author, send }: Props) =
 
   return (
     <>
-      <ScrolledModal onClose={hideModal} modalSize="l">
+      <ScrolledModal onClose={hideModal} modalSize="m">
         <ModalHeader title="Create a thread" onClick={hideModal} />
         <ScrolledModalBody>
           <ScrolledModalContainer>

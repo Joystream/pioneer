@@ -91,6 +91,9 @@ export const CKEditorStylesOverrides = createGlobalStyle<{ minRows: number; maxR
   img {
       max-height: 400px;
   }
+  .ck.ck-balloon-panel.ck-toolbar-container {
+    z-index: calc(var(--ck-z-modal) - 1);
+  }
 
   :root {
     --ck-focus-ring: 1px solid ${Colors.Blue[300]};

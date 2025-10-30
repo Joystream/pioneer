@@ -84,6 +84,7 @@ module.exports = {
   moduleNameMapper: {
     '\\.(svg|css|md)$': '<rootDir>/test/_mocks/imports/fileMock.js',
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@test/(.*)$': '<rootDir>/test/$1',
     // since jest doesn't support importing modules by `exports` in package.json
     // we are forced to make mapping manually
     '^@joystream/js/content': '@joystream/js/lib/mjs/content',

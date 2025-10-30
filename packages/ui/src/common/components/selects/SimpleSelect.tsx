@@ -72,7 +72,7 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
   selectSize,
   renderOption = String,
   renderSelected,
-  valueToOption = (value) => value as Option,
+  valueToOption = (value) => value as unknown as Option, // The default only works if Value and Option are the same type
   optionEquals = (optionA) => (optionB) => optionA === optionB,
   value,
   onChange,

@@ -1,0 +1,135 @@
+# Custom BigInt scalar type
+scalar BigInt
+
+type Member {
+  id: Int!
+  name: String!
+  email: String
+  unverifiedEmail: String
+  receiveEmails: Boolean!
+}
+
+enum EntitySubscriptionKind {
+  FORUM_THREAD_ENTITY_POST
+  FORUM_CATEGORY_ENTITY_POST
+  FORUM_CATEGORY_ENTITY_THREAD
+  PROPOSAL_ENTITY_DISCUSSION
+}
+
+enum EntitySubscriptionStatus {
+  WATCH
+  MUTE
+  DEFAULT
+}
+
+type EntitySubscription {
+  id: Int
+  kind: EntitySubscriptionKind!
+  entityId: String!
+  status: EntitySubscriptionStatus!
+}
+
+enum GeneralSubscriptionKind {
+  FORUM_POST_ALL
+  FORUM_POST_MENTION
+  FORUM_POST_REPLY
+  FORUM_THREAD_CREATOR
+  FORUM_THREAD_CONTRIBUTOR
+  FORUM_THREAD_ALL
+  FORUM_THREAD_MENTION
+  ELECTION_ANNOUNCING_STARTED
+  ELECTION_VOTING_STARTED
+  ELECTION_REVEALING_STARTED
+  PROPOSAL_DISCUSSION_MENTION
+  PROPOSAL_DISCUSSION_REPLY
+  PROPOSAL_DISCUSSION_CREATOR
+  PROPOSAL_DISCUSSION_CONTRIBUTOR
+  PROPOSAL_DISCUSSION_ALL
+}
+
+type GeneralSubscription {
+  id: Int
+  kind: GeneralSubscriptionKind!
+  shouldNotify: Boolean!
+  shouldNotifyByEmail: Boolean!
+}
+
+enum NotificationKind {
+  FORUM_POST_ALL
+  FORUM_POST_MENTION
+  FORUM_POST_REPLY
+  FORUM_THREAD_CREATOR
+  FORUM_THREAD_CONTRIBUTOR
+  FORUM_THREAD_ALL
+  FORUM_THREAD_MENTION
+  ELECTION_ANNOUNCING_STARTED
+  ELECTION_VOTING_STARTED
+  ELECTION_REVEALING_STARTED
+  FORUM_THREAD_ENTITY_POST
+  FORUM_CATEGORY_ENTITY_POST
+  FORUM_CATEGORY_ENTITY_THREAD
+  PROPOSAL_DISCUSSION_MENTION
+  PROPOSAL_DISCUSSION_REPLY
+  PROPOSAL_DISCUSSION_CREATOR
+  PROPOSAL_DISCUSSION_CONTRIBUTOR
+  PROPOSAL_DISCUSSION_ALL
+}
+
+enum NotificationEmailStatus {
+  PENDING
+  SENT
+  FAILED
+  IGNORED
+}
+
+type Notification {
+  id: Int!
+  kind: NotificationKind!
+  eventId: String!
+  entityId: String
+  emailStatus: NotificationEmailStatus!
+  isRead: Boolean!
+}
+
+input GeneralSubscriptionInput {
+  kind: GeneralSubscriptionKind!
+  shouldNotify: Boolean
+  shouldNotifyByEmail: Boolean
+}
+
+type Mutation {
+  signin(memberId: Int!, signature: String!, timestamp: BigInt!): String
+  signup(memberId: Int!, name: String!, email: String, signature: String!, timestamp: BigInt!): String
+  verifyEmail(token: String!): Member
+  updateMember(email: String, receiveEmails: Boolean): Member
+  entitySubscription(
+    kind: EntitySubscriptionKind!
+    entityId: String!
+    status: EntitySubscriptionStatus!
+  ): EntitySubscription
+  generalSubscriptions(data: [GeneralSubscriptionInput]): [GeneralSubscription]
+}
+
+type Query {
+  me: Member
+  memberExist(id: Int): Boolean
+  entitySubscriptions(
+    id: String
+    kind: EntitySubscriptionKind
+    entityId: String
+    status: EntitySubscriptionStatus
+  ): [EntitySubscription]
+  generalSubscriptions(
+    kind: GeneralSubscriptionKind
+    shouldNotify: Boolean
+    shouldNotifyByEmail: Boolean
+  ): [GeneralSubscription]
+  notifications(
+    id: String
+    kind: NotificationKind
+    eventId: String
+    entityId: String
+    emailStatus: NotificationEmailStatus
+    isRead: Boolean
+  ): [Notification]
+}

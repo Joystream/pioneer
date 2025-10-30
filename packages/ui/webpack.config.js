@@ -22,6 +22,7 @@ module.exports = (env, argv) => {
     .map(([key, value]) => [`process.env.${key}`, JSON.stringify(value)])
 
   const imageBlacklist = [...(env.blacklist ?? []), ...(process.env.REACT_APP_BLACKLISTED_IMAGES?.split(/\s+/) ?? [])]
+  const disableProxyApi = process.env.DISABLE_PROXY_API === 'true'
 
   const plugins = [
     ...shared.plugins,
@@ -75,8 +76,7 @@ module.exports = (env, argv) => {
           exclude: [/node_modules/],
         },
         {
-          test: /\.(png|jpg|gif|woff|woff2|eot|ttf|otf|svg)$/,
-          exclude: /node_modules/,
+          test: /\.(png|jpg|gif|woff|woff2|eot|ttf|otf|svg|webp)$/,
           use: ['file-loader'],
         },
         {
@@ -90,7 +90,13 @@ module.exports = (env, argv) => {
         },
       ],
     },
-    resolve: shared.resolve,
+    resolve: {
+      ...shared.resolve,
+      alias: {
+        '@/api$': path.resolve(__dirname, disableProxyApi ? './src/api/api-rx.ts' : './src/proxyApi/index.ts'),
+        ...shared.resolve.alias,
+      },
+    },
     output: {
       filename: '[name].[contenthash].js',
       path: path.resolve(__dirname, 'build'),

@@ -1,5 +1,5 @@
-import { Meta, Story } from '@storybook/react'
-import React from 'react'
+import { Meta, StoryObj } from '@storybook/react'
+import React, { ReactElement } from 'react'
 
 import { ModalContext } from '@/common/providers/modal/context'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
@@ -7,12 +7,14 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { VoteRationale } from './VoteRationale'
 
 export default {
-  title: 'Proposals/VoteRationale',
+  title: 'VoteForProposalModalForm/Components/VoteRationale',
   component: VoteRationale,
 } as Meta
 
-export const Default: Story = () => {
-  return (
+export const Default: StoryObj<() => ReactElement> = {
+  name: 'VoteRationale',
+
+  render: () => (
     <MockApolloProvider members proposals workingGroups workers>
       <ModalContext.Provider
         value={{
@@ -27,7 +29,5 @@ export const Default: Story = () => {
         <VoteRationale />
       </ModalContext.Provider>
     </MockApolloProvider>
-  )
+  ),
 }
-
-Default.args = {}

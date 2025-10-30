@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 
-import { BlockHistoryLine } from '@/common/components/BlockTime'
+import { BlockTime } from '@/common/components/BlockTime'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Stepper, StepperStep } from '@/common/components/Stepper'
 import { Label } from '@/common/components/typography'
@@ -24,7 +24,7 @@ export const ProposalHistory = ({ proposal }: ProposalHistoryProps) => {
     return steps.map(({ status, inBlock }, index) => ({
       title: status,
       type: index === steps.length - 1 ? 'active' : 'past',
-      details: <BlockHistoryLine block={inBlock} />,
+      details: <BlockTime block={inBlock} layout="reverse-start" lessInfo />,
     }))
   }, [proposal.id])
 

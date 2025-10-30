@@ -1,0 +1,12 @@
+query GetCurrentRoles {
+  workers(where: { isActive_eq: true }) {
+    groupId
+    isLead
+    membershipId
+  }
+  electedCouncils(where: { isResigned_eq: false }) {
+    councilMembers {
+      memberId
+    }
+  }
+}

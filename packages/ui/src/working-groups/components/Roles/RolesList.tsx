@@ -45,13 +45,13 @@ export const RolesList = ({ workers }: RolesListProps) => {
   )
 
   return (
-    <List>
+    <ListWrapper>
       {workers.map((worker) => (
         <ListItem key={worker.id} borderless>
           <RolesListItem worker={worker} payout={nextPayout} />
         </ListItem>
       ))}
-    </List>
+    </ListWrapper>
   )
 }
 
@@ -181,5 +181,12 @@ const NextPaymentValue = styled.span`
     line-height: 20px;
     font-weight: 400;
     color: ${Colors.Black[400]};
+  }
+`
+
+const ListWrapper = styled(List)`
+  overflow: auto;
+  li {
+    min-width: 970px;
   }
 `

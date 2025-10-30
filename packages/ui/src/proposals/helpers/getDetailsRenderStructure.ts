@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import { omit } from 'lodash'
 
 import { TooltipContentProp } from '@/common/components/Tooltip'
@@ -9,7 +10,6 @@ import {
   ProposalWithDetails,
   RewardPerBlockDetail,
   StakeAmountDetail,
-  UnstakingPeriodDetail,
   GroupDetail,
   GroupNameDetail,
   MemberDetail,
@@ -23,6 +23,8 @@ import {
   ProposalDetail,
   OpeningLinkDetail,
   UpdateChannelPayoutsDetail,
+  UpdatePalletFrozenStatusDetail,
+  BlockDetail,
 } from '@/proposals/types'
 
 export type RenderType =
@@ -37,14 +39,17 @@ export type RenderType =
   | 'Divider'
   | 'ProposalLink'
   | 'OpeningLink'
-  | 'Percentage'
   | 'Hash'
+  | 'DestinationsPreview'
+  | 'BlockTimeDisplay'
+  | 'AddressesPreview'
 
 export interface RenderNode {
   label: string
   value: any
   renderType: RenderType
   tooltip?: TooltipContentProp
+  units?: string
 }
 
 type Mapper<Detail, Key extends keyof Detail> = (
@@ -55,23 +60,36 @@ type Mapper<Detail, Key extends keyof Detail> = (
 const destinationsMapper: Mapper<DestinationsDetail, 'destinations'> = (value): RenderNode[] => {
   const result: RenderNode[] = []
 
-  value.forEach((destination) => {
+  if (value.length === 1) {
+    value.forEach((destination) => {
+      result.push({
+        label: 'amount',
+        value: destination.amount,
+        renderType: 'Amount',
+      })
+      result.push({
+        label: 'destination',
+        value: destination.account,
+        renderType: 'Address',
+      })
+    })
+  }
+  if (value.length > 1) {
+    let total = new BN(0)
+    value.forEach((destination) => {
+      total = total.add(destination.amount)
+    })
     result.push({
-      label: 'amount',
-      value: destination.amount,
+      label: 'Total Payment',
+      value: total,
       renderType: 'Amount',
     })
     result.push({
-      label: 'destination',
-      value: destination.account,
-      renderType: 'Address',
+      label: 'Payment Details',
+      value: value,
+      renderType: 'DestinationsPreview',
     })
-    result.push({
-      label: '',
-      value: undefined,
-      renderType: 'Divider',
-    })
-  })
+  }
 
   return result
 }
@@ -129,15 +147,19 @@ const stakeAmountMapper: Mapper<StakeAmountDetail, 'stakeAmount'> = (value): Ren
     },
   ]
 }
-const unstakingPeriodMapper: Mapper<UnstakingPeriodDetail, 'unstakingPeriod'> = (value): RenderNode[] => {
-  return [
-    {
-      label: 'Leaving unstaking period',
-      value: value,
-      renderType: 'NumberOfBlocks',
-    },
-  ]
-}
+
+const blocksMapper =
+  (label: string): Mapper<BlockDetail, 'blocks'> =>
+  (value): RenderNode[] => {
+    return [
+      {
+        label,
+        value,
+        renderType: 'NumberOfBlocks',
+      },
+    ]
+  }
+
 const textMapper =
   (label: string, tooltip?: TooltipContentProp): Mapper<GroupNameDetail, 'groupName'> =>
   (value): RenderNode[] => {
@@ -160,21 +182,17 @@ const memberMapper: Mapper<MemberDetail, 'member'> = (value): RenderNode[] => {
   ]
 }
 
-const percentageMapper: Mapper<AmountDetail, 'amount'> = (value, type): RenderNode[] => {
-  const defaultLabel = 'Percentage'
-  const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
-    setReferralCut: 'Proposed referral cut',
-  }
-  const overriddenLabel = type && overriddenLabelsBy[type]
-
-  return [
-    {
-      label: overriddenLabel || defaultLabel,
-      renderType: 'Percentage',
-      value,
-    },
-  ]
-}
+const percentageMapper =
+  (label = 'Percentage'): Mapper<AmountDetail, 'amount'> =>
+  (value): (RenderNode & { units: '%' })[] =>
+    [
+      {
+        label,
+        renderType: 'Numeric',
+        units: '%',
+        value,
+      },
+    ]
 
 const booleanMapper: Mapper<UpdateChannelPayoutsDetail, 'channelCashoutsEnabled'> = (value) => {
   return [
@@ -186,12 +204,31 @@ const booleanMapper: Mapper<UpdateChannelPayoutsDetail, 'channelCashoutsEnabled'
   ]
 }
 
+const palletStatusMapper: Mapper<UpdatePalletFrozenStatusDetail, 'freeze'> = (freezePallet) => {
+  return [
+    {
+      label: 'Proposed Status',
+      renderType: 'Text',
+      value: freezePallet ? 'Disable' : 'Enable',
+    },
+  ]
+}
+const palletMapper: Mapper<UpdatePalletFrozenStatusDetail, 'pallet'> = (pallet) => {
+  return [
+    {
+      label: 'Pallet',
+      renderType: 'Text',
+      value: pallet,
+    },
+  ]
+}
 const amountMapper =
   (label?: string): Mapper<AmountDetail, 'amount'> =>
   (value, type): RenderNode[] => {
     const overriddenLabelsBy: Partial<Record<ProposalType, string>> = {
       decreaseWorkingGroupLeadStake: 'Decrease stake amount',
       slashWorkingGroupLead: 'Slashing amount',
+      decreaseCouncilBudget: 'Decrease budget by',
     }
     return [
       {
@@ -201,19 +238,21 @@ const amountMapper =
       },
     ]
   }
-const countMapper: Mapper<CountDetail, 'count'> = (value, type) => {
-  const countLabels: Partial<Record<ProposalType, string>> = {
-    setInitialInvitationCount: 'Invitations',
-    setMaxValidatorCount: 'Validators',
+const countMapper =
+  (label = ''): Mapper<CountDetail, 'count'> =>
+  (value, type) => {
+    const countLabels: Partial<Record<ProposalType, string>> = {
+      setInitialInvitationCount: 'Invitations',
+      setMaxValidatorCount: 'Validators',
+    }
+    return [
+      {
+        label: label || (type && type in countLabels && countLabels[type]) || 'Count',
+        value,
+        renderType: 'Numeric',
+      },
+    ]
   }
-  return [
-    {
-      label: (type && type in countLabels && countLabels[type]) || 'Count',
-      value,
-      renderType: 'Numeric',
-    },
-  ]
-}
 
 const hashMapper =
   (label: string, tooltip?: TooltipContentProp): Mapper<UpdateChannelPayoutsDetail, 'payloadHash'> =>
@@ -239,6 +278,40 @@ const openingLinkMapper: Mapper<OpeningLinkDetail, 'openingId'> = (value) => {
     },
   ]
 }
+const addressMapper =
+  (label: string) =>
+  (value: string): RenderNode[] => {
+    return [
+      {
+        label,
+        value,
+        renderType: 'Address',
+      },
+    ]
+  }
+const addressesMapper =
+  (label: string) =>
+  (value: string[]): RenderNode[] => {
+    return [
+      {
+        label,
+        value,
+        renderType: 'AddressesPreview',
+      },
+    ]
+  }
+
+const listMapper =
+  (label: string) =>
+  (value: unknown[]): RenderNode[] => {
+    return [
+      {
+        label,
+        value: value.map(String).join(', '),
+        renderType: 'Text',
+      },
+    ]
+  }
 
 const percentageProposalsAmount: ProposalType[] = ['setReferralCut']
 
@@ -250,11 +323,11 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   signalText: signalTextMapper,
   rewardPerBlock: rewardPerBlockMapper,
   stakeAmount: stakeAmountMapper,
-  unstakingPeriod: unstakingPeriodMapper,
+  unstakingPeriod: blocksMapper('Leaving unstaking period'),
   groupName: textMapper('Working Group'),
   member: memberMapper,
   amount: amountMapper(),
-  count: countMapper,
+  count: countMapper(),
   proposal: proposalLinkMapper,
   openingId: openingLinkMapper,
   channelCashoutsEnabled: booleanMapper,
@@ -268,13 +341,36 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
     tooltipText:
       'This is the ID submitted to Chain for the Data Object (payout payload) to be further uploaded to the Storage. It will be displayed after proposal is executed.',
   }),
+  pallet: palletMapper,
+  freeze: palletStatusMapper,
+
+  // SetEraPayoutDampingFactor
+  multiplier: percentageMapper('Validator reward multiplier'),
+
+  // UpdateTokenPalletTokenConstraints
+  maxYearlyRate: percentageMapper('Proposed maximum yearly rate'),
+  minAmmSlope: amountMapper('Proposed minimum AMM slope'),
+  minSaleDuration: blocksMapper('Proposed minimum sale duration'),
+  minRevenueSplitDuration: blocksMapper('Proposed minimum revenue split duration'),
+  minRevenueSplitTimeToStart: blocksMapper('Proposed minimum revenue split time to start'),
+  salePlatformFee: percentageMapper('Proposed sale platform fee'),
+  ammBuyTxFees: percentageMapper('Proposed AMM buy transaction fees'),
+  ammSellTxFees: percentageMapper('Proposed AMM sell transaction fees'),
+  bloatBond: amountMapper('Proposed bloat bond'),
+
+  // UpdateArgoBridgeConstraints
+  operatorAccount: addressMapper('Operator Account'),
+  pauserAccounts: addressesMapper('Pauser Accounts'),
+  bridgingFee: amountMapper('Proposed bridging fee'),
+  thawnDuration: blocksMapper('Proposed thawn duration'),
+  remoteChains: listMapper('Remote Chains'),
 }
 
 const mapProposalDetail = (key: ProposalDetailsKeys, proposalDetails: ProposalWithDetails['details']) => {
   const value = proposalDetails[key as keyof typeof proposalDetails]
 
   if (percentageProposalsAmount.includes(proposalDetails.type as ProposalType) && key === 'amount') {
-    return percentageMapper((value as any).toNumber(), proposalDetails.type)
+    return percentageMapper('Proposed referral cut')((value as any).toNumber(), proposalDetails.type)
   }
 
   if (!mappers[key]) {

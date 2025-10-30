@@ -1,1 +1,1 @@
-export * from './client/ProxyApi'
+export { ProxyApi as Api } from './client/ProxyApi'

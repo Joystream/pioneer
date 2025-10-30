@@ -1,0 +1,80 @@
+services:
+  - type: web
+    name: api
+    region: frankfurt
+    plan: starter
+
+    runtime: image
+    image: { url: docker.io/joystream/pioneer-backend:latest }
+
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: db
+          property: connectionString
+
+      - key: QUERY_NODE_ENDPOINT
+        sync: false
+
+      - key: PIONEER_URL
+        sync: false
+
+      - key: EMAIL_SENDER
+        sync: false
+
+      - key: SENDGRID_API_KEY
+        sync: false
+
+      - key: APP_SECRET_KEY
+        generateValue: true
+
+  - type: cron
+    name: notifier
+    region: frankfurt
+    plan: starter
+
+    runtime: image
+    image: { url: docker.io/joystream/pioneer-backend:latest }
+    dockerCommand: notify
+    schedule: "*/10 * * * *"
+
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: db
+          property: connectionString
+
+      - key: QUERY_NODE_ENDPOINT
+        fromService:
+          type: web
+          name: api
+          envVarKey: QUERY_NODE_ENDPOINT
+
+      - key: PIONEER_URL
+        fromService:
+          type: web
+          name: api
+          envVarKey: PIONEER_URL
+
+      - key: EMAIL_SENDER
+        fromService:
+          type: web
+          name: api
+          envVarKey: EMAIL_SENDER
+
+      - key: SENDGRID_API_KEY
+        fromService:
+          type: web
+          name: api
+          envVarKey: SENDGRID_API_KEY
+
+      - key: STARTING_BLOCK
+        sync: false
+
+      - key: APP_LOG_LEVEL
+        value: verbose
+
+databases:
+  - name: db
+    region: frankfurt
+    plan: starter

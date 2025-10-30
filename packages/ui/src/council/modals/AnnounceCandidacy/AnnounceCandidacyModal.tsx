@@ -2,16 +2,23 @@ import { CouncilCandidacyNoteMetadata } from '@joystream/metadata-protobuf'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import styled from 'styled-components'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
 import { useHasRequiredStake } from '@/accounts/hooks/useHasRequiredStake'
 import { useStakingAccountStatus } from '@/accounts/hooks/useStakingAccountStatus'
 import { useTransactionFee } from '@/accounts/hooks/useTransactionFee'
-import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { Account } from '@/accounts/types'
 import { useApi } from '@/api/hooks/useApi'
 import { Modal, ModalHeader, ModalTransactionFooter } from '@/common/components/Modal'
-import { StepDescriptionColumn, Stepper, StepperBody, StepperModalBody } from '@/common/components/StepperModal'
+import {
+  StepDescriptionColumn,
+  Stepper,
+  StepperBody,
+  StepperModalBody,
+  StepperModalWrapper,
+} from '@/common/components/StepperModal'
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BN_ZERO } from '@/common/constants'
 import { useMachine } from '@/common/hooks/useMachine'
@@ -43,7 +50,6 @@ import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { BindStakingAccountModal } from '@/memberships/modals/BindStakingAccountModal/BindStakingAccountModal'
 import { IStakingAccountSchema } from '@/memberships/model/validation'
 import { Member } from '@/memberships/types'
-import { StepperProposalWrapper } from '@/proposals/modals/AddNewProposal'
 
 const getCandidateForPreview = (context: AnnounceCandidacyFrom, member: Member): ElectionCandidateWithDetails => ({
   id: '0',
@@ -297,7 +303,7 @@ export const AnnounceCandidacyModal = () => {
     <Modal onClose={hideModal} modalSize="l" modalHeight="xl">
       <ModalHeader onClick={hideModal} title="Announce candidacy" />
       <StepperModalBody>
-        <StepperProposalWrapper>
+        <StepperWrapperLayout>
           <Stepper steps={getSteps(service)} />
           <StepDescriptionColumn>
             <AnnounceCandidacyConstantsWrapper constants={constants} />
@@ -325,10 +331,19 @@ export const AnnounceCandidacyModal = () => {
                   )}
                 />
               )}
-              {state.matches('candidateProfile.summaryAndBanner') && <SummaryAndBannerStep />}
+              {state.matches('candidateProfile.summaryAndBanner') && (
+                <SummaryAndBannerStep
+                  previewButton={
+                    <PreviewButtons
+                      candidate={getCandidateForPreview(form.getValues() as AnnounceCandidacyFrom, activeMember)}
+                      disabled={!form.formState.isValid}
+                    />
+                  }
+                />
+              )}
             </FormProvider>
           </StepperBody>
-        </StepperProposalWrapper>
+        </StepperWrapperLayout>
       </StepperModalBody>
       <ModalTransactionFooter
         next={{
@@ -337,15 +352,19 @@ export const AnnounceCandidacyModal = () => {
           onClick: () => send('NEXT'),
         }}
         prev={state.matches('staking') ? { onClick: () => send('BACK') } : undefined}
-        extraButtons={
-          state.matches('candidateProfile.summaryAndBanner') && (
-            <PreviewButtons
-              candidate={getCandidateForPreview(form.getValues() as AnnounceCandidacyFrom, activeMember)}
-              disabled={!form.formState.isValid}
-            />
-          )
-        }
       />
     </Modal>
   )
 }
+
+const StepperWrapperLayout = styled(StepperModalWrapper)`
+  grid-template-columns: 220px 184px 1fr;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 220px 240px 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: 220px 336px 1fr;
+  }
+`

@@ -18,14 +18,13 @@ import {
   OpenedTop,
   OpenedWrapper,
 } from '@/working-groups/components/ToggleableItemStyledComponents'
-import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { ApplyForRoleModalCall } from '@/working-groups/modals/ApplyForRoleModal'
+import { asWeeklyRewards } from '@/working-groups/model/asWeeklyRewards'
 import { isOpeningOpen } from '@/working-groups/model/isOpeningOpen'
 import { groupNameToURLParam } from '@/working-groups/model/workingGroupName'
 
 export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps) => {
   const { showModal } = useModal()
-  const rewardPeriod = useRewardPeriod(opening.groupId)
   const groupName = groupNameToURLParam(nameMapping(opening.groupName))
   const openingRoute = `/working-groups/openings/${groupName}-${opening.runtimeId}`
 
@@ -39,12 +38,12 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
           <OpenedItemTitle>{opening.title}</OpenedItemTitle>
         </OpenedTop>
         <TextBig light>{opening.shortDescription}</TextBig>
-        <Statistics withMargin gapSize="s">
+        <StatisticsStyle withMargin>
           <StatsBlock size="m" centered>
             <TextBig>
-              <TokenValue value={rewardPeriod?.mul(opening.rewardPerBlock)} />
+              <TokenValue value={asWeeklyRewards(opening.rewardPerBlock)} />
             </TextBig>
-            <Subscription>Reward per {rewardPeriod?.toString()} blocks</Subscription>
+            <Subscription>Reward per week</Subscription>
           </StatsBlock>
           <StatsBlock size="m" centered>
             <MultiColumnsStatistic>
@@ -79,7 +78,7 @@ export const OpeningDetails = ({ opening, onClick, past }: OpeningListItemProps)
               </Tooltip>
             </MinStake>
           </StatsBlock>
-        </Statistics>
+        </StatisticsStyle>
         <ButtonsGroup align="right">
           <LinkButtonGhost to={openingRoute} size="medium">
             Learn more
@@ -103,4 +102,12 @@ const MinStake = styled(Subscription)`
   display: flex;
   align-items: center;
   gap: 8px;
+`
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `

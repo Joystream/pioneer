@@ -9,12 +9,13 @@ export interface MemberCreatedProps {
 }
 
 export const MemberCreated = React.memo(({ member }: MemberCreatedProps) => {
+  const { entry, createdAt } = member
+  const block = entry.type === 'genesis' ? { number: 0, timestamp: createdAt } : entry.block
+
   return (
     <MemeberCreated>
-      <MemberCreatedDate>{new Date(member.createdAt).toLocaleDateString('en-GB')}</MemberCreatedDate>
-      {member.entry && member.entry.type !== 'genesis' && (
-        <MemberCreatedBlock>{member.entry.block.number} block</MemberCreatedBlock>
-      )}
+      <MemberCreatedDate>{new Date(block.timestamp).toLocaleDateString('en-GB')}</MemberCreatedDate>
+      <MemberCreatedBlock>{block.number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} block</MemberCreatedBlock>
     </MemeberCreated>
   )
 })

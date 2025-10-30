@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter } from 'react-router'
 
-import { Settings } from '@/app/pages/Settings/Settings'
+import { SettingsNetworkTab } from '@/app/pages/Settings/SettingsNetworkTab'
 import { NetworkEndpointsProvider } from '@/common/providers/network-endpoints/provider'
 
 import { MockQueryNodeProviders } from '../../_mocks/providers'
@@ -37,8 +37,10 @@ describe('Settings', () => {
     renderPage()
     expect(await screen.findByText('selectNetwork')).toBeDefined()
     expect(await screen.findByText('networkDetails')).toBeDefined()
-    expect(await screen.findByText('networkAddress')).toBeDefined()
-    expect(await screen.findByText('QueryNodeAddress')).toBeDefined()
+    expect(await screen.findByText('networkSubscriptionAddress')).toBeDefined()
+    expect(await screen.findByText('networkHTTPAddress')).toBeDefined()
+    expect(await screen.findByText('QueryNodeHttpAddress')).toBeDefined()
+    expect(await screen.findByText('QueryNodeSubscriptionAddress')).toBeDefined()
     expect(await screen.findByText('faucet')).toBeDefined()
     expect(await screen.findByText(mockUseNetworkEndpoints[0].queryNodeEndpoint)).toBeDefined()
     expect(await screen.findAllByText(mockUseNetworkEndpoints[0].membershipFaucetEndpoint)).toBeDefined()
@@ -49,7 +51,7 @@ describe('Settings', () => {
       <MemoryRouter>
         <NetworkEndpointsProvider>
           <MockQueryNodeProviders>
-            <Settings />
+            <SettingsNetworkTab />
           </MockQueryNodeProviders>
         </NetworkEndpointsProvider>
       </MemoryRouter>

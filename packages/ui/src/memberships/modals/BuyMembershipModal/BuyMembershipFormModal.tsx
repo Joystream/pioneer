@@ -1,7 +1,9 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha'
 import { BalanceOf } from '@polkadot/types/interfaces/runtime'
+import { uniqBy } from 'lodash'
 import React, { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import styled from 'styled-components'
 import * as Yup from 'yup'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
@@ -24,7 +26,6 @@ import { Arrow } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import {
   ModalFooter,
-  ModalFooterGroup,
   ModalHeader,
   Row,
   ScrolledModal,
@@ -38,6 +39,7 @@ import { TextMedium } from '@/common/components/typography'
 import { definedValues } from '@/common/utils'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { AvatarInput } from '@/memberships/components/AvatarInput'
+import { SelectValidatorAccounts, useSelectValidatorAccounts } from '@/memberships/components/SelectValidatorAccounts'
 import { SocialMediaSelector } from '@/memberships/components/SocialMediaSelector/SocialMediaSelector'
 import { useUploadAvatarAndSubmit } from '@/memberships/hooks/useUploadAvatarAndSubmit'
 import { useGetMembersCountQuery } from '@/memberships/queries'
@@ -58,7 +60,7 @@ interface BuyMembershipFormModalProps {
   membershipPrice?: BalanceOf
 }
 
-interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onClose'> {
+export interface BuyMembershipFormProps extends Omit<BuyMembershipFormModalProps, 'onClose'> {
   type: 'onBoarding' | 'general'
   membershipAccount?: string
   changeMembershipAccount?: () => void
@@ -88,6 +90,7 @@ export interface MemberFormFields {
   about: string
   avatarUri: File | string | null
   isReferred?: boolean
+  validatorAccounts?: Account[]
   referrer?: Member
   hasTerms?: boolean
   invitor?: Member
@@ -101,6 +104,7 @@ const formDefaultValues = {
   about: '',
   avatarUri: null,
   isReferred: false,
+  validatorAccounts: [],
   referrer: undefined,
   hasTerms: false,
   externalResources: {},
@@ -137,6 +141,12 @@ export const BuyMembershipForm = ({
 
   const [handle, isReferred, referrer, captchaToken] = form.watch(['handle', 'isReferred', 'referrer', 'captchaToken'])
 
+  const selectValidatorAccounts = useSelectValidatorAccounts()
+  const {
+    isValidatorAccount,
+    state: { isValidator, accounts: accountsMap },
+  } = selectValidatorAccounts
+
   useEffect(() => {
     if (handle) {
       setFormHandleMap(handle)
@@ -149,9 +159,21 @@ export const BuyMembershipForm = ({
     }
   }, [data?.membershipsConnection.totalCount])
 
-  const isFormValid = !isUploading && form.formState.isValid
+  const validatorAccounts = Array.from(accountsMap.values())
+  const isFormValid =
+    !isUploading &&
+    form.formState.isValid &&
+    (!isValidator || (validatorAccounts.length > 0 && validatorAccounts.every(isValidatorAccount)))
+
   const isDisabled =
     type === 'onBoarding' && process.env.REACT_APP_CAPTCHA_SITE_KEY ? !captchaToken || !isFormValid : !isFormValid
+
+  const submit = () => {
+    const accounts = uniqBy(validatorAccounts, 'address')
+    form.setValue('validatorAccounts', accounts)
+    const values = form.getValues()
+    uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
+  }
 
   return (
     <>
@@ -234,6 +256,8 @@ export const BuyMembershipForm = ({
 
             <SocialMediaSelector />
 
+            {type === 'general' && <SelectValidatorAccounts {...selectValidatorAccounts} />}
+
             {process.env.REACT_APP_CAPTCHA_SITE_KEY && type === 'onBoarding' && (
               <Row>
                 <HCaptcha
@@ -247,54 +271,45 @@ export const BuyMembershipForm = ({
           </ScrolledModalContainer>
         </FormProvider>
       </ScrolledModalBody>
-      <ModalFooter twoColumns>
-        <ModalFooterGroup left>
-          {type === 'onBoarding' && (
-            <ButtonGhost onClick={changeMembershipAccount} size="medium">
-              <Arrow direction="left" />
-              Change account
-            </ButtonGhost>
-          )}
-          <Checkbox
-            id="privacy-policy-agreement"
-            onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
-          >
-            <TextMedium colorInherit>
-              I agree to the{' '}
-              <LabelLink to={TermsRoutes.termsOfService} target="_blank">
-                Terms of Service
-              </LabelLink>{' '}
-              and{' '}
-              <LabelLink to={TermsRoutes.privacyPolicy} target="_blank">
-                Privacy Policy
-              </LabelLink>
-              .
-            </TextMedium>
-          </Checkbox>
-        </ModalFooterGroup>
-        <ModalFooterGroup>
-          {type === 'general' && (
-            <TransactionInfoContainer>
-              <TransactionInfo
-                title="Creation fee:"
-                value={membershipPrice?.toBn()}
-                tooltipText="Creation fee is the price of membership, it is managed by council through the proposal system. It is inclusive of transaction fee."
-                tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
-                tooltipLinkText="Learn more"
-              />
-            </TransactionInfoContainer>
-          )}
-          <ButtonPrimary
-            size="medium"
-            onClick={() => {
-              const values = form.getValues()
-              uploadAvatarAndSubmit({ ...values, externalResources: { ...definedValues(values.externalResources) } })
-            }}
-            disabled={isDisabled}
-          >
-            {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
-          </ButtonPrimary>
-        </ModalFooterGroup>
+
+      <ModalFooter>
+        <StyledCheckbox
+          id="privacy-policy-agreement"
+          onChange={(hasTerms) => form.setValue('hasTerms', hasTerms, { shouldValidate: true })}
+        >
+          <TextMedium colorInherit>
+            I agree to the{' '}
+            <LabelLink to={TermsRoutes.termsOfService} target="_blank">
+              Terms of Service
+            </LabelLink>{' '}
+            and{' '}
+            <LabelLink to={TermsRoutes.privacyPolicy} target="_blank">
+              Privacy Policy
+            </LabelLink>
+            .
+          </TextMedium>
+        </StyledCheckbox>
+        {type === 'general' && (
+          <TransactionInfoContainer>
+            <TransactionInfo
+              title="Creation fee:"
+              value={membershipPrice?.toBn()}
+              tooltipText="Creation fee is the price of membership, it is managed by council through the proposal system. It is inclusive of transaction fee."
+              tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/governance/proposals"
+              tooltipLinkText="Learn more"
+            />
+          </TransactionInfoContainer>
+        )}
+
+        {type === 'onBoarding' && (
+          <ButtonGhost onClick={changeMembershipAccount} size="medium">
+            <Arrow direction="left" />
+            Change account
+          </ButtonGhost>
+        )}
+        <ButtonPrimary size="medium" onClick={submit} disabled={isDisabled}>
+          {isUploading ? <Loading text="Uploading avatar" /> : 'Create a Membership'}
+        </ButtonPrimary>
       </ModalFooter>
     </>
   )
@@ -308,3 +323,8 @@ export const BuyMembershipFormModal = ({ onClose, onSubmit, membershipPrice }: B
     </ScrolledModal>
   )
 }
+
+const StyledCheckbox = styled(Checkbox)`
+  flex-shrink: 1;
+  margin-right: auto;
+`

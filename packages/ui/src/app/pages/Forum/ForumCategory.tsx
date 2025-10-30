@@ -13,9 +13,7 @@ import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { Label, TextMedium } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
-import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { useSort } from '@/common/hooks/useSort'
-import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { ForumCategoryList } from '@/forum/components/category/ForumCategoryList'
 import { ForumPageHeader } from '@/forum/components/ForumPageHeader'
 import { ThreadFilters } from '@/forum/components/threads/ThreadFilters'
@@ -33,7 +31,7 @@ export const ForumCategory = () => {
   const { id, type } = useParams<{ id: string; type?: 'archive' }>()
   const isArchive = type === 'archive'
 
-  const { category } = useForumCategory(id)
+  const { category, isLoading: isLoadingCategory, hasError } = useForumCategory(id)
   const { order, getSortProps } = useSort<ForumThreadOrderByInput>('updatedAt')
   const {
     isLoading: isLoadingThreads,
@@ -48,15 +46,15 @@ export const ForumCategory = () => {
     },
     { perPage: THREADS_PER_PAGE, page }
   )
-  const isRefetched = useRefetchQueries({
-    interval: MILLISECONDS_PER_BLOCK,
-    include: ['GetForumThreads', 'GetForumThreadsCount'],
-  })
 
   const { showModal } = useModal()
 
-  if (isLoadingThreads && !isRefetched) {
+  if (isLoadingCategory) {
     return <Loading />
+  }
+
+  if (hasError) {
+    return <EmptyPagePlaceholder title="Something went wrong fetching this category." copy="" button={null} />
   }
 
   if (!category) {
@@ -84,6 +82,7 @@ export const ForumCategory = () => {
               style="primary"
               size="medium"
               onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
+              isResponsive
             >
               <PlusIcon /> Add New Thread
             </TransactionButton>
@@ -118,7 +117,7 @@ export const ForumCategory = () => {
             <ThreadList
               threads={threads}
               getSortProps={getSortProps}
-              isLoading={isLoadingThreads && !isRefetched}
+              isLoading={isLoadingThreads}
               isArchive={isArchive}
               page={page}
               pageCount={threadCount && Math.ceil(threadCount / THREADS_PER_PAGE)}

@@ -33,7 +33,7 @@ export const createBalanceLock = (amount: number, type: LockType = 'Bound Stakin
 
 export const EMPTY_BALANCES: DeriveBalancesAll = {
   additional: [],
-  accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
+  accountId: createType('AccountId', 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf'),
   accountNonce: createType('Index', 1),
   availableBalance: createBalance(0),
   freeBalance: createBalance(0),

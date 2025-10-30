@@ -21,7 +21,7 @@ export const ActivityIcon = React.memo(({ category }: ActivityIconProps) => {
   )
 })
 
-const IconWrap = styled.div<{ iconStyle: IconStyle }>`
+export const IconWrap = styled.div<{ iconStyle: IconStyle }>`
   display: flex;
   grid-area: activityicon;
   justify-content: center;

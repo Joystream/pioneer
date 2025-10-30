@@ -1,37 +1,77 @@
-import React from 'react'
+import React, { FC, useEffect } from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { ButtonPrimary } from '@/common/components/buttons'
-import { ArrowDownExpandedIcon, Icon } from '@/common/components/icons'
+import { ArrowDownExpandedIcon, Icon, Loader } from '@/common/components/icons'
 import { BorderRad, Colors, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useOnBoarding } from '@/common/hooks/useOnBoarding'
+import { useRouteQuery } from '@/common/hooks/useRouteQuery'
+import { EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM } from '@/memberships/constants'
+import { useNotificationSettings } from '@/memberships/hooks/useNotificationSettings'
 
 import { MemberDarkHover, MemberInfo, MembershipsCount } from '..'
 import { useMyMemberships } from '../../hooks/useMyMemberships'
+import { EmailConfirmationModalCall } from '../../modals/EmailConfirmationModal'
+import { EmailSubscriptionModalCall } from '../../modals/EmailSubscriptionModal'
 import { SwitchMemberModalCall } from '../../modals/SwitchMemberModal'
-import { AddMembershipButton } from '../AddMembershipButton'
 
 export const CurrentMember = () => {
-  const { wallet } = useMyAccounts()
+  const { status, isLoading } = useOnBoarding()
   const { members, hasMembers, active } = useMyMemberships()
-  const { showModal } = useModal()
-  if (!wallet) {
+  const { showModal, modal } = useModal()
+  const { activeMemberSettings, activeMemberExistBackendData } = useNotificationSettings()
+  const showSubscriptionModal =
+    active && activeMemberExistBackendData?.memberExist === false && !activeMemberSettings?.hasBeenAskedForEmail
+
+  useEffect(() => {
+    if (!emailVerificationToken && !modal && showSubscriptionModal) {
+      showModal<EmailSubscriptionModalCall>({
+        modal: 'EmailSubscriptionModal',
+        data: {},
+      })
+    }
+  }, [showSubscriptionModal, modal])
+
+  const history = useHistory()
+  const routeQuery = useRouteQuery()
+  const emailVerificationToken = routeQuery.get(EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM)
+  useEffect(() => {
+    if (emailVerificationToken) {
+      const onModalClose = () => {
+        routeQuery.delete(EMAIL_VERIFICATION_TOKEN_SEARCH_PARAM)
+        history.replace({
+          search: routeQuery.toString(),
+        })
+      }
+      showModal<EmailConfirmationModalCall>({
+        modal: 'EmailConfirmationModal',
+        data: {
+          token: emailVerificationToken,
+          onClose: onModalClose,
+        },
+      })
+    }
+  }, [emailVerificationToken])
+
+  if (status !== 'finished') {
     return (
       <MembershipButtonsWrapper>
-        <MembershipActionButton onClick={() => showModal({ modal: 'OnBoardingModal' })} size="large">
-          Connect Wallet
+        <MembershipActionButton
+          onClick={() => showModal({ modal: 'OnBoardingModal' })}
+          size="large"
+          disabled={isLoading}
+        >
+          {isLoading && <Loader />}
+          {status === 'installPlugin' ? 'Connect Wallet' : 'Join Now'}
         </MembershipActionButton>
       </MembershipButtonsWrapper>
     )
   }
 
   if (!hasMembers) {
-    return (
-      <MembershipButtonsWrapper>
-        <AddMembershipButton size="large">Join Now</AddMembershipButton>
-      </MembershipButtonsWrapper>
-    )
+    return <SwitchMembershipButton>Join Now</SwitchMembershipButton>
   }
 
   return (
@@ -45,17 +85,19 @@ export const CurrentMember = () => {
           </SwitchArrow>
         </SwitchMember>
       )}
-      {!active && (
-        <MembershipButtonsWrapper>
-          <MembershipActionButton
-            onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })}
-            size="large"
-          >
-            Select membership
-          </MembershipActionButton>
-        </MembershipButtonsWrapper>
-      )}
+      {!active && <SwitchMembershipButton>Select membership</SwitchMembershipButton>}
     </>
+  )
+}
+
+const SwitchMembershipButton: FC = ({ children }) => {
+  const { showModal } = useModal()
+  return (
+    <MembershipButtonsWrapper>
+      <MembershipActionButton onClick={() => showModal<SwitchMemberModalCall>({ modal: 'SwitchMember' })} size="large">
+        {children}
+      </MembershipActionButton>
+    </MembershipButtonsWrapper>
   )
 }
 

@@ -1,26 +1,102 @@
 # Mocking
 
-There are two types of mocks used by the Pioneer
+There are 3 ways to mock data to develop on Pioneer
 
-1. GraphQL (query-node) mocks
-2. Local node mocks
+- [Storybook mocks](#storybook-mocks))
+- [Local node mocks](#node-mock)
+- [GraphQL (query-node) mocks (**deprecated**)](#query-node-mocks)
 
-### Node mocks
+## Storybook mocks
+
+In stories data are mocked using the [MockProvidersDecorator](../packages/ui/src/mocks/providers/index.tsx). This Decorator expects either an object or a function returning an object in the story parameter. This object has the following structure:
+
+```yml
+{
+  accounts: {
+    active: account and membership data or handle defined in the list property
+    list: list of account and membership data
+    hasWallet: boolean
+  }
+
+  chain: {
+    consts: This mirrors the Joystream API consts structure. The contants can simply be defined with JS primitives (no need to create types).
+
+    query: This mirrors the Joystream API query structure. This too can be defined with simple JS primitive no need to defined functions returning RXjs subscription returning Polkadot types (although this is accepted too for edge cases).
+
+    derive: Same as query.
+
+    rpc: Same as query.
+
+    tx: {
+      [module]: {
+        [extrinsic]: {
+          data: The data returned on success
+          failure: If this is defined and a non empty string the mocked transaction fails with this message
+          event: The name of the chain event triggered by this transaction
+          fee: The fee of the transaction
+          onCall: This is called whenever the tx function is called (so whenever the transaction is updated)
+          onSend: This is called when the transaction is sent
+        }
+      }
+    }
+  }
+
+  gql: {
+    queries: [
+      {
+        query: DocumentNode,
+        data: The data fields returned when the query succeeds
+        error: If this is defined the query will fail witht this value as it's error
+        resolver: The resolver to run for the query if defined it will ovewrite both data and error
+      }
+    ]
+
+    mutations: [
+      {
+        mutation: DocumentNode
+        data: The data fields returned when the mutation succeeds
+        error: If this is defined the mutation will fail witht this value as it's error
+        resolver: The resolver to run for the mutation if defined it will ovewrite both data and error
+        onSend: This is called when the mutation is sent
+      }
+    ]
+  }
+
+  localStorage: { [property name]: string value }
+
+  backend: {
+    notificationsSettingsMap?: BackendContextValue['notificationsSettingsMap']
+    onSetMemberSettings?: (memberId: string, settings: any) => void
+    authToken: string
+  }
+
+}
+```
+
+> [!NOTE]
+> Most properties of this object are optionals. Only what's needed to render the stories and run the tests should be mocked.
+
+For more details check existing stories like: [ProposalPreview.stories.tsx](../packages/ui/src/app/pages/Proposals/ProposalPreview.stories.tsx).
+
+## Node mocks
 
 To test most of the extrinsics requires existing on-chain data. To create some on-chain objects use the `yarn run node-mocks` script or use the polkadot apps wallet application to create them beforehand.
 
 Available commands:
 
+- `yarn workspace @joystream/pioneer node-mocks council:elect [-d BLOCK_TIME¹] [--to ELECTION_STAGE]` - Run an election until the specified stage: VOTE, REVEAL, or IDLE (default)
 - `yarn workspace @joystream/pioneer node-mocks council:announce` - Announce enough candidacies to start the voting stage when the announcing stage ends
 - `yarn workspace @joystream/pioneer node-mocks council:vote` - Vote for the announced by the previous command candidate to start the revealing stage next
 - `yarn workspace @joystream/pioneer node-mocks council:reveal` - Reveal the votes casted by the previous command to start elect a new council and start the idle stage next
 - `yarn workspace @joystream/pioneer node-mocks members:create` - generate memberships using query-node mocks data
 - `yarn workspace @joystream/pioneer node-mocks set-budget` - Set membership Working Group budget
-- `yarn workspace @joystream/pioneer node-mocks opening:create` - Create an opening
+- `yarn workspace @joystream/pioneer node-mocks opening:create [-d BLOCK_TIME¹]` - Create an opening
 - `yarn workspace @joystream/pioneer node-mocks opening:fill` - Fill existing opening
 - `yarn workspace @joystream/pioneer node-mocks upcoming-opening:create` - Create an upcoming opening
 - `yarn workspace @joystream/pioneer node-mocks forumCategory:create` - Create a forum category
 - `yarn workspace @joystream/pioneer node-mocks transfer` - Transfer tokens between accounts
+
+**(¹)** `BLOCK_TIME` is the time between each block. It is 6000ms by default but on testing chain it is 1000ms. Therefore when running some of the scripts on these testing chain `-d 1000` should be added for the command to succeed.
 
 To show help:
 
@@ -28,11 +104,7 @@ To show help:
 yarn node-mocks --help
 ```
 
-Shortcuts:
-- `yarn workspace @joystream/pioneer node-mocks:announce-vote` - Announce candidacies, wait, then vote on them
-- `yarn workspace @joystream/pioneer node-mocks:announce-vote-reveal` - Announce candidacies, wait, vote on them, wait, then reveal these votes
-
-#### Chain spec
+#### Chain spec (**deprecated**)
 
 Another way to influence the on-chain state for testing purpose, is to provide a customize `chain-spec.json` file when running a Joystream node:
 
@@ -97,7 +169,10 @@ The available aliases are: `post`, `opening`, `thread`, `bounty`, `candidacy`, `
 
 You can also connect to the node using [Polkadot apps wallet](README.md#connecting-to-the-joystream-node-using-polkadot-app-wallet) to interact with the node.
 
-### Query-node Mocks
+## Query-node Mocks
+
+> [!WARNING]
+> These mocks are now deprecated they are still heavily used by the legacy tests suites and some old stories. However no new tests or stories should depend on MirageJS and the legacy tests and stories should be removed progressively.
 
 To mock the query-node server we use [Mirage JS](https://miragejs.com/) in tests, storybook data and for local development.
 

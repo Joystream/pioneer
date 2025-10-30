@@ -38,7 +38,7 @@ export const ActivityItem = styled.div<{ unread?: boolean }>`
     'activityicon activitytext';
   grid-column-gap: 8px;
   grid-row-gap: 8px;
-  padding: 12px 16px;
+  padding: 12px 0;
   transition: ${Transitions.durationXL};
 
   ${({ unread }) =>

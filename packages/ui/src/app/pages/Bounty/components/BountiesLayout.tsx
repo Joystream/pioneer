@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 
 import { PageLayout } from '@/app/components/PageLayout'
 import { BountyEmptyFilter, BountyFilters } from '@/bounty/components/BountiesFilters'
+import { BountiesHeader } from '@/bounty/components/BountiesHeader'
 import { BountiesList } from '@/bounty/components/BountiesList'
 import { BountyStatus, QueryExtraFilter, useBounties } from '@/bounty/hooks/useBounties'
 import { BountyOrderByInput } from '@/common/api/queries'
@@ -10,8 +11,6 @@ import { Loading } from '@/common/components/Loading'
 import { MainPanel } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { useSort } from '@/common/hooks/useSort'
-
-import { BountiesHeader } from './BountiesHeader'
 
 export interface LayoutProps {
   tilesComponent?: React.ReactNode

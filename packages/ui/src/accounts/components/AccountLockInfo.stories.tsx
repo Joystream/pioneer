@@ -27,7 +27,7 @@ export const Default = Template.bind({})
 Default.args = {
   account: {
     name: 'Alice',
-    address: '5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY',
+    address: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
   },
   amount: new BN(1000000),
   lockType: 'Invitation',

@@ -61,5 +61,7 @@ export const PostContextMenu = ({ isFirstItem, post, onEdit, type }: Props) => {
   }
 
   const isActive = post.status === 'PostStatusActive'
-  return isOwn && isActive ? <ContextMenu title="Post actions" size="small" items={getContextMenuItems()} /> : null
+  return isOwn && isActive ? (
+    <ContextMenu title="Post actions" size="small" items={getContextMenuItems()} isResponsive />
+  ) : null
 }

@@ -20,6 +20,7 @@ interface FilterBoxProps {
   children: React.ReactNode
   searchLabel?: string
   className?: string
+  minCharacterLimit?: number
 }
 
 export const FilterBox = ({
@@ -32,6 +33,7 @@ export const FilterBox = ({
   children,
   searchLabel,
   className,
+  minCharacterLimit,
 }: FilterBoxProps) => (
   <FilterContainer gap={8} className={className}>
     {isDefined(onClear) && (
@@ -49,6 +51,7 @@ export const FilterBox = ({
           onChange={onSearch}
           label={searchLabel}
           displayReset={displaySearchReset}
+          minCharacterLimit={minCharacterLimit}
         />
       )}
       {children}

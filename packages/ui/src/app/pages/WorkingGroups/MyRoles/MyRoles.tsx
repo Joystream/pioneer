@@ -1,5 +1,6 @@
 import BN from 'bn.js'
 import React from 'react'
+import styled from 'styled-components'
 
 import { PageLayout, PageHeaderWrapper } from '@/app/components/PageLayout'
 import { Loading } from '@/common/components/Loading'
@@ -58,15 +59,27 @@ export const MyRoles = () => {
       }
       main={
         <MainPanel>
-          <Statistics>
+          <StatisticsStyle>
             <MyEarningsStat />
             <MyStakeStat />
             <TokenValueStat title="Total owed reward" value={owedReward} />
             <NextPayoutStat workers={workers} />
-          </Statistics>
+          </StatisticsStyle>
           {displayRoles()}
         </MainPanel>
       }
     />
   )
 }
+
+const StatisticsStyle = styled(Statistics)`
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1440px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+`

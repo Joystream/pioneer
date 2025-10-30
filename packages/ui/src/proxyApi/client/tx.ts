@@ -3,12 +3,13 @@ import { AnyTuple } from '@polkadot/types/types'
 import { uniqueId } from 'lodash'
 import { filter, map, Observable, share } from 'rxjs'
 
-import { ProxyApi } from '..'
 import { deserializeMessage } from '../models/payload'
 import { PostMessage, ProxyPromisePayload, RawWorkerMessageEvent } from '../types'
 import { apiInterfaceProxy } from '../utils/proxy'
 
-type ObservableMethods = typeof ObservableMethods[number]
+import { ProxyApi } from './ProxyApi'
+
+type ObservableMethods = (typeof ObservableMethods)[number]
 
 export type TxModule = keyof ProxyApi['tx']
 
@@ -61,21 +62,25 @@ export const tx = (messages: Observable<RawWorkerMessageEvent>, postMessage: Pos
     function addObservableMethodEntry(method: ObservableMethods) {
       return [
         method,
-        (...params: AnyTuple) => {
-          const callId = uniqueId(`tx.${module}.${txKey}.${method}.`)
-          _postMessage({ method: { key: method, id: callId }, payload: params })
-          return _messages.pipe(
-            filter((message) => message.callId === callId),
-            map(({ payload: { error, result } }) => {
-              if (error) {
-                throw error
-              } else {
-                return result
-              }
-            }),
-            share()
-          )
-        },
+        (...params: AnyTuple) =>
+          new Observable((subscriber) => {
+            const callId = uniqueId(`tx.${module}.${txKey}.${method}.`)
+
+            _postMessage({ method: { key: method, id: callId }, payload: params })
+
+            _messages
+              .pipe(
+                filter((message) => message.callId === callId),
+                map(({ payload: { error, result } }) => {
+                  if (error) {
+                    throw error
+                  } else {
+                    return result
+                  }
+                })
+              )
+              .subscribe((value) => subscriber.next(value))
+          }),
       ]
     }
   })

@@ -26,6 +26,7 @@ export const InviteMemberButton = ({ className, children, size }: InviteMemberBu
         onClick={openModal}
         className={className}
         disabled={isTransactionPending}
+        isResponsive
       >
         {children}
       </TransactionButton>

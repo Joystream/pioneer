@@ -17,6 +17,17 @@ export const Row = styled.div`
   height: auto;
 `
 
+export const RowInline = styled.div<{ justify?: string; gap?: number; top?: number }>`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  justify-content: ${({ justify }) => justify ?? 'flex-start'};
+  gap: ${({ gap }) => gap ?? 16}px;
+  margin-top: ${({ top }) => top ?? 0}px;
+`
+
 export const AccountRow = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -25,7 +36,7 @@ export const AccountRow = styled.div`
   width: 100%;
   min-height: ${Sizes.accountHeight};
   max-height: ${Sizes.accountHeight};
-  padding: 8px 72px 8px 14px;
+  padding: 8px 14px;
   border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.s};
   background-color: ${Colors.White};
@@ -52,6 +63,9 @@ export const TransactionAmount = styled.div<TransactionAmountProps>`
 
 export const TransactionInfoContainer = styled.div`
   display: grid;
+  align-items: center;
+  grid-template-columns: 1fr auto auto;
+  column-gap: 8px;
 `
 
 export const BalanceInfo = styled.div`
@@ -66,11 +80,6 @@ export const BalanceInfoInRow = styled(BalanceInfo)`
   justify-self: end;
 `
 
-export const BalanceInfoNarrow = styled(BalanceInfo)`
-  grid-template-columns: 1fr 128px;
-  width: auto;
-`
-
 export const InfoTitle = styled.span`
   font-size: 10px;
   line-height: 16px;
@@ -80,7 +89,7 @@ export const InfoTitle = styled.span`
   color: ${Colors.Black[400]};
 `
 
-export const InfoValue = styled.span`
+export const InfoValue = styled.div`
   text-align: right;
   text-align: -webkit-right;
   line-height: 20px;

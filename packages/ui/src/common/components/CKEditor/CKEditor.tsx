@@ -20,7 +20,7 @@ export interface BaseCKEditorProps {
 
 export const BaseCKEditor = React.forwardRef(
   (
-    { maxRows = 20, minRows = 5, onChange, onBlur, onFocus, onReady, disabled, inline }: CKEditorProps,
+    { id, maxRows = 20, minRows = 5, onChange, onBlur, onFocus, onReady, disabled, inline }: BaseCKEditorProps,
     ref?: Ref<HTMLDivElement>
   ) => {
     const localRef = useRef<HTMLDivElement>(null)
@@ -57,6 +57,9 @@ export const BaseCKEditor = React.forwardRef(
               'blockQuote',
               'undo',
               'redo',
+              '|',
+              // 'insertTable',
+              'specialCharacters',
             ],
           },
           mention: {
@@ -68,10 +71,22 @@ export const BaseCKEditor = React.forwardRef(
           image: {
             toolbar: ['imageStyle:full', 'imageStyle:side', '|', 'imageTextAlternative'],
           },
+          table: {
+            contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells'],
+          },
           // This value must be kept in sync with the language defined in webpack.config.js.
           language: 'en',
         })
-        .then((editor: any) => {
+        .then((editor: Editor) => {
+          // The component might be unmounted by the time it's initialize
+          // In this case the editor will be cleaned up when the promise resolves
+          if (!elementRef.current) return editor
+
+          Object.defineProperty(elementRef.current, 'setData', {
+            configurable: true,
+            value: (data: any) => editor.setData(data),
+          })
+
           if (onReady) {
             onReady(editor)
           }
@@ -105,12 +120,12 @@ export const BaseCKEditor = React.forwardRef(
       return () => {
         createPromise.then((editor) => editor.destroy())
       }
-    }, [elementRef.current])
+    }, [])
 
     return (
       <>
         <CKEditorStylesOverrides maxRows={maxRows} minRows={minRows} />
-        <div className="ckeditor-anchor" ref={elementRef} />
+        <div id={id} className="ckeditor-anchor" ref={elementRef} />
       </>
     )
   }

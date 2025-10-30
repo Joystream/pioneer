@@ -1,18 +1,20 @@
 import React, { useEffect } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { generatePath, Link, useHistory, useParams } from 'react-router-dom'
+import styled from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
-import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
+import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { BadgesRow, BadgeStatus, BadgeStatusCss } from '@/common/components/BadgeStatus'
 import { ButtonsGroup, CopyButtonTemplate } from '@/common/components/buttons'
 import { LinkIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import { MainPanel, RowGapBlock } from '@/common/components/page/PageContent'
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
+import { Tooltip, TooltipDefault } from '@/common/components/Tooltip'
 import { getUrl } from '@/common/utils/getUrl'
 import { PastElectionStats } from '@/council/components/election/pastElection/PastElectionStats'
 import { PastElectionTabs } from '@/council/components/election/pastElection/PastElectionTabs'
-import { ElectionRoutes } from '@/council/constants'
+import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { useCandidatePreviewViaUrlParameter } from '@/council/hooks/useCandidatePreviewViaUrlParameter'
 import { usePastElection } from '@/council/hooks/usePastElection'
 
@@ -36,7 +38,7 @@ export const PastElection = () => {
 
     return (
       <PageHeaderWrapper>
-        <PageHeaderRow showOverflow>
+        <PageHeaderWithButtons showOverflow>
           <PreviousPage showOverflow>
             <PageTitle>Election #{election.cycleId}</PageTitle>
           </PreviousPage>
@@ -49,12 +51,29 @@ export const PastElection = () => {
               Copy link
             </CopyButtonTemplate>
           </ButtonsGroup>
-        </PageHeaderRow>
+        </PageHeaderWithButtons>
         <RowGapBlock>
           <BadgesRow space={8}>
             <BadgeStatus inverted size="l">
               Past Election
             </BadgeStatus>
+            {election.result == 'successful' ? (
+              <StyledBadge to={generatePath(CouncilRoutes.pastCouncil, { id: election.id })} succeeded>
+                Successful
+              </StyledBadge>
+            ) : (
+              <TooltipBadge ended size="l">
+                <span>Failed</span>
+                <Tooltip
+                  tooltipText={
+                    "The process didn't complete because there weren't enough candidates, votes cast or revealed, or the voting stage was missing"
+                  }
+                  tooltipTitle={'Election Failed'}
+                >
+                  <TooltipDefault />
+                </Tooltip>
+              </TooltipBadge>
+            )}
           </BadgesRow>
         </RowGapBlock>
       </PageHeaderWrapper>
@@ -77,3 +96,11 @@ export const PastElection = () => {
 
   return <PageLayout header={displayHeader()} main={displayMain()} lastBreadcrumb={'Election #' + id} />
 }
+const StyledBadge = styled(Link)`
+  ${BadgeStatusCss}
+`
+const TooltipBadge = styled(BadgeStatus)`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`

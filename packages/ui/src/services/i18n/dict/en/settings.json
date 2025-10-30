@@ -1,12 +1,21 @@
 {
   "network": "Network",
   "language": "Language",
+  "notifications": "Notifications",
   "selectNetwork": "Select Network",
   "networkDetails": "Network Details",
-  "networkAddress": "Network: ",
-  "QueryNodeAddress": "Query Node: ",
+  "networkSubscriptionAddress": "Network subscription: ",
+  "networkHTTPAddress": "Network HTTP endpoint: ",
+  "QueryNodeHttpAddress": "Query Node: ",
+  "QueryNodeSubscriptionAddress": "Query Node subscription: ",
   "faucet": "Faucet: ",
+  "backend": "Backend: ",
   "chainInfo": "Chain Information",
   "rpcBlockheight": "RPC Block Height: ",
-  "qnBlockheight": "Query Node Block Height: "
+  "qnBlockheight": "Query Node Block Height: ",
+  "customFaucet": "FAUCET",
+  "customWsRpcNode": "RPC NODE SUBSCRIPTION",
+  "customHttpRpcNode": "RPC NODE HTTP ENDPOINT",
+  "customQueryNode": "QUERY NODE",
+  "customBackend": "BACKEND"
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { PageLayout, PageHeaderWrapper, PageHeaderRow } from '@/app/components/PageLayout'
 import { ButtonsGroup } from '@/common/components/buttons'
@@ -14,7 +15,7 @@ export const MyMemberships = () => (
   <PageLayout
     header={
       <PageHeaderWrapper>
-        <PageHeaderRow>
+        <MyMembershipsHeaderWrapper>
           <PageTitle>My Profile</PageTitle>
           <ButtonsGroup>
             <InviteMemberButton size="medium">Invite a member</InviteMemberButton>
@@ -23,10 +24,32 @@ export const MyMemberships = () => (
               Add Membership
             </AddMembershipButton>
           </ButtonsGroup>
-        </PageHeaderRow>
+        </MyMembershipsHeaderWrapper>
         <MyProfileTabs />
       </PageHeaderWrapper>
     }
     main={<Memberships />}
   />
 )
+
+const MyMembershipsHeaderWrapper = styled(PageHeaderRow)`
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    ${ButtonsGroup} {
+      grid-auto-flow: row;
+      grid-row-gap: 8px;
+      width: 100%;
+
+      button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center:
+        gap: 4px;
+      }
+    }
+  }
+`

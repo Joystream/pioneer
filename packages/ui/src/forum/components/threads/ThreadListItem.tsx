@@ -58,9 +58,11 @@ const ThreadPinIcon = styled(PinIcon)`
 `
 
 const ThreadListItemStyles = styled(TableListItem).attrs({ $colLayout: ThreadsColLayout })<{ $isSticky?: boolean }>`
-  height: 80px;
-  padding: 12px 24px;
+  grid-column-gap: 14px;
+  height: 86px;
+  padding: 14px 24px;
   position: relative;
+  min-width: 1024px;
 
   ${({ $isSticky }) =>
     $isSticky &&

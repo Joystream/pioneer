@@ -1,5 +1,6 @@
+import { usePastCouncil } from '@/council/hooks/usePastCouncil'
 import { useGetCouncilBlockRangeQuery, useGetPastCouncilStatsQuery } from '@/council/queries'
-import { getSpentOnProposals, getTotalSpent } from '@/council/types/PastCouncil'
+import { getSpentOnProposals } from '@/council/types/PastCouncil'
 
 export const usePastCouncilStats = (id: string) => {
   const { loading: loadingRange, data: rangeData } = useGetCouncilBlockRangeQuery({
@@ -19,11 +20,13 @@ export const usePastCouncilStats = (id: string) => {
     },
   })
 
+  const { isLoading: loadingCouncil, council: pastCouncil } = usePastCouncil(id)
+
   return {
-    isLoading: loadingRange || loadingData,
+    isLoading: loadingRange || loadingData || loadingCouncil,
     proposalsApproved: data?.proposalsApproved?.totalCount ?? 0,
     proposalsRejected: (data?.proposalsRejected?.totalCount || 0) + (data?.proposalsSlashed?.totalCount || 0),
-    totalSpent: data && getTotalSpent(data.budgetSpendingEvents),
+    totalSpent: data && pastCouncil && pastCouncil.totalSpent,
     spentOnProposals: data && getSpentOnProposals(data.fundingRequestsApproved),
   }
 }

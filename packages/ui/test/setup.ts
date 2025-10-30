@@ -4,14 +4,40 @@ import { BN_THOUSAND } from '@polkadot/util'
 import '@testing-library/jest-dom'
 import { configure, screen } from '@testing-library/react'
 import BN from 'bn.js'
+import { Buffer } from 'buffer/'
 
+import { UseTransactionFee } from '@/accounts/hooks/useTransactionFee'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
 import { AddressToBalanceMap, Balances } from '@/accounts/types'
 import { BN_ZERO } from '@/common/constants'
 import { UseModal } from '@/common/providers/modal/types'
-import { UseTransaction } from '@/common/providers/transactionFees/context'
+
+Object.defineProperty(global, 'screen', {
+  value: {
+    width: 1024,
+  },
+})
 
 configure({ testIdAttribute: 'id' })
+
+jest.mock('injectweb3-connect', () => {
+  const wallet = {
+    title: 'ExtraWallet',
+    extensionName: 'polkadot-js',
+    logo: { src: 'https://picsum.photos/100?grayscale&blur=2' },
+    updateMetadata: jest.fn(() => Promise.resolve(true)),
+  }
+  const BaseDotsamaWallet = function () {
+    return
+  }
+  BaseDotsamaWallet.prototype = wallet
+
+  return {
+    getWalletBySource: jest.fn(() => ({ ...wallet })),
+    getAllWallets: jest.fn(() => [{ ...wallet }]),
+    BaseDotsamaWallet,
+  }
+})
 
 // Prevent jest from importing workers
 jest.mock('@/common/utils/crypto/worker', () => jest.requireActual('@/common/utils/crypto'))
@@ -59,16 +85,17 @@ export const mockDefaultBalance = {
   total: BN_THOUSAND,
 }
 
-const defaultMockedTransactionFee: UseTransaction = {
+const defaultMockedTransactionFee: UseTransactionFee = {
   transaction: undefined,
-  setTransaction: () => undefined,
-  setSigner: () => undefined,
   feeInfo: { transactionFee: BN_ZERO, canAfford: true },
+  isLoading: false,
 }
 
-const mockedTransactionFee = jest.fn(() => defaultMockedTransactionFee)
+export const mockedTransactionFee = jest.fn<UseTransactionFee, [any, () => any, any[]] | []>(
+  () => defaultMockedTransactionFee
+)
 
-export const mockTransactionFee = (value: Partial<UseTransaction>) => {
+export const mockTransactionFee = (value: Partial<UseTransactionFee>) => {
   mockedTransactionFee.mockReturnValue({ ...mockedTransactionFee(), ...value })
 }
 
@@ -80,6 +107,7 @@ export const mockedUseMyAccounts = jest.fn<UseAccounts, []>(() => ({
   allAccounts: [],
   hasAccounts: false,
   isLoading: true,
+  allWallets: [],
 }))
 
 jest.mock('@/accounts/hooks/useMyAccounts', () => ({
@@ -152,3 +180,7 @@ expect.extend({
 // multihases requires both TextEncoder and TextDecoder but is having trouble with resoving them
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder as any
+
+const glob: any = global
+
+glob.Buffer = Buffer

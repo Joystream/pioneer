@@ -18,7 +18,7 @@ export const BountyFooter = ({ bounty }: Props) => {
   return (
     <BountyInfoWrapper>
       <TextSmall>
-        {t('created')}: {formatDateString(bounty.createdAt, 'l')}
+        {t('created')}: {formatDateString(bounty.createdAt)}
       </TextSmall>
       <Separator>{' | '}</Separator>
       <BlockInfo

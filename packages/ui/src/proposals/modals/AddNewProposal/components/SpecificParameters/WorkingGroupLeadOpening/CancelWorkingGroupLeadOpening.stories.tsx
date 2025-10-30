@@ -5,7 +5,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { CancelWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/CancelWorkingGroupLeadOpening'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/CancelWorkingGroupLeadOpening',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/CancelWorkingGroupLeadOpening',
   component: CancelWorkingGroupLeadOpening,
 } as Meta
 

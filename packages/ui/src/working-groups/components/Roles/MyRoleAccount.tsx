@@ -18,37 +18,39 @@ export const MyRoleAccount = ({ account, balances }: MyRoleAccountProps) => {
   const balance = useBalance(account.address)
 
   return (
-    <ListItem>
-      <RoleAccount>
-        <UnknownAccountInfo address={account.address} placeholderName={account.name as string} />
-        <RoleAccountBalances>
-          {balances.includes('free') && (
-            <RoleAccountBalance>
-              <Label>Free balance</Label>
-              <TokenValue value={balance?.transferable} />
-            </RoleAccountBalance>
-          )}
-          {balances.includes('total') && (
-            <RoleAccountBalance>
-              <Label>Total balance</Label>
-              <TokenValue value={balance?.total} />
-            </RoleAccountBalance>
-          )}
-          {balances.includes('locked') && (
-            <RoleAccountBalance>
-              <Label>Locked balance</Label>
-              <TokenValue value={balance?.locked} />
-            </RoleAccountBalance>
-          )}
-        </RoleAccountBalances>
-      </RoleAccount>
-    </ListItem>
+    <Wrapper>
+      <ListItem>
+        <RoleAccount>
+          <UnknownAccountInfo address={account.address} placeholderName={account.name as string} />
+          <RoleAccountBalances>
+            {balances.includes('free') && (
+              <RoleAccountBalance>
+                <Label>Free balance</Label>
+                <TokenValue value={balance?.transferable} />
+              </RoleAccountBalance>
+            )}
+            {balances.includes('total') && (
+              <RoleAccountBalance>
+                <Label>Total balance</Label>
+                <TokenValue value={balance?.total} />
+              </RoleAccountBalance>
+            )}
+            {balances.includes('locked') && (
+              <RoleAccountBalance>
+                <Label>Locked balance</Label>
+                <TokenValue value={balance?.locked} />
+              </RoleAccountBalance>
+            )}
+          </RoleAccountBalances>
+        </RoleAccount>
+      </ListItem>
+    </Wrapper>
   )
 }
 
 const RoleAccount = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(224px, 1fr) minmax(300px, 1fr);
   grid-template-rows: 1fr;
   -webkit-box-pack: justify;
   -webkit-justify-content: space-between;
@@ -82,4 +84,13 @@ const RoleAccountBalance = styled.div`
   -ms-flex-align: center;
   align-items: center;
   width: 100%;
+`
+
+const Wrapper = styled.div`
+  width: 100%;
+  overflow: auto;
+
+  ${ListItem} {
+    min-width: fit-content;
+  }
 `

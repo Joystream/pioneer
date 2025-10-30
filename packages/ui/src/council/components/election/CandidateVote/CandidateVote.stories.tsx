@@ -19,8 +19,8 @@ const args: CandidateVoteProps = {
   member: {
     id: '0',
     name: 'Jennifer_123',
-    rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    rootAccount: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
+    controllerAccount: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
     handle: 'Jennifer_123',
     isVerified: true,
     isFoundingMember: true,

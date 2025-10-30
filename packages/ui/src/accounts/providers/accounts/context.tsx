@@ -6,4 +6,5 @@ export const AccountsContext = createContext<UseAccounts>({
   isLoading: true,
   hasAccounts: false,
   allAccounts: [],
+  allWallets: [],
 })

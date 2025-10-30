@@ -32,7 +32,7 @@ export const ThreadItemBreadcrumbs = memo(({ id, nonInteractive }: ThreadItemBre
           {title}
         </BreadcrumbsItem>
       )),
-    [isLoading, nonInteractive]
+    [breadcrumbs, nonInteractive]
   )
 
   const containerRef = useRef<HTMLUListElement>(null)
@@ -56,7 +56,7 @@ export const ThreadItemBreadcrumbs = memo(({ id, nonInteractive }: ThreadItemBre
 
     const { children } = containerRef.current
     return [children[0], last(children)].map((child) => child.getBoundingClientRect().width)
-  }, [isLoading])
+  }, [isLoading, containerRef.current])
 
   useEffect(() => {
     if (!lastChildWidth || !firstChildWidth) return

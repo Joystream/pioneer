@@ -14,7 +14,6 @@ import {
   Row,
 } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
-import { useKeyring } from '@/common/hooks/useKeyring'
 import { useYupValidationResolver } from '@/common/utils/validation'
 import { AvatarInput } from '@/memberships/components/AvatarInput'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -51,14 +50,13 @@ const formDefaultValues = {
 
 export const InviteMemberFormModal = ({ onClose, onSubmit }: InviteProps) => {
   const { active } = useMyMemberships()
-  const keyring = useKeyring()
   const { uploadAvatarAndSubmit, isUploading } = useUploadAvatarAndSubmit(onSubmit)
   const [formHandleMap, setFormHandleMap] = useState('')
   const { data } = useGetMembersCountQuery({ variables: { where: { handle_eq: formHandleMap } } })
 
   const form = useForm<MemberFormFields>({
     resolver: useYupValidationResolver(InviteMemberSchema),
-    context: { size: data?.membershipsConnection.totalCount, keyring },
+    context: { size: data?.membershipsConnection.totalCount },
     mode: 'onChange',
     defaultValues: formDefaultValues,
   })

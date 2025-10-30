@@ -11,20 +11,22 @@ import { ProposalType } from '../types'
 export const useProposalConstants = (proposalType?: ProposalType): ProposalConstants | null => {
   const { api, isConnected } = useApi()
 
-  return useMemo(() => {
-    if (!proposalType) {
-      return null
-    }
+  return useMemo(() => proposalConstants(api, proposalType), [proposalType, isConnected])
+}
 
-    const constantKey = proposalTypeToConstantKey.get(proposalType)
+export const proposalConstants = (api?: Pick<Api, 'consts'>, proposalType?: ProposalType) => {
+  if (!proposalType) {
+    return null
+  }
 
-    if (!constantKey) {
-      return null
-    }
-    const constants = api?.consts.proposalsCodex[constantKey]
+  const constantKey = proposalTypeToConstantKey.get(proposalType)
 
-    return constants && extendsProposalPallet(constants) ? asProposalConstants(constants) : null
-  }, [proposalType, isConnected])
+  if (!constantKey) {
+    return null
+  }
+  const constants = api?.consts.proposalsCodex[constantKey]
+
+  return constants && extendsProposalPallet(constants) ? asProposalConstants(constants) : null
 }
 
 const extendsProposalPallet = (
@@ -34,6 +36,7 @@ const extendsProposalPallet = (
 
 const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['proposalsCodex']>([
   ['updateChannelPayouts', 'updateChannelPayoutsProposalParameters'],
+  ['updatePalletFrozenStatus', 'setPalletFozenStatusProposalParameters'],
   ['amendConstitution', 'amendConstitutionProposalParameters'],
   ['cancelWorkingGroupLeadOpening', 'cancelWorkingGroupLeadOpeningProposalParameters'],
   ['createWorkingGroupLeadOpening', 'createWorkingGroupLeadOpeningProposalParameters'],
@@ -55,4 +58,8 @@ const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['pro
   ['terminateWorkingGroupLead', 'terminateWorkingGroupLeadProposalParameters'],
   ['updateWorkingGroupBudget', 'updateWorkingGroupBudgetProposalParameters'],
   ['veto', 'vetoProposalProposalParameters'],
+  ['setEraPayoutDampingFactor', 'setEraPayoutDampingFactorProposalParameters'],
+  ['decreaseCouncilBudget', 'decreaseCouncilBudgetProposalParameters'],
+  ['updateTokenPalletTokenConstraints', 'updateTokenPalletTokenConstraints'],
+  ['updateArgoBridgeConstraints', 'updateArgoBridgeConstraints'],
 ])

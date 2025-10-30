@@ -34,18 +34,12 @@ export const DefaultDateFormatter = Intl.DateTimeFormat('en-GB', {
   timeZoneName: 'short',
 })
 
-export const formatDateString = (timestamp: string | number | undefined, size: 's' | 'l' = 'l') => {
+export const formatDateString = (timestamp: string | number | undefined) => {
   if (!isDefined(timestamp)) {
     return '-'
   }
 
-  const defaultFormat = DefaultDateFormatter.format(new Date(timestamp))
-  switch (size) {
-    case 'l':
-      return defaultFormat.replace(/ ([AP]M)/i, (_, period: string) => period.toUpperCase())
-    default:
-      return defaultFormat
-  }
+  return DefaultDateFormatter.format(new Date(timestamp)).toUpperCase()
 }
 
 type TimeUnit = [number, Intl.RelativeTimeFormatUnit]

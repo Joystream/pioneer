@@ -24,7 +24,7 @@ export const usePastWorkersPagination = ({
       group: { id_eq: group_eq },
       status_json: { isTypeOf_not: 'WorkerStatusActive' },
     },
-    orderBy: [toQueryOrderByInput<WorkerOrderByInput>(order)],
+    orderBy: toQueryOrderByInput<WorkerOrderByInput>(order),
   }
 
   const { loading: loadingCount, data: countData } = useGetWorkersCountQuery({ variables })

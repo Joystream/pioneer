@@ -68,11 +68,31 @@ export const BuyMembershipSignModal = ({
     }
   }, [!balance, !membershipPrice, !paymentInfo])
 
+  const shouldBindValidatorAccounts = formData.validatorAccounts?.length
   const signDisabled = !isReady || !hasFunds || !validationInfo
   return (
-    <TransactionModal onClose={onClose} service={service}>
+    <TransactionModal
+      onClose={onClose}
+      service={service}
+      useMultiTransaction={
+        shouldBindValidatorAccounts
+          ? {
+              steps: [
+                { title: 'Create Membership' },
+                { title: 'Bind Validator Account' },
+                { title: 'Confirm Validator Account' },
+              ],
+              active: 0,
+            }
+          : undefined
+      }
+    >
       <ModalBody>
-        <TextMedium>You intend to create a new membership.</TextMedium>
+        <TextMedium>
+          {shouldBindValidatorAccounts
+            ? 'You intend to create a validator membership.'
+            : 'You intend to create a new membership.'}
+        </TextMedium>
         <TextMedium>
           The creation of the new membership costs <TokenValue value={membershipPrice?.toBn()} />.
         </TextMedium>
@@ -108,7 +128,11 @@ export const BuyMembershipSignModal = ({
       </ModalBody>
       <ModalTransactionFooter
         transactionFee={paymentInfo?.partialFee.toBn()}
-        next={{ disabled: signDisabled, label: 'Sign and create a member', onClick: sign }}
+        next={{
+          disabled: signDisabled,
+          label: shouldBindValidatorAccounts ? 'Create membership' : 'Sign and create a member',
+          onClick: sign,
+        }}
       >
         <TransactionInfo
           title="Creation fee:"

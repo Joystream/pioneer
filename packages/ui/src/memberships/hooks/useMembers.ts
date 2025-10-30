@@ -26,12 +26,12 @@ export const useMembers = ({ order, filter, perPage = 10 }: UseMemberProps) => {
     where,
     orderBy: toQueryOrderByInput<MembershipOrderByInput>(order),
   }
+
   const { data, loading, error: err } = useGetMembersWithDetailsQuery({ variables })
 
   if (err) {
     error(err)
   }
-
   return {
     isLoading: loading,
     members: data?.memberships.map(asMemberWithDetails) ?? [],
@@ -50,6 +50,7 @@ type FilterGqlInput = Pick<
   | 'controllerAccount_eq'
   | 'rootAccount_eq'
   | 'isCouncilMember_eq'
+  | 'isVerified_eq'
   | 'externalResources_some'
 >
 
@@ -58,12 +59,14 @@ const filterToGqlInput = ({
   roles,
   onlyCouncil,
   onlyFounder,
+  onlyVerified,
   searchFilter,
 }: MemberListFilter): FilterGqlInput => ({
   ...(roles.length ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
   ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
   ...(searchFilter ? searchFilterToGqlInput(searchFilter, search) : {}),
   ...(onlyCouncil ? { isCouncilMember_eq: true } : {}),
+  ...(onlyVerified ? { isVerified_eq: true } : {}),
 })
 
 const searchFilterToGqlInput = (

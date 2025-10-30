@@ -1,7 +1,7 @@
 import { isBn } from '@polkadot/util'
 import BN from 'bn.js'
-import { at, get } from 'lodash'
-import React, { useCallback } from 'react'
+import { at, get, merge } from 'lodash'
+import React, { useCallback, useRef } from 'react'
 import { FieldErrors, FieldValues, Resolver } from 'react-hook-form'
 import { FieldError } from 'react-hook-form/dist/types/errors'
 import { DeepMap, DeepPartial } from 'react-hook-form/dist/types/utils'
@@ -15,6 +15,8 @@ import { Loading } from '@/common/components/Loading'
 import { formatJoyValue } from '@/common/model/formatters'
 
 export const BNSchema = Yup.mixed()
+
+export const NumberSchema = Yup.number().transform((_, value) => value ?? undefined)
 
 export const whenDefined = (key: string, schema: Yup.AnySchema) =>
   Yup.mixed().when(key, {
@@ -188,24 +190,27 @@ interface IFormError {
 export const useYupValidationResolver = <T extends FieldValues>(
   validationSchema: AnyObjectSchema,
   path?: string
-): Resolver<T> =>
-  useCallback(
+): Resolver<T> => {
+  const validationsPromise = useRef<Promise<any>>(Promise.resolve())
+
+  return useCallback(
     async (data, context) => {
       let values
+
+      // Deep clone data since it's "by reference" attributes values might change by the time it runs
+      const _data = merge({}, data)
+      const options = {
+        abortEarly: false,
+        context,
+        stripUnknown: true,
+      }
+      const validate = () =>
+        path ? validationSchema.validateSyncAt(path, _data, options) : validationSchema.validateSync(_data, options)
+
+      validationsPromise.current = validationsPromise.current.then(validate, validate)
+
       try {
-        if (path) {
-          values = await validationSchema.validateSyncAt(path, data, {
-            abortEarly: false,
-            context,
-            stripUnknown: true,
-          })
-        } else {
-          values = await validationSchema.validateSync(data, {
-            abortEarly: false,
-            context,
-            stripUnknown: true,
-          })
-        }
+        values = await validationsPromise.current
 
         return {
           values,
@@ -214,12 +219,13 @@ export const useYupValidationResolver = <T extends FieldValues>(
       } catch (errors: any) {
         return {
           values: {},
-          errors: convertYupErrorVectorToFieldErrors<T>(errors?.inner ?? []),
+          errors: convertYupErrorVectorToFieldErrors<T>(errors?.inner ?? [errors ?? Error('Unknown')]),
         }
       }
     },
     [validationSchema, path]
   )
+}
 
 export interface ValidationHelpers {
   errorMessageGetter: (field: string) => string | undefined

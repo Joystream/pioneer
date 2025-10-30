@@ -43,7 +43,6 @@ export const SetMembershipLeadInvitationQuota = () => {
               id="amount-input"
               name="setMembershipLeadInvitationQuota.count"
               placeholder="0"
-              maxAllowedValue={Math.pow(2, 32) - 1}
               disabled={isLoading || !group?.leadId}
             />
           </InputComponent>

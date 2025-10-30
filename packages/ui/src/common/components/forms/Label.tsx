@@ -4,6 +4,7 @@ import { Colors } from '../../constants'
 import { TooltipContainer } from '../Tooltip'
 
 interface LabelProps {
+  noMargin?: boolean
   isRequired?: boolean
   className?: string
 }
@@ -13,7 +14,7 @@ export const Label = styled.label<LabelProps>`
   align-items: center;
   align-content: center;
   width: fit-content;
-  margin-bottom: 4px;
+  margin-bottom: ${({ noMargin }) => (noMargin ? '0px' : '4px')};
   font-size: 14px;
   line-height: 20px;
   font-weight: 700;

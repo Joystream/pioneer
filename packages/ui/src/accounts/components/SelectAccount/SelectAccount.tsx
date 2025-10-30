@@ -9,7 +9,6 @@ import { isValidAddress } from '@/accounts/model/isValidAddress'
 import { RecoveryConditions } from '@/accounts/model/lockTypes'
 import { Account, AccountOption, LockType } from '@/accounts/types'
 import { Select, SelectedOption, SelectProps } from '@/common/components/selects'
-import { useKeyring } from '@/common/hooks/useKeyring'
 import { Address } from '@/common/types'
 
 import { filterByText } from './helpers'
@@ -25,6 +24,7 @@ interface SelectAccountProps extends Pick<SelectProps<AccountOption>, 'id' | 'se
   onChange?: (selected: AccountOption) => void
   filter?: (option: AccountOption) => boolean
   name?: string
+  variant?: 's' | 'm' | 'l'
 }
 
 interface SelectStakingAccountProps extends SelectAccountProps {
@@ -38,19 +38,24 @@ interface BaseSelectAccountProps extends SelectAccountProps {
   isForStaking?: boolean
 }
 
-export const BaseSelectAccount = React.memo(
-  ({ id, onChange, accounts, filter, selected, disabled, onBlur, isForStaking }: BaseSelectAccountProps) => {
-    const options = accounts.filter(filter || (() => true))
+const BaseSelectAccount = React.memo(
+  ({ id, onChange, accounts, filter, selected, disabled, onBlur, isForStaking, variant }: BaseSelectAccountProps) => {
+    const options = !filter
+      ? accounts
+      : accounts.filter(
+          (account) =>
+            account.address === selected?.address || // Always keep the selected account (otherwise the select behavior is strange)
+            filter(account)
+        )
 
     const [search, setSearch] = useState('')
 
     const filteredOptions = useMemo(() => filterByText(options, search), [search, options])
-    const keyring = useKeyring()
 
     const notSelected = !selected || selected.address !== search
 
     useEffect(() => {
-      if (filteredOptions.length === 0 && isValidAddress(search, keyring) && notSelected) {
+      if (filteredOptions.length === 0 && isValidAddress(search) && notSelected) {
         onChange?.(accountOrNamed(accounts, search, 'Unsaved account'))
       }
     }, [filteredOptions, search, notSelected])
@@ -67,7 +72,7 @@ export const BaseSelectAccount = React.memo(
         onChange={change}
         onBlur={onBlur}
         disabled={disabled}
-        renderSelected={renderSelected(isForStaking)}
+        renderSelected={renderSelected(isForStaking, variant)}
         placeholder="Select account or paste account address"
         renderList={(onOptionClick) => (
           <OptionListAccount
@@ -75,6 +80,7 @@ export const BaseSelectAccount = React.memo(
             onChange={onOptionClick}
             options={filteredOptions}
             isForStaking={isForStaking}
+            variant={variant}
           />
         )}
         onSearch={(search) => setSearch(search)}
@@ -83,10 +89,10 @@ export const BaseSelectAccount = React.memo(
   }
 )
 
-const renderSelected = (isForStaking?: boolean) => (option: AccountOption) =>
+const renderSelected = (isForStaking?: boolean, variant?: 's' | 'm' | 'l') => (option: AccountOption) =>
   (
-    <SelectedOption>
-      <OptionAccount option={option} isForStaking={isForStaking} />
+    <SelectedOption variant={variant}>
+      <OptionAccount option={option} isForStaking={isForStaking} isSelected />
     </SelectedOption>
   )
 

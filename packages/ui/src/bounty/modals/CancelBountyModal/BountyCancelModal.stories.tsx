@@ -27,10 +27,11 @@ const useMyAccounts: UseAccounts = {
   isLoading: false,
   hasAccounts: false,
   allAccounts: [
-    { name: 'Alice Account', address: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY' },
+    { name: 'Alice Account', address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf' },
     { name: 'Bob Account', address: '5DWS57CtERHpNehXCPcNoHGKutQYGrwvaEF5zXb26Fz9rcQp' },
   ],
-  error: undefined,
+  allWallets: [],
+  walletState: 'READY',
 }
 
 const useMyBalances: AddressToBalanceMap = {

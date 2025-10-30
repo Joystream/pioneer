@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { MembershipExternalResourceType } from '@/common/api/queries'
 import { TogglableIcon } from '@/common/components/forms'
 import { Fields, FilterBox, FilterLabel } from '@/common/components/forms/FilterBox'
-import { CheckboxIcon, CouncilMemberIcon, FounderMemberIcon } from '@/common/components/icons'
+import { CheckboxIcon, CouncilMemberIcon, FounderMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import { ItemCount } from '@/common/components/ItemCount'
 import { ColumnGapBlock } from '@/common/components/page/PageContent'
 import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons'
@@ -28,6 +28,7 @@ export interface MemberListFilter {
   onlyFounder: boolean
   searchFilter: MemberSearchFilter
   onlyCouncil: boolean
+  onlyVerified: boolean
 }
 
 type FilterKey = keyof MemberListFilter
@@ -58,6 +59,7 @@ export const MemberListEmptyFilter: MemberListFilter = {
   onlyFounder: false,
   searchFilter: 'Membership',
   onlyCouncil: false,
+  onlyVerified: false,
 }
 
 const memberListIcons = {
@@ -99,6 +101,8 @@ const searchFilterOptions: MemberSearchFilter[] = [
   'Wechat',
   'Whatsapp',
   'Youtube',
+  'Linkedin',
+  'Github',
 ]
 
 export interface MemberListFiltersProps {
@@ -109,8 +113,7 @@ export interface MemberListFiltersProps {
 export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersProps) => {
   const [filters, dispatch] = useReducer(filterReducer, MemberListEmptyFilter)
   const searchSlot = useRef<HTMLDivElement>(null)
-  const { search, roles, onlyCouncil, onlyFounder } = filters
-
+  const { search, roles, onlyCouncil, onlyFounder, onlyVerified, searchFilter } = filters
   const applyFilters = () => onApply(filters)
   const clear = isFilterEmpty(filters)
     ? undefined
@@ -128,7 +131,7 @@ export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersPro
       <div ref={searchSlot}>
         <SimpleSelect
           options={searchFilterOptions}
-          value={filters.searchFilter}
+          value={searchFilter}
           renderOption={renderSocialOption}
           onChange={(value: MemberSearchFilter | null) =>
             value && dispatch({ type: 'change', field: 'searchFilter', value })
@@ -141,47 +144,59 @@ export const MemberListFilters = ({ memberCount, onApply }: MemberListFiltersPro
         onApply={applyFilters}
         onClear={clear}
         onSearch={onSearch}
+        minCharacterLimit={searchFilter === 'Membership_ID' ? 1 : undefined}
       >
         <FieldsHeader>
           <ItemCount count={memberCount}>All members</ItemCount>
         </FieldsHeader>
-
-        <SelectMemberRoles
-          value={roles}
-          onChange={(value) => {
-            dispatch({ type: 'change', field: 'roles', value })
-            onApply({ ...filters, roles: value })
-          }}
-          onApply={applyFilters}
-          onClear={() => {
-            dispatch({ type: 'change', field: 'roles', value: [] })
-            onApply({ ...filters, roles: [] })
-          }}
-        />
-        <ToggleContainer>
-          <FilterLabel>Member Type</FilterLabel>
-
-          <TogglableIcon
-            tooltipText="Founding Member"
-            value={onlyFounder}
+        <FilterContentWrapper>
+          <SelectMemberRoles
+            value={roles}
             onChange={(value) => {
-              dispatch({ type: 'change', field: 'onlyFounder', value })
-              onApply({ ...filters, onlyFounder: value })
+              dispatch({ type: 'change', field: 'roles', value })
+              onApply({ ...filters, roles: value })
             }}
-          >
-            <FounderMemberIcon />
-          </TogglableIcon>
-          <TogglableIcon
-            tooltipText="Council Member"
-            value={onlyCouncil}
-            onChange={(value) => {
-              dispatch({ type: 'change', field: 'onlyCouncil', value })
-              onApply({ ...filters, onlyCouncil: value })
+            onApply={applyFilters}
+            onClear={() => {
+              dispatch({ type: 'change', field: 'roles', value: [] })
+              onApply({ ...filters, roles: [] })
             }}
-          >
-            <CouncilMemberIcon />
-          </TogglableIcon>
-        </ToggleContainer>
+          />
+          <ToggleContainer>
+            <FilterLabel>Member Type</FilterLabel>
+
+            <TogglableIcon
+              tooltipText="Founding Member"
+              value={onlyFounder}
+              onChange={(value) => {
+                dispatch({ type: 'change', field: 'onlyFounder', value })
+                onApply({ ...filters, onlyFounder: value })
+              }}
+            >
+              <FounderMemberIcon />
+            </TogglableIcon>
+            <TogglableIcon
+              tooltipText="Council Member"
+              value={onlyCouncil}
+              onChange={(value) => {
+                dispatch({ type: 'change', field: 'onlyCouncil', value })
+                onApply({ ...filters, onlyCouncil: value })
+              }}
+            >
+              <CouncilMemberIcon />
+            </TogglableIcon>
+            <TogglableIcon
+              tooltipText="Verified Member"
+              value={onlyVerified}
+              onChange={(value) => {
+                dispatch({ type: 'change', field: 'onlyVerified', value })
+                onApply({ ...filters, onlyVerified: value })
+              }}
+            >
+              <VerifiedMemberIcon />
+            </TogglableIcon>
+          </ToggleContainer>
+        </FilterContentWrapper>
       </MembersFilterBox>
     </Wrapper>
   )
@@ -196,16 +211,29 @@ const Wrapper = styled.div`
     width: 440px;
     flex-direction: row-reverse;
 
+    @media (max-width: 767px) {
+      width: 100%;
+      flex-direction: column-reverse;
+    }
+
     label {
       > *:first-child {
-        height: 100%;
+        height: 40px;
       }
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    margin-top: -64px;
+    row-gap: 16px;
+
+    > *:first-child {
+      margin-left: auto;
     }
   }
 `
 
 const MembersFilterBox = styled(FilterBox)`
-  height: 72px;
   margin-top: 8px;
 
   ${Fields} {
@@ -214,10 +242,11 @@ const MembersFilterBox = styled(FilterBox)`
     gap: 16px;
     padding: 8px 16px;
     height: 100%;
-  }
 
-  ${SelectContainer} {
-    flex-basis: 220px;
+    @media (max-width: 767px) {
+      flex-direction: column;
+      padding: 16px;
+    }
   }
 `
 
@@ -228,14 +257,33 @@ const FieldsHeader = styled.div`
   margin-right: auto;
 `
 
+const FilterContentWrapper = styled.div`
+  display: flex;
+  gap: 16px;
+  padding: 8px 8px 12px 8px;
+
+  ${SelectContainer} {
+    width: 220px;
+  }
+
+  @media (max-width: 424px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 767px) {
+    margin-right: auto;
+  }
+`
+
 const ToggleContainer = styled.div`
   display: grid;
   gap: 4px 8px;
   grid-template-columns: auto 1fr;
   height: 48px;
+  width: fit-content;
 
   & > :first-child {
-    grid-column: span 2;
+    grid-column: span 3;
   }
 `
 

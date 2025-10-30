@@ -2,7 +2,7 @@ import { fireEvent, render, RenderResult, screen } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 
-import { MoveFundsModalCall } from '@/accounts/modals/MoveFoundsModal'
+import { MoveFundsModalCall } from '@/accounts/modals/MoveFundsModal'
 import { ApiContext } from '@/api/providers/context'
 import { AnnounceWorkEntryModal } from '@/bounty/modals/AnnounceWorkEntryModal'
 import { formatTokenValue } from '@/common/model/formatters'

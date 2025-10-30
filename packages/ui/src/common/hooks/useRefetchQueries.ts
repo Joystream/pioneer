@@ -1,4 +1,4 @@
-import { useApolloClient } from '@apollo/client'
+import { ApolloQueryResult, OnQueryUpdated, useApolloClient } from '@apollo/client'
 import { DependencyList, useEffect, useRef } from 'react'
 
 interface RefetchOptions {
@@ -20,29 +20,22 @@ export const useRefetchQueries = (
   const isRefetched = useRef(false)
   const apolloClient = useApolloClient()
   const couldRefetchNext = useRef(typeof after === 'undefined')
+  const onQueryUpdated: OnQueryUpdated<Promise<ApolloQueryResult<any>>> = (_, { complete }) => {
+    if (complete) {
+      isRefetched.current = true
+    }
+    return complete ?? false
+  }
 
   useEffect(() => {
     if (couldRefetchNext.current && when) {
       if (interval) {
-        const handler = setInterval(() => {
-          apolloClient.refetchQueries({
-            include,
-            onQueryUpdated(_, { complete }) {
-              if (complete) {
-                isRefetched.current = true
-              }
-              return complete
-            },
-          })
-          isRefetched.current = true
-        }, interval)
-
+        const handler = setInterval(() => apolloClient.refetchQueries({ include, onQueryUpdated }), interval)
         return () => {
           clearInterval(handler)
         }
       } else {
-        apolloClient.refetchQueries({ include })
-        isRefetched.current = true
+        apolloClient.refetchQueries({ include, onQueryUpdated })
       }
     }
     couldRefetchNext.current = after !== false

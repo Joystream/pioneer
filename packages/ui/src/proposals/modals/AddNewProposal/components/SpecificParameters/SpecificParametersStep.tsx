@@ -25,8 +25,13 @@ import {
 import { FillWorkingGroupLeadOpening } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/WorkingGroupLeadOpening/FillWorkingGroupLeadOpening'
 import { AddNewProposalMachineState } from '@/proposals/modals/AddNewProposal/machine'
 
+import { DecreaseCouncilBudget } from './DecreaseCouncilBudget'
+import { SetEraPayoutDampingFactor } from './SetEraPayoutDampingFactor'
 import { SetInitialInvitationBalance } from './SetInitialInvitationBalance'
 import { SetInitialInvitationCount } from './SetInitialInvitationCount'
+import { UpdateArgoBridgeConstraints } from './UpdateArgoBridgeConstraints'
+import { UpdatePalletFrozenStatus } from './UpdatePalletFrozenStatus'
+import { UpdateTokenPalletTokenConstraints } from './UpdateTokenPalletTokenConstraints'
 
 interface SpecificParametersStepProps {
   matches: AddNewProposalMachineState['matches']
@@ -81,6 +86,21 @@ export const SpecificParametersStep = ({ matches }: SpecificParametersStepProps)
     }
     case matches('specificParameters.updateChannelPayouts'): {
       return <UpdateChannelPayouts />
+    }
+    case matches('specificParameters.updatePalletFrozenStatus'): {
+      return <UpdatePalletFrozenStatus />
+    }
+    case matches('specificParameters.setEraPayoutDampingFactor'): {
+      return <SetEraPayoutDampingFactor />
+    }
+    case matches('specificParameters.decreaseCouncilBudget'): {
+      return <DecreaseCouncilBudget />
+    }
+    case matches('specificParameters.updateTokenPalletTokenConstraints'): {
+      return <UpdateTokenPalletTokenConstraints />
+    }
+    case matches('specificParameters.updateArgoBridgeConstraints'): {
+      return <UpdateArgoBridgeConstraints />
     }
     default:
       return null

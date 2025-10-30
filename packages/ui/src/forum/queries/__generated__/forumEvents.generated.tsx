@@ -120,6 +120,7 @@ export type GetForumEventsQuery = {
     | { __typename: 'BountyRemovedEvent' }
     | { __typename: 'BountyVetoedEvent' }
     | { __typename: 'BudgetBalanceSetEvent' }
+    | { __typename: 'BudgetFundedEvent' }
     | { __typename: 'BudgetIncrementUpdatedEvent' }
     | { __typename: 'BudgetRefillEvent' }
     | { __typename: 'BudgetRefillPlannedEvent' }
@@ -165,6 +166,7 @@ export type GetForumEventsQuery = {
     | { __typename: 'CommentPinnedEvent' }
     | { __typename: 'CommentReactedEvent' }
     | { __typename: 'CommentTextUpdatedEvent' }
+    | { __typename: 'CouncilBudgetDecreasedEvent' }
     | { __typename: 'CouncilBudgetFundedEvent' }
     | { __typename: 'CouncilorRewardUpdatedEvent' }
     | { __typename: 'EnglishAuctionSettledEvent' }
@@ -297,6 +299,7 @@ export type GetForumEventsQuery = {
         actor: { __typename: 'Worker'; membership: { __typename: 'Membership'; id: string; handle: string } }
       }
     | { __typename: 'ThreadMovedEvent' }
+    | { __typename: 'VestedBudgetSpendingEvent' }
     | { __typename: 'VideoReactedEvent' }
     | { __typename: 'VideoReactionsPreferenceEvent' }
     | { __typename: 'VoteCastEvent' }

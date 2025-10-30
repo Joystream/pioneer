@@ -12,13 +12,13 @@ export const ExecutionRequirementsWarning = React.memo(() => {
       <TextMedium bold>
         <AlertSymbol /> Warning
       </TextMedium>
-      <TextMedium inter>
+      <TextMedium as="div" inter>
         Parameters provided here are checked across two set of constraints which are executed at different times,
         creation and execution constraints. Current inputs for proposal parameters violate the execution constraints for
         this proposal, meaning while you can create this proposal, if the runtime execution constraints for this
         proposal remain unchanged at the time of council vote, this proposal will be automatically rejected.
         <TooltipExternalLink
-          href="https://app.gitbook.com/o/-M-C0Rf1ILeSmMugzduG/s/-M-C0W9924TH_Qp2jnDV/governance/proposals#parameters-general-and-specific"
+          href="https://handbook.joystream.org/system/proposal-system#parameters-general-and-specific"
           target="_blank"
         >
           <TextMedium>Learn more</TextMedium> <LinkSymbol />

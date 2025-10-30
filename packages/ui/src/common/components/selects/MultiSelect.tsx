@@ -1,3 +1,4 @@
+import { isNull } from 'lodash'
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 
@@ -38,7 +39,7 @@ export const MultiSelect = <T extends any>({
 
   const change = useCallback(
     (pickedOption: T | null) => {
-      if (pickedOption === null) {
+      if (isNull(pickedOption)) {
         onChange([])
       } else {
         const isPickedOption = equals(pickedOption)

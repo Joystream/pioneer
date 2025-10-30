@@ -1,50 +1,42 @@
 # Testing
 
-The testing strategy:
+The testing strategy now relies entirely on [Storybook](https://pioneer-2-storybook-joystream.vercel.app). First all pages should be accessible through in Storybook so they can be easily viewed and interacted with. Secondly [interaction tests](https://storybook.js.org/docs/writing-tests/interaction-testing) are added to these pages stories in order to continuously test the pages business logic via the CI.
 
-1. [storybook](#the-storybook) for simple components & manual tests
-2. [automated tests](#integration-tests) for business logic
+In addition some [non storybook test suites](#integration-tests) now deprecated but not replaced yet. They are still part of the codebase and Ran by the CI.
 
-## The storybook
+## Storybook
 
-The project's [storybook](https://storybook.js.org/) is build by the CI and available at [https://pioneer-2-storybook.netlify.app/](https://pioneer-2-storybook.netlify.app/).
+The project's [storybook](https://storybook.js.org/) is build by the CI and available at [https://pioneer-2-storybook-joystream.vercel.app](https://pioneer-2-storybook-joystream.vercel.app).
 
 To run the local instance (project root or `packages/ui` directory):
 
 ```bash
-yarn run storybook
+yarn storybook
 ```
 
-For more complex components, the stories might need a [query-node mocks](mocks.md#query-node-mocks) in order to fetch data.
+Stories are written on files write next to the component they are rendering. E.g for `packages/ui/src/app/pages/Proposals/ProposalPreview.tsx` the stories are in `packages/ui/src/app/pages/Proposals/ProposalPreview.stories.tsx`.
 
-Example story that uses query-node mocks to fetch `members` data:
+The Pioneer Storybook has 3 type of stories:
+- Component which don't require any mocks. These are used to document Pioneer reusable building blocks.
+- The pages and App stories which do not have a `play` method. These have 2 main utilities:
+   1. They make it easy to develop, visualize, and interact with any configuration of a page by relying on the mocks.
+   2. They serve as smoke tests for the CI. Meaning that if a page breaks in due to change it should be reported by the CI.
+- The pages and App which have `play` functions. These are tests they rely on slightly modified versions of Jest and the Testing Library.
 
-```tsx
-import { Meta, Story } from '@storybook/react'
-import React from 'react'
+> [!NOTE]
+> Some stories currently do not fit in any of these 3 categories. They are single components but which rely on Query node mocks to run. These stories should be progressively removed.
 
-import { ComplexComponent } from '@/foo/bar/components/ComplexComponent'
-import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+One of the main advantage of having tests done in the stories is that the same mocks are used to both write the stories (and often to also create the page itself) and to write the tests. It also makes it easier to debug the tests by providing a visual feed back of everything it does.
 
-export default {
-  title: 'ComplexComponent',
-  component: ComplexComponent,
-} as Meta
-
-export const Default: Story = () => {
-  return (
-    <MockApolloProvider members>
-      <ComplexComponent />
-    </MockApolloProvider>
-  )
-}
-```
-
-**Note**: Some components might need to connect with Polkadot.js extension. However, the extension API can't be accessed inside storybook's iframe ([example story](/packages/ui/src/accounts/components/SelectAccount/SelectAccount.stories.tsx) that renders warning).
+> [!IMPORTANT]
+> Read how to mock data in the pages stories and tests [here](mocks.md#storybook-mocks)
 
 ## Integration tests
 
-Pioneer 2 use [jest](https://jestjs.io/) to run automated tests and [testing-library](https://testing-library.com/) as testing utilities. The [query-node mocks](mocks.md#query-node-mocks) uses the same setup as the front-end mocks.
+> [!WARNING]
+> These tests are now deprecated they should be progressively be replaced by [Storybook interaction tests](#storybook).
+
+Pioneer use [jest](https://jestjs.io/) to run automated tests and [testing-library](https://testing-library.com/) as testing utilities. The [query-node mocks](mocks.md#query-node-mocks) uses the same setup as the front-end mocks.
 
 ### Polkadot.js API stubs
 
@@ -115,7 +107,8 @@ The repository has enabled the continuous integration for every commit that land
   - linter check
   - build step
   - tests
-- The application preview on netlify
-- The storybook preview on netlify
+- The application preview on Vercel
+- The storybook preview on Vercel
 
-**Note**: Only the PRs that pass CI check can be included in the `main` branch.
+> [!NOTE]
+> Only the PRs that pass CI check can be merged to the `dev` branch.
