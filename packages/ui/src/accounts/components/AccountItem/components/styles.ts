@@ -41,7 +41,7 @@ export const DetailsName = styled.h6`
 `
 
 export const ValueCell = styled.div<{ isRecoverable?: boolean }>`
-  grid-column: ${({ isRecoverable }) => (isRecoverable ? 4 : 3)}; ;
+  grid-column: ${({ isRecoverable }) => (isRecoverable ? 4 : 3)};
 `
 
 export const ButtonsCell = styled.div`

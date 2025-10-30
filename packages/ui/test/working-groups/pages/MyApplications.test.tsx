@@ -39,7 +39,7 @@ const currentApplication: WorkingGroupApplication = {
   },
   createdAtBlock: block,
   status: 'ApplicationStatusPending',
-  stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  stakingAccount: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
   stake: BN_TEN,
   roleAccount: getMember('alice').controllerAccount,
 }
@@ -59,7 +59,7 @@ const pastApplication: WorkingGroupApplication = {
   },
   createdAtBlock: block,
   status: 'ApplicationStatusRejected',
-  stakingAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  stakingAccount: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
   stake: BN_TEN,
   roleAccount: getMember('alice').controllerAccount,
 }

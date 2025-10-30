@@ -1,32 +1,36 @@
-![Pioneer](https://user-images.githubusercontent.com/247363/116713796-699da780-a9d5-11eb-82b1-a42bccd642d7.png)
+<h1 >
+    <a href="https://pioneerapp.xyz">
+        <img alt="Pioneer" src="https://user-images.githubusercontent.com/247363/116713796-699da780-a9d5-11eb-82b1-a42bccd642d7.png" />
+    </a>
+</h1>
 
+<h3 align="center">
+	Governance application for the Joystream DAO platform.
+</h3>
 
-# Pioneer
-
-[![CI](https://github.com/Joystream/pioneer/actions/workflows/CI.yml/badge.svg)](https://github.com/Joystream/pioneer/actions/workflows/CI.yml)
-
-Governance application for the Joystream DAO platform.
-
-## Deployed version
-
-- The live production is available on [https://pioneerapp.xyz/)
-- Components preview and testing from `dev` branch, is available on [https://pioneer-2-storybook.vercel.app/](https://pioneer-2-storybook.vercel.app/).
-
-The deployed version can interact with two backends:
-
-- Joystream testnet – A deployed testnet.
-- Local – [A Joystream ecosystem running locally](docs/testenv.md).
+<p align="center">
+	<strong>
+        <a href="https://pioneerapp.xyz">Live app</a>
+        •
+        <a href="https://pioneer-2-storybook.vercel.app">Storybook</a>
+        •
+        <a href="docs/README.md">Docs</a>
+        •
+        <a href="CHANGELOG.md">Changelog</a>
+	</strong>
+</p>
 
 ## Quickstart
 
-After cloning the repository run:
 
 ```shell
-## Install npm packages
-yarn
+## Clone this repository
+git clone git@github.com:Joystream/pioneer.git
 
-## Build all the sub-packages
-yarn build
+cd pioneer
+
+## Install npm packages
+yarn --immutable
 
 ## To start local development server
 yarn start
@@ -34,7 +38,7 @@ yarn start
 ## To start local storybook instance
 yarn storybook
 
-## To run tests
+## To run tests (the back-end tests require docker in order to run)
 yarn test
 ```
 
@@ -50,9 +54,8 @@ To run a Pioneer instance check the [admin documentation](docs/admin.md)
 
 The project's monorepo contains packages:
 
-- [packages/ui](packages/ui) – The main Pioneer 2.0 package
-- [packages/types](packages/types) – A copy of [@joystream/types](https://github.com/Joystream/joystream/tree/master/types) checked out from the `master` branch.
-- [packages/metadata-protobuf](packages/metadata-protobuf) – A copy [@joystream/metadata-protobuf](https://github.com/Joystream/joystream/tree/master/metadata-protobuf) checked out from an `master` branch.
+- [packages/ui](packages/ui) – The Pioneer front-end package.
+- [packages/server](packages/server) – The Pioneer backend package.
 - [packages/markdown-editor](packages/markdown-editor) – A CKEditor 5 build used as Markdown editor.
 
 ## Contributing

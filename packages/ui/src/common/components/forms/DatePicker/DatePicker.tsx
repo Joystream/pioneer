@@ -24,7 +24,7 @@ interface DatePickerProps extends ControlProps<PartialDateRange> {
   onApply?: () => void
   onClear?: () => void
   inputSize?: 'xs' | 's' | 'm' | 'l' | 'auto' | undefined
-  inputWidth?: 'auto' | 's' | 'xs' | undefined
+  inputWidth?: 's' | 'xs' | undefined
   placeholder?: string
 }
 
@@ -212,12 +212,6 @@ const DatePickerPopup = styled.div<{ isOpen?: boolean }>`
   z-index: ${ZIndex.select};
 `
 
-const DatePickerControllersWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-column-gap: 16px;
-`
-
 const DatePickerCalendarsWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, ${CALENDAR_WRAP_SIZE});
@@ -231,5 +225,23 @@ const DatePickerSideNav = styled.div`
   ${ButtonSecondaryStyles} {
     width: 112px;
     padding: 4px;
+  }
+`
+
+const DatePickerControllersWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-column-gap: 16px;
+
+  @media (max-width: 767px) {
+    ${DatePickerSideNav} {
+      display: none;
+    }
+
+    ${DatePickerCalendarsWrapper} {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
   }
 `

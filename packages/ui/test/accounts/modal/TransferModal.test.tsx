@@ -115,7 +115,7 @@ describe('UI: TransferModal', () => {
     renderModal({ from: alice, to: bob })
 
     expect(await getButton('Transfer tokens')).toBeDisabled()
-    await fillAmount(1)
+    await fillAmount(100)
 
     const button = await getButton(/transfer tokens/i)
     expect(button).not.toBeDisabled()
@@ -124,7 +124,7 @@ describe('UI: TransferModal', () => {
 
     expect(await screen.findByText(/modals.authorizeTransaction.title/i)).toBeDefined()
     expect((await screen.findByText(/modals.transactionFee.label/i))?.parentNode?.textContent).toMatch(
-      /^modals.transactionFee.label25/
+      /^Amount:100modals.transactionFee.label25/
     )
   })
 
@@ -171,7 +171,7 @@ describe('UI: TransferModal', () => {
         stubTransactionSuccess(transfer, 'balances', 'Transfer', [
           createType('AccountId', alice.address),
           createType('AccountId', bob.address),
-          createType('Balance', 50),
+          createType('u128', 50),
         ])
       })
 

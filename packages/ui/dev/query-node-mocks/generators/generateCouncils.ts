@@ -152,7 +152,7 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
     electionRoundId: council.id,
     stake: randomFromRange(1, 10) * 1000,
     stakeLocked: isFinished ? Math.random() > 0.5 : true,
-    castBy: '5ChwAW7ASAaewhQPNK334vSHNUrPFYg2WriY2vDBfEQwkipU',
+    castBy: 'j4RxqjYM8Jt5gnJr8eHUiv59GtrvxkSFCEoLyQUFW6JZaQRku',
     voteForId: Math.random() > 0.5 ? candidates[randomFromRange(0, candidates.length - 1)].id : null,
     commitment: '0x0000000000000000000000000000000000000000000000000000000000000000',
     voteCastEvent: randomBlock(),
@@ -170,9 +170,9 @@ const generateCouncil = (mocks: MocksForCouncil) => (data: CouncilData, _: any, 
           // key: votes:4
           // value:
           // [
-          //   {"salt":"0x0000000000000000000000000000000000000000000000000000000000000001","accountId":"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY","optionId":"0"},
-          //   {"salt":"0x0000000000000000000000000000000000000000000000000000000000000001","accountId":"5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty","optionId":"1"},
-          //   {"salt":"0x0000000000000000000000000000000000000000000000000000000000000001","accountId":"5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y","optionId":"2"},
+          //   {"salt":"0x0000000000000000000000000000000000000000000000000000000000000001","accountId":"j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf","optionId":"0"},
+          //   {"salt":"0x0000000000000000000000000000000000000000000000000000000000000001","accountId":"j4UYhDYJ4pz2ihhDDzu69v2JTVeGaGmTebmBdWaX2ANVinXyE","optionId":"1"},
+          //   {"salt":"0x0000000000000000000000000000000000000000000000000000000000000001","accountId":"j4UbMHiS79yvMLJctXggUugkkKmwxG5LW2YSy3ap8SmgF5qW9","optionId":"2"},
           // ]
           createVote(22, {
             castBy: ALICE,

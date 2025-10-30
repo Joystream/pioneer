@@ -24,9 +24,9 @@ export const Default = Template.bind({})
 
 Default.args = {
   councils: [
-    { id: '0', endedAt: randomBlock() },
-    { id: '1', endedAt: randomBlock() },
-    { id: '1', endedAt: randomBlock() },
+    { id: '0', endedAt: randomBlock(), electionCycleId: 10 },
+    { id: '1', endedAt: randomBlock(), electionCycleId: 11 },
+    { id: '1', endedAt: randomBlock(), electionCycleId: 12 },
   ],
   isLoading: false,
 }

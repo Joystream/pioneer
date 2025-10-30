@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
 import { TextMedium } from '@/common/components/typography'
@@ -12,13 +12,13 @@ export const HorizontalStaticStepper = ({ steps }: Props) => {
   return (
     <Wrapper>
       {steps.map((text, index) => (
-        <>
-          {!!index && <Dash key={`horizontalStepper-1-${index}`} />}
-          <Step key={`horizontalStepper-2-${index}`}>
+        <Fragment key={index}>
+          {!!index && <Dash />}
+          <Step>
             <StepCircle>{index + 1}</StepCircle>
             <TextMedium>{text}</TextMedium>
           </Step>
-        </>
+        </Fragment>
       ))}
     </Wrapper>
   )

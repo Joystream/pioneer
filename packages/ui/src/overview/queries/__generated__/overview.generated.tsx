@@ -75,6 +75,7 @@ export type GetAllDeadLinesQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -82,6 +83,7 @@ export type GetAllDeadLinesQuery = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -101,6 +103,7 @@ export type GetAllDeadLinesQuery = {
       }
       votesReceived: Array<{ __typename: 'CastVote'; id: string }>
     }>
+    castVotes: Array<{ __typename: 'CastVote'; voteForId?: string | null; stake: string }>
   }>
   proposals: Array<{ __typename: 'Proposal'; updatedAt?: any | null; id: string; title: string }>
   upcomingWorkingGroupOpenings?: Array<{
@@ -245,6 +248,10 @@ export const GetAllDeadLinesDocument = gql`
       cycleId
       candidates {
         ...ElectionCandidateFields
+      }
+      castVotes {
+        voteForId
+        stake
       }
     }
     proposals(

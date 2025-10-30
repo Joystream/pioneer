@@ -54,6 +54,10 @@ const CandidatePreviewColumn = styled(ScrollableModalColumn)`
   flex: 0 0 336px;
   flex-direction: column;
   gap: 24px;
+
+  * {
+    word-break: normal;
+  }
 `
 
 const CandidacyPointList = styled.ul`

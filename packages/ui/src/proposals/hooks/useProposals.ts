@@ -33,7 +33,10 @@ export const useProposals = ({
   perPage = 10,
   fetchAll = false,
 }: UseProposalsProps): UseProposals => {
-  const orderBy = order ? toQueryOrderByInput<ProposalOrderByInput>(order) : ProposalOrderByInput.CreatedAtDesc
+  const orderBy = toQueryOrderByInput<ProposalOrderByInput>(order, {
+    orderKey: 'createdAt',
+    isDescending: order?.isDescending ?? false,
+  })
 
   const where = useMemo(() => {
     const where: ProposalWhereInput = filters?.stage
@@ -71,10 +74,12 @@ export const useProposals = ({
   const { data: proposalCount } = useGetProposalsCountQuery({ variables: { where } })
   const { offset, pagination } = usePagination(perPage, proposalCount?.proposalsConnection.totalCount ?? 0, [])
   const paginationVariables = fetchAll ? {} : { offset, limit: perPage }
-  const { loading, data } = useGetProposalsQuery({ variables: { ...paginationVariables, where, orderBy } })
+  const { loading, data, previousData } = useGetProposalsQuery({
+    variables: { ...paginationVariables, where, orderBy },
+  })
 
   return {
-    isLoading: loading,
+    isLoading: loading && !previousData,
     pagination,
     proposals: data && data.proposals ? data.proposals.map(asProposal) : [],
     allCount: proposalCount?.proposalsConnection.totalCount,

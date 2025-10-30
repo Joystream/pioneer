@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { WorkerOrderByInput } from '@/common/api/queries'
 import { ListHeader, ListHeaders } from '@/common/components/List/ListHeader'
@@ -28,17 +29,25 @@ export const WorkersHistory = ({ groupId }: { groupId: string | undefined }) => 
 
   return (
     <>
-      <RowGapBlock gap={4}>
+      <ListWrapper gap={4}>
         <ListHeaders $colLayout={pastWorkersColLayout}>
           <ListHeader>Worker</ListHeader>
           <SortHeader {...getSortProps('createdAt')}>Date Started</SortHeader>
           <SortHeader {...getSortProps('updatedAt')}>Date Finished</SortHeader>
         </ListHeaders>
         {loadingWorkers ? <Loading /> : <PastWorkersList workers={workers} />}
-      </RowGapBlock>
+      </ListWrapper>
       <Pagination {...pagination} />
     </>
   )
 }
 
 const pastWorkersColLayout = '1fr 1fr 1fr'
+
+const ListWrapper = styled(RowGapBlock)`
+  overflow: auto;
+
+  li {
+    min-width: 720px;
+  }
+`

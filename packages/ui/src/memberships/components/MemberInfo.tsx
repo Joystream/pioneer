@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { FounderMemberIcon, LeadMemberIcon, CouncilMemberIcon } from '@/common/components/icons'
+import { FounderMemberIcon, LeadMemberIcon, CouncilMemberIcon, VerifiedMemberIcon } from '@/common/components/icons'
 import {
   DarkTooltipInnerItemProps,
   DefaultTooltip,
@@ -73,7 +73,7 @@ export const MemberInfo = React.memo(
         skipModal={skipModal}
         onlyTop={onlyTop}
       >
-        <MemberPhoto small={avatarSmall}>
+        <MemberPhoto big={memberSize === 'l'} small={avatarSmall}>
           <MemberPhotoContainer>
             <Avatar avatarUri={member.avatar} />
             {isLead && (
@@ -85,10 +85,10 @@ export const MemberInfo = React.memo(
             )}
           </MemberPhotoContainer>
         </MemberPhoto>
-        <div>
+        <MemberHeaderWrapper>
           <MemberHead>
             <MemberHandle>{member.handle}</MemberHandle>
-            {(member.isFoundingMember || member.isCouncilMember) && (
+            {(member.isFoundingMember || member.isCouncilMember || member.isVerified) && (
               <MemberIcons>
                 {member.isFoundingMember && (
                   <Tooltip tooltipText="This member is founder">
@@ -104,6 +104,13 @@ export const MemberInfo = React.memo(
                     </MemberStatusTooltip>
                   </Tooltip>
                 )}
+                {member.isVerified && (
+                  <Tooltip tooltipText="This member is verified">
+                    <MemberStatusTooltip isOnDark={isOnDark} className={isOnDark ? 'tooltipondark' : 'tooltiponlight'}>
+                      <VerifiedMemberIcon />
+                    </MemberStatusTooltip>
+                  </Tooltip>
+                )}
               </MemberIcons>
             )}
           </MemberHead>
@@ -113,7 +120,7 @@ export const MemberInfo = React.memo(
               {member.id}
             </IdHeader>
           )}
-        </div>
+        </MemberHeaderWrapper>
         {showRoles && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
         {showId && <MemberId>{isString(showIdOrText) ? showIdOrText : `Member ID: ${member.id}`}</MemberId>}
       </MemberInfoWrap>
@@ -151,4 +158,8 @@ export const AvatarStarTooltipContainer = styled(DefaultTooltip)<DefaultTooltipP
     border-color: ${Colors.Blue[400]};
     background-color: ${Colors.Blue[400]};
   }
+`
+
+const MemberHeaderWrapper = styled.div`
+  grid-area: memberhead;
 `

@@ -1,0 +1,116 @@
+fragment PostAddedEventFields on PostAddedEvent {
+  __typename
+  id
+  inBlock
+  post {
+    id
+    authorId
+    createdAt
+    text
+    repliesTo {
+      authorId
+    }
+    thread {
+      id
+      authorId
+      posts {
+        authorId
+        createdAt
+      }
+      categoryId
+    }
+  }
+}
+
+fragment ThreadCreatedEventFields on ThreadCreatedEvent {
+  __typename
+  id
+  inBlock
+  thread {
+    id
+    authorId
+    categoryId
+  }
+  text
+}
+
+fragment ElectionAnnouncingStartedEventFields on AnnouncingPeriodStartedEvent {
+  __typename
+  id
+  inBlock
+}
+
+fragment ElectionVotingStartedEventFields on VotingPeriodStartedEvent {
+  __typename
+  id
+  inBlock
+}
+
+fragment ElectionRevealingStartedFields on RevealingStageStartedEvent {
+  __typename
+  id
+  inBlock
+}
+
+fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
+  __typename
+  id
+  inBlock
+  post {
+    id
+    authorId
+    createdAt
+    text
+    repliesTo {
+      authorId
+    }
+    discussionThread {
+      proposal {
+        id # Users subscribe to proposals rather than proposal discussions
+        creatorId
+      }
+      posts {
+        authorId
+        createdAt
+      }
+    }
+  }
+}
+
+query GetNotificationEvents($from: Int, $exclude: [ID!]) {
+  events(
+    where: {
+      type_in: [
+        PostAddedEvent
+        ThreadCreatedEvent
+        AnnouncingPeriodStartedEvent
+        VotingPeriodStartedEvent
+        RevealingStageStartedEvent
+        # PostTextUpdatedEvent
+        ProposalDiscussionPostCreatedEvent
+      ]
+      inBlock_gte: $from
+      NOT: { id_in: $exclude }
+    }
+    orderBy: [inBlock_ASC]
+  ) {
+    ... on PostAddedEvent {
+      ...PostAddedEventFields
+    }
+    ... on ThreadCreatedEvent {
+      ...ThreadCreatedEventFields
+    }
+    ... on AnnouncingPeriodStartedEvent {
+      ...ElectionAnnouncingStartedEventFields
+    }
+    ... on VotingPeriodStartedEvent {
+      ...ElectionVotingStartedEventFields
+    }
+    ... on RevealingStageStartedEvent {
+      ...ElectionRevealingStartedFields
+    }
+    ... on ProposalDiscussionPostCreatedEvent {
+      ...ProposalDiscussionPostCreatedEventFields
+    }
+  }
+}

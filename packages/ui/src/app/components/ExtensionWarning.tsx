@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { SideNotification } from '@/common/components/page/SideNotification'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -13,16 +12,9 @@ const notificationTimeouts: Record<ExtensionNotificationTypes, number> = {
 }
 
 export function ExtensionNotification() {
-  const { error } = useMyAccounts()
   const { members } = useMyMemberships()
   const { status } = useOnBoarding()
   const [showNotification, setShowNotification] = useState<ExtensionNotificationTypes | undefined>(undefined)
-
-  useEffect(() => {
-    if (error === 'NO_EXTENSION') {
-      setShowNotification('ERROR')
-    }
-  }, [error])
 
   useEffect(() => {
     if (status === 'finished') {
@@ -37,17 +29,6 @@ export function ExtensionNotification() {
     const timeout = setTimeout(() => setShowNotification(undefined), notificationTimeouts[showNotification])
     return () => clearTimeout(timeout)
   }, [showNotification])
-
-  if (showNotification === 'ERROR') {
-    return (
-      <SideNotification
-        onClick={() => setShowNotification(undefined)}
-        title="Extension unavailable"
-        message="You need a Polkadot ecosystem extension to use this site."
-        isError
-      />
-    )
-  }
 
   if (showNotification === 'OLD_USER') {
     return (

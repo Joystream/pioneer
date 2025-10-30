@@ -61,6 +61,7 @@ export const CouncilList = ({ councilors, order, onSort, isLoading }: CouncilLis
 }
 
 const CouncilListStyles = styled(RowGapBlock)`
+  overflow: auto;
   ${ListHeaders} {
     padding: 0 58px 0 24px;
 

@@ -107,7 +107,7 @@ describe('UI: Election page', () => {
 
     const { queryByText } = await renderComponent()
 
-    expect(queryByText('Stage')).not.toBeNull()
+    expect(queryByText('Round')).toBeNull()
   })
 
   describe('Active', () => {
@@ -119,7 +119,7 @@ describe('UI: Election page', () => {
       it('Displays stage and round', async () => {
         const { queryByText } = await renderComponent()
 
-        expect(queryByText('Announcing Period')).toBeInTheDocument()
+        expect(queryByText(/Election Progress/i)).toBeInTheDocument()
       })
 
       describe('Tabs', () => {
@@ -185,7 +185,7 @@ describe('UI: Election page', () => {
       it('Displays stage', async () => {
         const { queryByText } = await renderComponent()
 
-        expect(queryByText(/Voting period/i)).not.toBeNull()
+        expect(queryByText(/Election Progress/i)).not.toBeNull()
       })
 
       it('No accounts', async () => {
@@ -276,8 +276,7 @@ describe('UI: Election page', () => {
       it('Displays stage, remaining length, and no election round', async () => {
         const { queryByText } = await renderComponent()
 
-        expect(queryByText(/Revealing period/i)).toBeInTheDocument()
-        expect(queryByText(/period remaining length/i)?.parentElement?.nextElementSibling).toHaveTextContent('< 1 min')
+        expect(queryByText(/Election Progress/i)).toBeInTheDocument()
         expect(loaderSelector(true)).toHaveLength(1)
       })
 

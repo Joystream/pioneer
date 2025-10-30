@@ -92,7 +92,7 @@ export const RestoreVotesModal = () => {
   }, [value, votingAttempts, setVotingAttempts])
 
   return (
-    <Modal modalSize="s" modalHeight="s" onClose={hideModal}>
+    <Modal modalSize="m" modalHeight="s" onClose={hideModal}>
       <ModalHeader title="Restore Votes" onClick={hideModal} />
 
       <ModalBody>

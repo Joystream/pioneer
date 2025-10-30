@@ -14,6 +14,8 @@ import {
   WhatsappIcon,
   YoutubeIcon,
   TelegramIcon,
+  LinkedinIcon,
+  GithubIcon,
 } from '@/common/components/icons/socials'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextMedium } from '@/common/components/typography'
@@ -34,6 +36,8 @@ export const socialToIcon: Record<Socials, React.ReactElement> = {
   WECHAT: <WechatIcon />,
   WHATSAPP: <WhatsappIcon />,
   HYPERLINK: <CustomLinkIcon />,
+  LINKEDIN: <LinkedinIcon />,
+  GITHUB: <GithubIcon />,
 }
 
 export const socialMediaList = Object.keys(socialToIcon) as (keyof typeof socialToIcon)[]
@@ -45,12 +49,22 @@ export interface SocialMediaTileProps {
   id: string
 }
 
+export const socialTitle = (social: Socials) => {
+  switch (social) {
+    case 'TWITTER':
+      return 'X'
+
+    default:
+      return capitalizeFirstLetter(social.toLowerCase())
+  }
+}
+
 export const SocialMediaTile = React.memo(({ social, onClick, active, id }: SocialMediaTileProps) => {
   return (
     <Wrapper id={id} onClick={onClick} active={active}>
       <RowGapBlock align="center" gap={2}>
         {socialToIcon[social]}
-        <TextMedium value>{capitalizeFirstLetter(social.toLowerCase())}</TextMedium>
+        <TextMedium value>{socialTitle(social)}</TextMedium>
       </RowGapBlock>
     </Wrapper>
   )
@@ -62,7 +76,6 @@ const Wrapper = styled.div<{ active?: boolean }>`
   user-select: none;
   place-items: center;
   height: 92px;
-  width: 120px;
   border: 1px solid ${Colors.Black[300]};
   border-radius: ${BorderRad.m};
   text-align: center;

@@ -5,7 +5,7 @@ import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvi
 import { SetCouncilBudgetIncrement } from '@/proposals/modals/AddNewProposal/components/SpecificParameters/SetCouncilBudgetIncrement'
 
 export default {
-  title: 'Proposals/AddNewProposalModal/SetCouncilBudgetIncrement',
+  title: 'Pages/Proposals/ProposalList/Current/Modals/AddNewProposalModal/SetCouncilBudgetIncrement',
   component: SetCouncilBudgetIncrement,
 } as Meta
 

@@ -30,7 +30,10 @@ describe('UI: TransactionButton', () => {
   stubTransaction(api, txPath)
 
   beforeAll(async () => {
-    stubAccounts([{ ...alice, name: 'Alice Account' }], { wallet: new BaseDotsamaWallet({ title: 'ExtraWallet' }) })
+    const wallet = new BaseDotsamaWallet({ title: 'ExtraWallet' })
+    stubAccounts([{ ...alice, name: 'Alice Account' }], {
+      wallet,
+    })
     await cryptoWaitReady()
   })
 

@@ -44,6 +44,7 @@ describe('useForumCategoryThreads', () => {
         orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 30,
       },
+      pollInterval: 0,
     })
   })
 
@@ -64,6 +65,7 @@ describe('useForumCategoryThreads', () => {
         orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 30,
       },
+      pollInterval: 0,
     })
 
     act(() => refresh({ filters: { author, date: { start, end }, tag: null } }))
@@ -82,6 +84,7 @@ describe('useForumCategoryThreads', () => {
         orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 30,
       },
+      pollInterval: 0,
     })
   })
 
@@ -94,6 +97,7 @@ describe('useForumCategoryThreads', () => {
         orderBy: [IsStickyDesc, AuthorDesc],
         limit: 30,
       },
+      pollInterval: 0,
     })
   })
 
@@ -111,6 +115,7 @@ describe('useForumCategoryThreads', () => {
         orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 30,
       },
+      pollInterval: 0,
     })
 
     act(() => rerender([{ isArchive: true, order, filters: { author: null, date: { start, end }, tag: null } }]))
@@ -126,6 +131,7 @@ describe('useForumCategoryThreads', () => {
         orderBy: [IsStickyDesc, UpdatedAtDesc],
         limit: 30,
       },
+      pollInterval: 0,
     })
   })
 
@@ -139,6 +145,7 @@ describe('useForumCategoryThreads', () => {
         limit: 10,
         offset: 0,
       },
+      pollInterval: 0,
     })
   })
 })

@@ -8,7 +8,7 @@ import { ProposalWithDetails } from '@/proposals/types'
 import { VoteForProposalModalForm } from './VoteForProposalModalForm'
 
 export default {
-  title: 'Proposals/VoteForProposal/VoteForProposalModalForm',
+  title: 'Pages/Proposals/ProposalPreview/Modals/VoteForProposalModalForm',
   component: VoteForProposalModalForm,
   argTypes: {
     send: { action: 'send' },

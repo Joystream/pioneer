@@ -62,7 +62,7 @@ export const VOTE_DATA = {
   // For:
   //  cycleId: 1,
   //  salt":"0x16dfff7ba21922067a0c114de774424abcd5d60fc58658a35341c9181b09e94a",
-  //  accountId:"5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+  //  accountId:"j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf",
   //  optionId:"0"
 }
 

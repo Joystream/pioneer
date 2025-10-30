@@ -6,6 +6,7 @@ import { BorderRad, Colors, Fonts, Transitions } from '../../constants'
 export type ButtonSize = 'small' | 'medium' | 'large'
 
 export interface ButtonProps extends ButtonSizingProps {
+  id?: string
   square?: boolean
   className?: string
   children?: React.ReactNode
@@ -58,50 +59,34 @@ export function ButtonPrimary({ className, children, size, square, disabled, onC
   )
 }
 
-export function ButtonSecondary({ className, children, size, square, disabled, onClick }: ButtonProps) {
+export function ButtonSecondary({ children, size, ...props }: ButtonProps) {
   return (
-    <ButtonSecondaryStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
+    <ButtonSecondaryStyles {...props} size={size}>
       <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
     </ButtonSecondaryStyles>
   )
 }
 
-export function ButtonGhost({ className, children, size, square, disabled, onClick, title }: ButtonProps) {
+export function ButtonGhost({ children, size, ...props }: ButtonProps) {
   return (
-    <ButtonGhostStyles
-      className={className}
-      size={size}
-      square={square}
-      disabled={disabled}
-      onClick={onClick}
-      title={title}
-    >
+    <ButtonGhostStyles {...props} size={size}>
       <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
     </ButtonGhostStyles>
   )
 }
 
-export function ButtonBareGhost({ className, children, size, square, disabled, onClick }: ButtonProps) {
+export function ButtonBareGhost({ children, size, ...props }: ButtonProps) {
   return (
-    <ButtonBareGhostStyles className={className} size={size} square={square} disabled={disabled} onClick={onClick}>
+    <ButtonBareGhostStyles {...props} size={size}>
       <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
     </ButtonBareGhostStyles>
   )
 }
 
-export function ButtonLink({ className, children, square, borderless, bold, inline, disabled, onClick }: ButtonProps) {
+export function ButtonLink({ children, size, ...props }: ButtonProps) {
   return (
-    <ButtonLinkStyles
-      size="small"
-      className={className}
-      square={square}
-      disabled={disabled}
-      onClick={onClick}
-      bold={bold}
-      borderless={borderless}
-      inline={inline}
-    >
-      <ButtonInnerWrapper size="small">{children}</ButtonInnerWrapper>
+    <ButtonLinkStyles {...props} size={size}>
+      <ButtonInnerWrapper size={size}>{children}</ButtonInnerWrapper>
     </ButtonLinkStyles>
   )
 }
@@ -504,20 +489,37 @@ export const ButtonLinkStyles = styled.button<ButtonProps>`
 `
 
 export const ButtonsGroup = styled.div<{ align?: 'left' | 'center' | 'right' }>`
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: 8px;
-  align-items: center;
-  width: fit-content;
-  justify-self: ${({ align }) => {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 8px;
+
+  ${({ align }) => {
     switch (align) {
       case 'left':
-      default:
-        return 'start'
+        return css`
+          justify-content: start;
+          justify-self: start;
+          margin-right: auto;
+        `
       case 'center':
-        return 'center'
+        return css`
+          justify-content: center;
+          justify-self: center;
+          margin-left: auto;
+          margin-right: auto;
+        `
       case 'right':
-        return 'end'
+        return css`
+          justify-content: end;
+          justify-self: end;
+          margin-left: auto;
+        `
     }
   }};
+`
+
+export const ResponsiveButtonsGroup = styled(ButtonsGroup)`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 `

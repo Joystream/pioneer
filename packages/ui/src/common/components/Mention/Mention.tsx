@@ -15,6 +15,8 @@ import { ForumIcon, MyProfileIcon, ProposalsIcon, WorkingGroupsIcon } from '@/co
 import { Tooltip } from '@/common/components/Tooltip'
 import { TextMedium } from '@/common/components/typography'
 import { Colors } from '@/common/constants'
+import { MentionType } from '@/common/hooks/useMentions'
+import { CouncilRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import {
   GetForumPostMentionDocument,
@@ -23,6 +25,7 @@ import {
   GetForumThreadMentionQuery,
 } from '@/forum/queries'
 import { asForumPostMention, asForumThreadMention, ForumPostMention, ForumThreadMention } from '@/forum/types'
+import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 import { GetMemberMentionDocument, GetMemberMentionQuery } from '@/memberships/queries'
 import { asMember, Member } from '@/memberships/types'
 import { ProposalsRoutes } from '@/proposals/constants/routes'
@@ -39,6 +42,7 @@ import {
   ProposalMention,
 } from '@/proposals/types'
 import { WorkingGroupsRoutes } from '@/working-groups/constants'
+import { groupIdToURLParam } from '@/working-groups/model/workingGroupName'
 import {
   GetWorkingGroupApplicationMentionDocument,
   GetWorkingGroupApplicationMentionQuery,
@@ -50,15 +54,6 @@ import {
   asWorkingGroupApplicationMention,
   WorkingGroupApplicationMention,
 } from '@/working-groups/types/WorkingGroupApplication'
-
-export type MentionType =
-  | 'proposal'
-  | 'proposalDiscussionEntry'
-  | 'forumThread'
-  | 'forumPost'
-  | 'member'
-  | 'opening'
-  | 'application'
 
 export interface MentionProps {
   children: React.ReactNode
@@ -79,7 +74,7 @@ type TState =
 export const Mention = ({ children, type, itemId }: MentionProps) => {
   const client = useApolloClient()
   const [data, setData] = useState<TState>()
-
+  const showMemberModal = useShowMemberModal((data as Member)?.id)
   const query = useCallback(
     (query: DocumentNode) => async (id: string) =>
       await client.query({
@@ -93,65 +88,69 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
   const getData = useCallback(() => {
     let document: DocumentNode
     switch (type) {
-      case 'proposal': {
+      case MentionType.Proposal: {
         document = GetProposalMentionDocument
         break
       }
-      case 'proposalDiscussionEntry': {
+      case MentionType.ProposalPost: {
         document = GetProposalDiscussionPostMentionDocument
         break
       }
-      case 'forumThread': {
+      case MentionType.ForumThread: {
         document = GetForumThreadMentionDocument
         break
       }
-      case 'forumPost': {
+      case MentionType.ForumPost: {
         document = GetForumPostMentionDocument
         break
       }
-      case 'opening': {
+      case MentionType.Opening: {
         document = GetWorkingGroupOpeningMentionDocument
         break
       }
-      case 'application': {
+      case MentionType.Application: {
         document = GetWorkingGroupApplicationMentionDocument
         break
       }
-      case 'member': {
+      case MentionType.Member: {
         document = GetMemberMentionDocument
+        break
+      }
+      default: {
+        return
       }
     }
     return query(document)(itemId)
   }, [query, type])
 
   const onMount = useCallback(async () => {
-    const { data } = await getData()
+    const data = (await getData())?.data
     switch (type) {
-      case 'proposal': {
+      case MentionType.Proposal: {
         const { proposal } = data as GetProposalMentionQuery
         return proposal && setData(asProposalMention(proposal))
       }
-      case 'proposalDiscussionEntry': {
+      case MentionType.ProposalPost: {
         const { proposalPost } = data as GetProposalDiscussionPostMentionQuery
         return proposalPost && setData(asProposalDiscussionPostMention(proposalPost))
       }
-      case 'forumThread': {
+      case MentionType.ForumThread: {
         const { forumThread } = data as GetForumThreadMentionQuery
         return forumThread && setData(asForumThreadMention(forumThread))
       }
-      case 'forumPost': {
+      case MentionType.ForumPost: {
         const { forumPost } = data as GetForumPostMentionQuery
         return forumPost && setData(asForumPostMention(forumPost))
       }
-      case 'opening': {
+      case MentionType.Opening: {
         const { opening } = data as GetWorkingGroupOpeningMentionQuery
         return opening && setData(asWorkingGroupOpeningMention(opening))
       }
-      case 'application': {
+      case MentionType.Application: {
         const { application } = data as GetWorkingGroupApplicationMentionQuery
         return application && setData(asWorkingGroupApplicationMention(application))
       }
-      case 'member': {
+      case MentionType.Member: {
         const { membership } = data as GetMemberMentionQuery
         return membership && setData(asMember(membership))
       }
@@ -160,21 +159,22 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
 
   const Icon = useMemo(() => {
     switch (type) {
-      case 'proposalDiscussionEntry':
-      case 'proposal': {
+      case MentionType.ProposalPost:
+      case MentionType.Proposal: {
         return <ProposalsIcon />
       }
-      case 'forumPost':
-      case 'forumThread': {
+      case MentionType.ForumPost:
+      case MentionType.ForumThread: {
         return <ForumIcon />
       }
-      case 'member': {
+      case MentionType.Member:
+      case MentionType.Role: {
         return <MyProfileIcon />
       }
-      case 'opening': {
+      case MentionType.Opening: {
         return <WorkingGroupsIcon />
       }
-      case 'application': {
+      case MentionType.Application: {
         return <ApplicationIcon />
       }
     }
@@ -182,46 +182,65 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
 
   const UrlAddress = useMemo(() => {
     switch (type) {
-      case 'proposalDiscussionEntry':
-      case 'proposal': {
+      case MentionType.ProposalPost:
+      case MentionType.Proposal: {
         return `${generatePath(ProposalsRoutes.preview, { id: itemId })}`
       }
-      case 'forumPost':
-      case 'forumThread': {
+      case MentionType.ForumPost:
+      case MentionType.ForumThread: {
         return `${generatePath(ForumRoutes.thread, { id: itemId })}`
       }
-      case 'member': {
+      case MentionType.Member: {
         return 'members'
       }
-      case 'opening': {
+      case MentionType.Role: {
+        const [role, groupId] = itemId.split('_')
+        if (groupId) {
+          return generatePath(WorkingGroupsRoutes.group, { name: groupIdToURLParam(groupId) })
+        }
+        switch (role) {
+          case 'council':
+            return generatePath(CouncilRoutes.council)
+
+          case 'leads':
+            return generatePath(WorkingGroupsRoutes.groups)
+
+          default:
+            return
+        }
+      }
+      case MentionType.Opening: {
         return `${generatePath(WorkingGroupsRoutes.openingById, { id: itemId })}`
       }
-      case 'application': {
+      case MentionType.Application: {
         return `${generatePath(WorkingGroupsRoutes.upcomingOpenings, { id: itemId })}`
       }
     }
   }, [type])
 
-  const Content = useMemo(() => {
+  const Popup = useMemo(() => {
     switch (type) {
-      case 'proposal': {
+      case MentionType.Proposal: {
         return <ProposalTooltip onMount={onMount} mention={data as ProposalMention} urlAddress={'#' + UrlAddress} />
       }
-      case 'proposalDiscussionEntry': {
+      case MentionType.ProposalPost: {
         return <ProposalDiscussionEntryTooltip onMount={onMount} mention={data as ProposalDiscussionPostMention} />
       }
-      case 'forumThread': {
+      case MentionType.ForumThread: {
         return (
           <ForumThreadTooltip onMount={onMount} mention={data as ForumThreadMention} urlAddress={'#' + UrlAddress} />
         )
       }
-      case 'forumPost': {
+      case MentionType.ForumPost: {
         return <ForumPostTooltip onMount={onMount} mention={data as ForumPostMention} />
       }
-      case 'member': {
+      case MentionType.Role: {
+        return
+      }
+      case MentionType.Member: {
         return <MemberTooltip onMount={onMount} mention={data as Member} />
       }
-      case 'opening': {
+      case MentionType.Opening: {
         return (
           <OpeningTooltip
             onMount={onMount}
@@ -230,7 +249,7 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
           />
         )
       }
-      case 'application': {
+      case MentionType.Application: {
         return (
           <ApplicationTooltip
             onMount={onMount}
@@ -242,16 +261,40 @@ export const Mention = ({ children, type, itemId }: MentionProps) => {
     }
   }, [type, onMount, data])
 
+  const label = useMemo(
+    () => (
+      <TextMedium as="span" black bold underline>
+        {children}
+      </TextMedium>
+    ),
+    [children]
+  )
+
+  const content = useMemo(() => {
+    switch (type) {
+      case MentionType.Member:
+        return (
+          <Tooltip popupContent={Popup} forBig>
+            <a onClick={showMemberModal}>{label}</a>
+          </Tooltip>
+        )
+
+      case MentionType.Role:
+        return <a href={UrlAddress && `#${UrlAddress}`}>{label}</a>
+
+      default:
+        return (
+          <Tooltip popupContent={Popup} forBig>
+            <a href={'#' + UrlAddress}>{label}</a>
+          </Tooltip>
+        )
+    }
+  }, [type, Popup, label, showMemberModal])
+
   return (
     <Container id="mention-container">
       {Icon}
-      <Tooltip popupContent={Content} forBig>
-        <a href={'#' + UrlAddress}>
-          <TextMedium as="span" black bold underline>
-            {children}
-          </TextMedium>
-        </a>
-      </Tooltip>
+      {content}
     </Container>
   )
 }

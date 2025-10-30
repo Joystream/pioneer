@@ -1,6 +1,9 @@
-import { createType } from '@joystream/types'
+import { createType, registry } from '@joystream/types'
+import { GenericChainProperties } from '@polkadot/types'
 import type { AccountId, Perbill } from '@polkadot/types/interfaces'
 import { Codec, DetectCodec } from '@polkadot/types/types'
+
+import { CHAIN_PROPERTIES } from '@/app/constants/chain'
 
 const TypeMap = {
   AccountId: 'AccountId',
@@ -95,3 +98,5 @@ const createSafeType = <MTN extends keyof MappedTypeNames, TN extends ValidTypeN
 }
 
 export { createSafeType as createType }
+
+registry.setChainProperties(new GenericChainProperties(registry, CHAIN_PROPERTIES))

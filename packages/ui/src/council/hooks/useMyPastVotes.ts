@@ -25,7 +25,7 @@ export const useMyPastVotes = ({ order, perPage = 5 }: UseMyPastVotesProps) => {
 
   const variables = {
     where,
-    orderBy: [toQueryOrderByInput<CastVoteOrderByInput>(order)],
+    orderBy: toQueryOrderByInput<CastVoteOrderByInput>(order),
     limit: perPage,
     offset,
   }

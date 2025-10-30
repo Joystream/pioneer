@@ -47,7 +47,8 @@ export const MemberRoles = ({ size, max, wrapable, roles }: MemberRolesProps) =>
   if (!roles || !roles.length) {
     roles = []
   }
-  const mapRoles = rolesToMap(roles)
+  const activeRoles = roles.filter((role) => role.isActive)
+  const mapRoles = rolesToMap(activeRoles)
   const rolesWithCount = [...mapRoles.entries()]
 
   const rolesToDisplay = max ? rolesWithCount.slice(0, max) : rolesWithCount

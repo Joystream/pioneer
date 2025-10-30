@@ -1,47 +1,12 @@
-import { Meta, Story } from '@storybook/react'
-import React from 'react'
+import { Meta } from '@storybook/react'
 
-import { MyMemberListItem, MemberListItem } from '.'
+import { MemberListItem } from '.'
+import MyMemberListItem from './MyMemberListItem.stories'
 
 export default {
   title: 'Member/MemberListItem',
-  subcomponents: { MyMemberListItem, MemberListItem },
+  component: MemberListItem,
+  args: MyMemberListItem.args,
 } as Meta
 
-type MyMemberStory = Story<Parameters<typeof MyMemberListItem>[0]>
-export const MyMember: MyMemberStory = (props) => <MyMemberListItem {...props} />
-MyMember.args = {
-  member: {
-    id: '144',
-    name: 'Alice member',
-    rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    handle: 'alice',
-    isVerified: false,
-    isFoundingMember: false,
-    isCouncilMember: false,
-    roles: [],
-    boundAccounts: [],
-    inviteCount: 0,
-    createdAt: '',
-  },
-}
-
-type MemberStory = Story<Parameters<typeof MemberListItem>[0]>
-export const Member: MemberStory = (props) => <MemberListItem {...props} />
-Member.args = {
-  member: {
-    id: '144',
-    name: 'Alice member',
-    rootAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    controllerAccount: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    handle: 'alice',
-    isVerified: false,
-    isFoundingMember: false,
-    isCouncilMember: false,
-    roles: [],
-    boundAccounts: [],
-    inviteCount: 0,
-    createdAt: '',
-  } as unknown as any,
-}
+export const Default = {}

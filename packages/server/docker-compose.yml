@@ -1,0 +1,28 @@
+version: '3.4'
+
+volumes:
+  pioneer-db-data:
+
+services:
+  pioneer-api:
+    image: joystream/pioneer-backend
+    build:
+      context: ../..
+      dockerfile: backend.Dockerfile
+    ports:
+      - '${PORT}:${PORT}'
+    depends_on:
+      - pioneer-db
+    env_file:
+      - .env # ensure `.env` exist
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@pioneer-db:5432/${POSTGRES_DB}
+
+  pioneer-db:
+    image: postgres:16
+    ports:
+      - '127.0.0.1:${DB_PORT}:5432'
+    volumes:
+      - pioneer-db-data:/var/lib/postgresql/data
+    env_file:
+      - .env # ensure `.env` exist

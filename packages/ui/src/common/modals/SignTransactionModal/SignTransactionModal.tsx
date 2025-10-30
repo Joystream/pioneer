@@ -16,6 +16,7 @@ import { TransactionInfo, TransactionInfoProps } from '@/common/components/Trans
 import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useResponsive } from '@/common/hooks/useResponsive'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
 import { TransactionModal, TransactionModalProps } from '@/common/modals/TransactionModal'
 import { Address } from '@/common/types'
@@ -103,20 +104,23 @@ interface SignModalAccountProps {
 
 const SignModalAccount = ({ account, amountInfo = [] }: SignModalAccountProps) => {
   const { total } = useBalance(account.address) || {}
+  const { size } = useResponsive()
 
   return (
     <Wrapper>
       <AccountInfo account={account} />
-      <RowGapBlock>
-        {[...amountInfo, { name: 'Total balance', value: total }].map(({ name, value }, index) => (
-          <BalanceInfoInRow key={name + index}>
-            <InfoTitle>{name}</InfoTitle>
-            <InfoValue>
-              <TokenValue value={value} />
-            </InfoValue>
-          </BalanceInfoInRow>
-        ))}
-      </RowGapBlock>
+      {size !== 'xxs' && size !== 'xs' && (
+        <RowGapBlock>
+          {[...amountInfo, { name: 'Total balance', value: total }].map(({ name, value }, index) => (
+            <BalanceInfoInRow key={name + index}>
+              <InfoTitle>{name}</InfoTitle>
+              <InfoValue>
+                <TokenValue value={value} />
+              </InfoValue>
+            </BalanceInfoInRow>
+          ))}
+        </RowGapBlock>
+      )}
     </Wrapper>
   )
 }

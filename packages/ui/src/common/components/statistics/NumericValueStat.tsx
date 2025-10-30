@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { Colors, Fonts } from '@/common/constants'
 import { formatTokenValue } from '@/common/model/formatters'
+import { isDefined } from '@/common/utils'
 
 import { StatisticItem, StatisticItemProps } from './StatisticItem'
 
@@ -11,9 +12,19 @@ export interface NumericValueStatProps extends StatisticItemProps {
 }
 
 export const NumericValueStat: FC<NumericValueStatProps> = (props) => {
+  const value = typeof props.value === 'number' ? props.value.toString() : props.value
+
+  if (!isDefined(value)) {
+    return (
+      <StatisticItem {...props}>
+        <span>-</span>
+      </StatisticItem>
+    )
+  }
+
   return (
     <StatisticItem {...props}>
-      <NumericValue>{formatTokenValue(props.value)}</NumericValue>
+      <NumericValue>{formatTokenValue(value)}</NumericValue>
       {props.children}
     </StatisticItem>
   )

@@ -15,9 +15,8 @@ interface Props {
 
 export const RecoverButton = React.memo(({ memberId, lock, address, isRecoverable, isSmall }: Props) => {
   const { showModal } = useModal()
+  const isVotingLock = lock.type === 'Voting'
   const onClick = useCallback(() => {
-    if (!memberId) return
-
     if (isRecoverableLock(lock)) {
       showModal<RecoverBalanceModalCall>({
         modal: 'RecoverBalance',
@@ -26,12 +25,17 @@ export const RecoverButton = React.memo(({ memberId, lock, address, isRecoverabl
     }
   }, [address, lock, memberId])
 
-  if (!isRecoverable || !memberId) {
+  if (!isRecoverable) {
     return null
   }
 
   return (
-    <TransactionButton style="primary" size={isSmall ? 'small' : 'medium'} onClick={onClick}>
+    <TransactionButton
+      style="primary"
+      size={isSmall ? 'small' : 'medium'}
+      onClick={onClick}
+      disabled={!isVotingLock && !memberId}
+    >
       Recover
     </TransactionButton>
   )

@@ -7,7 +7,9 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Pagination } from '@/common/components/Pagination'
 import { Colors } from '@/common/constants'
 import { useLocation } from '@/common/hooks/useLocation'
+import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { useRouteQuery } from '@/common/hooks/useRouteQuery'
+import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { AnyKeys } from '@/common/types'
 import { getUrl } from '@/common/utils/getUrl'
 import { ForumRoutes } from '@/forum/constant'
@@ -29,8 +31,9 @@ export const PostList = ({ threadId, isThreadActive, isLoading, isDiscussion }: 
 
   const navigation = { post: query.get('post'), page: query.get('page') }
   const { isLoading: isLoadingPosts, posts, page, pageCount } = useForumThreadPosts(threadId, navigation)
+  const isRefetched = useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['GetForumPosts'] }, [])
 
-  const isReady = useMemo(() => !(isLoading || isLoadingPosts), [posts, pageCount])
+  const isReady = useMemo(() => (!isLoading && !isLoadingPosts) || isRefetched, [posts, pageCount])
   const setPage = useCallback(
     (page: number) => history.replace({ pathname, search: page > 1 ? `page=${page}` : '' }),
     []

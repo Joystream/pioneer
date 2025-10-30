@@ -21,6 +21,7 @@ export const useForumPopularThreads = ({ categoryId, page = 1, threadsPerPage = 
       offset: (page - 1) * threadsPerPage,
       limit: threadsPerPage,
     },
+    fetchPolicy: 'cache-first',
   })
 
   return {

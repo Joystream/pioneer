@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 
 import { List, ListItem } from '@/common/components/List'
 import { UpcomingWorkingGroupOpening, WorkingGroupOpening } from '@/working-groups/types'
@@ -12,12 +13,20 @@ export interface OpeningsListProps {
 
 export const OpeningsList = ({ openings, past }: OpeningsListProps) => {
   return (
-    <List>
+    <ListWrapper>
       {openings.map((opening: any) => (
         <ListItem key={opening.id}>
           <OpeningsListRow opening={opening} past={past} />
         </ListItem>
       ))}
-    </List>
+    </ListWrapper>
   )
 }
+
+const ListWrapper = styled(List)`
+  overflow: auto;
+
+  > li {
+    min-width: 750px;
+  }
+`

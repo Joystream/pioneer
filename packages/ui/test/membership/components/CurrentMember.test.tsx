@@ -5,12 +5,13 @@ import React from 'react'
 
 import { GlobalModals } from '@/app/GlobalModals'
 import { ModalContextProvider } from '@/common/providers/modal/provider'
+import { OnBoardingProvider } from '@/common/providers/onboarding/provider'
 import { CurrentMember } from '@/memberships/components/CurrentMember'
 import { seedMember, seedMembers } from '@/mocks/data'
 
 import { getButton } from '../../_helpers/getButton'
 import { alice, aliceStash, bob, bobStash } from '../../_mocks/keyring'
-import { MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
+import { MockBackendProvider, MockKeyringProvider, MockQueryNodeProviders } from '../../_mocks/providers'
 import { setupMockServer } from '../../_mocks/server'
 import { MEMBER_ALICE_DATA } from '../../_mocks/server/seeds'
 import { stubAccounts } from '../../_mocks/transactions'
@@ -21,6 +22,10 @@ jest.mock('@/common/hooks/useLocalStorage', () => ({
 
 jest.mock('@/common/hooks/useModal', () => ({
   useModal: jest.requireActual('@/common/hooks/useModal').useModal,
+}))
+
+jest.mock('@/common/hooks/useRouteQuery', () => ({
+  useRouteQuery: () => new URLSearchParams(),
 }))
 
 describe('UI: CurrentMember component', () => {
@@ -84,10 +89,14 @@ describe('UI: CurrentMember component', () => {
     return render(
       <MockKeyringProvider>
         <MockQueryNodeProviders>
-          <ModalContextProvider>
-            <CurrentMember />
-            <GlobalModals />
-          </ModalContextProvider>
+          <OnBoardingProvider>
+            <MockBackendProvider>
+              <ModalContextProvider>
+                <CurrentMember />
+                <GlobalModals />
+              </ModalContextProvider>
+            </MockBackendProvider>
+          </OnBoardingProvider>
         </MockQueryNodeProviders>
       </MockKeyringProvider>
     )

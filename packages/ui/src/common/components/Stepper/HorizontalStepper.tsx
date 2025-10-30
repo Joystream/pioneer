@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled, { css } from 'styled-components'
 
 import { asStepsToRender, StepperStep, StepToRender } from '@/common/components/Stepper/types'
-import { BorderRad, Colors, Fonts, Transitions } from '@/common/constants'
+import { BorderRad, BreakPoints, Colors, Fonts, Transitions } from '@/common/constants'
 
 import { CheckboxIcon } from '../icons'
 
@@ -16,16 +16,25 @@ export const HorizontalStepper = ({ steps }: HorizontalStepperProps) => {
   return (
     <HorizontalStepperWrapper>
       {stepsToRender.map((step, index) => (
-        <Step step={step} key={`horizontal-stepper-${index}`}>
-          <StepCircle>{step.isPast ? <CheckboxIcon /> : index + 1}</StepCircle>
-          <StepBody>
-            <StepTitle>{step.title}</StepTitle>
-          </StepBody>
-        </Step>
+        <Fragment key={`horizontal-stepper-${index}`}>
+          <Step step={step}>
+            <StepCircle>{step.isPast ? <CheckboxIcon /> : index + 1}</StepCircle>
+            <StepBody>
+              <StepTitle>{step.title}</StepTitle>
+            </StepBody>
+          </Step>
+          {index < stepsToRender.length - 1 && <Separator />}
+        </Fragment>
       ))}
     </HorizontalStepperWrapper>
   )
 }
+
+const Separator = styled.i`
+  min-width: 20px;
+  height: 1px;
+  background-color: ${Colors.Black[500]};
+`
 
 const pastStepCss = css`
   border-color: ${Colors.Black[500]};
@@ -40,10 +49,10 @@ const activeStepCss = css`
 
 const StepTitle = styled.h6`
   align-self: center;
+  text-align: center;
   text-transform: capitalize;
   transition: ${Transitions.all};
   font-weight: 400;
-  padding-left: 8px;
   color: ${Colors.Black[400]};
 `
 
@@ -68,24 +77,15 @@ export const StepCircle = styled.span`
 `
 
 export const Step = styled.div<{ step: StepToRender }>`
+  align-self: flex-start;
   display: flex;
+  flex-direction: column;
+  gap: 8px;
   position: relative;
   align-items: center;
+  justify-content: center;
   width: fit-content;
-
-  &:not(:first-child) {
-    margin-left: 12px;
-  }
-
-  &:not(:last-child) {
-    &:after {
-      margin-left: 12px;
-      content: '';
-      min-width: 20px;
-      height: 1px;
-      background-color: ${Colors.Black[500]};
-    }
-  }
+  flex: 1 1 0;
 
   ${StepCircle} {
     ${({ step: { isActive } }) => (isActive ? activeStepCss : pastStepCss)};
@@ -95,6 +95,11 @@ export const Step = styled.div<{ step: StepToRender }>`
     ${({ step: { isActive } }) => {
       return isActive ? 'color: white; font-weight: 700' : `color: ${Colors.Black[400]}`
     }};
+  }
+
+  @media (min-width: ${BreakPoints.sm}px) {
+    flex-direction: row;
+    flex: auto;
   }
 `
 
@@ -108,4 +113,5 @@ const HorizontalStepperWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
 `

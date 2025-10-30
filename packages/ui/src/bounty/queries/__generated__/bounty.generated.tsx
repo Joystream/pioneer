@@ -35,6 +35,7 @@ export type BountyFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -42,6 +43,7 @@ export type BountyFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -68,6 +70,7 @@ export type BountyFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -75,6 +78,7 @@ export type BountyFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -110,6 +114,7 @@ export type BountyFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -117,6 +122,7 @@ export type BountyFieldsFragment = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -154,6 +160,7 @@ export type BountyFieldsFragment = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -161,6 +168,7 @@ export type BountyFieldsFragment = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -220,6 +228,7 @@ export type BountyEntryFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -227,6 +236,7 @@ export type BountyEntryFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -272,6 +282,7 @@ export type BountyEntryWithDetailsFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -279,6 +290,7 @@ export type BountyEntryWithDetailsFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -334,6 +346,7 @@ export type BountyWorkWithDetailsFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -341,6 +354,7 @@ export type BountyWorkWithDetailsFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -381,6 +395,7 @@ export type BountyContributionFieldsFragment = {
       __typename: 'MemberMetadata'
       name?: string | null
       about?: string | null
+      isVerifiedValidator?: boolean | null
       avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
     }
     roles: Array<{
@@ -388,6 +403,7 @@ export type BountyContributionFieldsFragment = {
       id: string
       createdAt: any
       isLead: boolean
+      isActive: boolean
       group: { __typename: 'WorkingGroup'; name: string }
     }>
     stakingaccountaddedeventmember?: Array<{
@@ -440,6 +456,7 @@ export type GetBountiesQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -447,6 +464,7 @@ export type GetBountiesQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -473,6 +491,7 @@ export type GetBountiesQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -480,6 +499,7 @@ export type GetBountiesQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -515,6 +535,7 @@ export type GetBountiesQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -522,6 +543,7 @@ export type GetBountiesQuery = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -559,6 +581,7 @@ export type GetBountiesQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -566,6 +589,7 @@ export type GetBountiesQuery = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -650,6 +674,7 @@ export type GetBountyQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -657,6 +682,7 @@ export type GetBountyQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -683,6 +709,7 @@ export type GetBountyQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -690,6 +717,7 @@ export type GetBountyQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -725,6 +753,7 @@ export type GetBountyQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -732,6 +761,7 @@ export type GetBountyQuery = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -769,6 +799,7 @@ export type GetBountyQuery = {
           __typename: 'MemberMetadata'
           name?: string | null
           about?: string | null
+          isVerifiedValidator?: boolean | null
           avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
         }
         roles: Array<{
@@ -776,6 +807,7 @@ export type GetBountyQuery = {
           id: string
           createdAt: any
           isLead: boolean
+          isActive: boolean
           group: { __typename: 'WorkingGroup'; name: string }
         }>
         stakingaccountaddedeventmember?: Array<{
@@ -852,6 +884,7 @@ export type GetBountyWorksQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -859,6 +892,7 @@ export type GetBountyWorksQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{
@@ -947,6 +981,7 @@ export type GetBountyContributorsQuery = {
         __typename: 'MemberMetadata'
         name?: string | null
         about?: string | null
+        isVerifiedValidator?: boolean | null
         avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
       }
       roles: Array<{
@@ -954,6 +989,7 @@ export type GetBountyContributorsQuery = {
         id: string
         createdAt: any
         isLead: boolean
+        isActive: boolean
         group: { __typename: 'WorkingGroup'; name: string }
       }>
       stakingaccountaddedeventmember?: Array<{

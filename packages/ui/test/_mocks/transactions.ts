@@ -1,72 +1,26 @@
-import { DeriveBalancesAll } from '@polkadot/api-derive/types'
 import { AugmentedEvents } from '@polkadot/api/types'
 import { AnyTuple } from '@polkadot/types/types'
 import BN from 'bn.js'
 import { set } from 'lodash'
-import { asyncScheduler, from, Observable, of, scheduled } from 'rxjs'
+import { from, Observable, of } from 'rxjs'
 
 import { toBalances } from '@/accounts/model/toBalances'
 import { UseAccounts } from '@/accounts/providers/accounts/provider'
-import { Account, LockType } from '@/accounts/types'
+import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { UseApi } from '@/api/providers/provider'
 import { BN_ZERO } from '@/common/constants'
 import { createType } from '@/common/model/createType'
 import { ExtractTuple } from '@/common/model/JoystreamNode'
+import { asDerivedBalances } from '@/mocks/helpers/asDerivedBalances'
+import { createErrorEvents, createSuccessEvents, stubTransactionResult } from '@/mocks/helpers/transactions'
 import { proposalDetails } from '@/proposals/model/proposalDetails'
 
 import { mockedBalances, mockedMyBalances, mockedUseMyAccounts } from '../setup'
 
-import { createBalanceLock, createRuntimeDispatchInfo } from './chainTypes'
-
-const createSuccessEvents = (data: any[], section: string, method: string) => [
-  {
-    phase: { ApplyExtrinsic: 2 },
-    event: { index: '0x0502', data, method, section },
-  },
-  {
-    phase: { ApplyExtrinsic: 2 },
-    event: { index: '0x0000', data: [{ weight: 190949000, class: 'Normal', paysFee: 'Yes' }] },
-  },
-]
+import { createRuntimeDispatchInfo } from './chainTypes'
 
 export const currentStubErrorMessage = 'Balance too low to send value.'
-const findMetaError = () => ({
-  docs: [currentStubErrorMessage],
-})
-
-const createErrorEvents = () => [
-  {
-    phase: { ApplyExtrinsic: 2 },
-    event: {
-      index: '0x0001',
-      data: [
-        { Module: { index: new BN(5), error: new BN(3) }, isModule: true, registry: { findMetaError } },
-        { weight: 190949000, class: 'Normal', paysFee: 'Yes' },
-      ],
-      section: 'system',
-      method: 'ExtrinsicFailed',
-    },
-  },
-]
-
-export const stubTransactionResult = (events: any[]) =>
-  scheduled(
-    from([
-      {
-        status: { isReady: true, type: 'Ready' },
-      },
-      {
-        status: { type: 'InBlock', isInBlock: true, asInBlock: '0x93XXX' },
-        events: [...events],
-      },
-      {
-        status: { type: 'Finalized', isFinalized: true, asFinalized: '0x93XXX' },
-        events: [...events],
-      },
-    ]),
-    asyncScheduler
-  )
 
 const createBatchSuccessEvents = () => [
   {
@@ -96,7 +50,7 @@ const createBatchErrorEvents = () => [
 ]
 
 export const stubTransactionFailure = (transaction: any) => {
-  set(transaction, 'signAndSend', () => stubTransactionResult(createErrorEvents()))
+  set(transaction, 'signAndSend', () => stubTransactionResult(createErrorEvents(currentStubErrorMessage)))
 }
 
 type PartialTuple<T extends AnyTuple> = Partial<T>
@@ -154,6 +108,7 @@ export const stubConst = <T>(api: UseApi, constSubPath: string, value: T) => {
 export const stubApi = () => {
   const api: UseApi = {
     api: {
+      _async: { chainMetadata: Promise.resolve({}) },
       isConnected: true,
     } as unknown as Api,
     isConnected: true,
@@ -167,10 +122,10 @@ export const stubApi = () => {
   set(api, 'api.rpc.chain.subscribeNewHeads', () =>
     from([
       createType('Header', {
-        parentHash: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+        parentHash: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
         number: 1337,
-        stateRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-        extrinsicsRoot: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+        stateRoot: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
+        extrinsicsRoot: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
         digest: {
           logs: [],
         },
@@ -178,8 +133,16 @@ export const stubApi = () => {
     ])
   )
   set(api, 'api.rpc.chain.getBlockHash', () => {
-    from([createType('BlockHash', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY')])
+    from([createType('BlockHash', 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf')])
   })
+
+  set(api, 'api.rpc.chain.getHeader', () =>
+    from([
+      {
+        number: createType('BlockNumber', 1337),
+      },
+    ])
+  )
 
   return api
 }
@@ -261,33 +224,8 @@ export const stubCouncilAndReferendum = (
   stubQuery(api, 'council.nextRewardPayments', new BN(1000))
 }
 
-type Balances = { available?: number; locked?: number; lockId?: LockType }
-
-export const stubBalances = ({ available, lockId, locked }: Balances) => {
-  const availableBalance = new BN(available ?? 0)
-  const lockedBalance = new BN(locked ?? 0)
-
-  const deriveBalances = {
-    availableBalance: createType('Balance', availableBalance),
-    lockedBalance: createType('Balance', lockedBalance),
-    accountId: createType('AccountId', '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'),
-    accountNonce: createType('Index', 1),
-    freeBalance: createType('Balance', availableBalance.add(lockedBalance)),
-    frozenFee: new BN(0),
-    frozenMisc: new BN(0),
-    isVesting: false,
-    lockedBreakdown: lockedBalance.eq(BN_ZERO) ? [] : [createBalanceLock(locked!, lockId ?? 'Bound Staking Account')],
-    reservedBalance: new BN(0),
-    vestedBalance: new BN(0),
-    vestedClaimable: new BN(0),
-    vestingEndBlock: createType('BlockNumber', 1234),
-    vestingLocked: new BN(0),
-    vestingPerBlock: new BN(0),
-    vestingTotal: new BN(0),
-    votingBalance: new BN(0),
-    vesting: [],
-  } as unknown as DeriveBalancesAll
-
+export const stubBalances = ({ available, lockId, locked }: Parameters<typeof asDerivedBalances>[0]) => {
+  const deriveBalances = asDerivedBalances({ available, lockId, locked })
   const balance = toBalances(deriveBalances)
   mockedBalances.mockReturnValue(balance)
 
@@ -303,6 +241,7 @@ export const stubAccounts = (allAccounts: Account[], myAccounts: Partial<UseAcco
     allAccounts,
     hasAccounts,
     ...myAccounts,
+    allWallets: [],
   })
 
   const balance = mockedBalances()

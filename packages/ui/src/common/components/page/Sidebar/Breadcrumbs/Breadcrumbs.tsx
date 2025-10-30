@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { BreadcrumbsOptions } from '@/app/constants/breadcrumbs'
+import { RemoveScrollbar } from '@/common/constants'
 
 import { BreadcrumbsList } from './BreadcrumbsList'
 import { HomeLink } from './HomeLink'
@@ -26,4 +27,8 @@ export const BreadcrumbsNavigation = styled.nav`
   position: absolute;
   top: 6px;
   left: 0;
+  width: 100%;
+  padding-right: 24px;
+  overflow: auto;
+  ${RemoveScrollbar}
 `

@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router'
 import { useHistory, useParams } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { PageHeaderRow, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
+import { PageHeaderWithButtons, PageHeaderWrapper, PageLayout } from '@/app/components/PageLayout'
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { CopyButtonTemplate } from '@/common/components/buttons'
 import { ButtonPrimary, ButtonsGroup } from '@/common/components/buttons/Buttons'
@@ -13,6 +13,7 @@ import { ContentWithSidePanel, MainPanel, RowGapBlock } from '@/common/component
 import { PageTitle } from '@/common/components/page/PageTitle'
 import { PreviousPage } from '@/common/components/page/PreviousPage'
 import { SidePanel } from '@/common/components/page/SidePanel'
+import { Statistics, StatsContent } from '@/common/components/statistics'
 import { Label, TextInlineMedium, TextMedium } from '@/common/components/typography'
 import { camelCaseToText } from '@/common/helpers'
 import { useModal } from '@/common/hooks/useModal'
@@ -22,6 +23,7 @@ import { getUrl } from '@/common/utils/getUrl'
 import { useElectedCouncil } from '@/council/hooks/useElectedCouncil'
 import { MemberInfo } from '@/memberships/components'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { CancelProposalButton } from '@/proposals/components/CancelProposalButton'
 import { ProposalDetails } from '@/proposals/components/ProposalDetails/ProposalDetails'
 import { ProposalDiscussions } from '@/proposals/components/ProposalDiscussions'
 import { ProposalHistory } from '@/proposals/components/ProposalHistory'
@@ -84,7 +86,8 @@ export const ProposalPreview = () => {
     (vote) => vote.voter.id === active?.id && proposal?.councilApprovals === vote.votingRound - 1
   )
 
-  const myVote = proposal?.votes.find((vote) => vote.voter.id === active?.id && vote.votingRound === currentVotingRound)
+  const myVote =
+    active && proposal?.votes.find((vote) => vote.voter.id === active.id && vote.votingRound === currentVotingRound + 1)
   const myVoteStatus = myVote?.voteKind
 
   if (!proposal || !votes) {
@@ -110,11 +113,16 @@ export const ProposalPreview = () => {
       sidebarScrollable
       header={
         <PageHeaderWrapper>
-          <PageHeaderRow>
+          <PageHeaderWithButtons>
             <PreviousPage>
               <PageTitle>{proposal.title}</PageTitle>
             </PreviousPage>
             <ButtonsGroup>
+              {active?.id === proposal.proposer.id &&
+                proposal.votes.length === 0 &&
+                (proposal.status === 'deciding' || proposal.status === 'dormant') && (
+                  <CancelProposalButton member={active} proposalId={proposal.id} />
+                )}
               {active?.isCouncilMember &&
                 proposal.status === 'deciding' &&
                 (!hasVoted ? (
@@ -132,7 +140,7 @@ export const ProposalPreview = () => {
                 Copy link
               </CopyButtonTemplate>
             </ButtonsGroup>
-          </PageHeaderRow>
+          </PageHeaderWithButtons>
 
           <RowGapBlock gap={24}>
             <BadgeAndTime>
@@ -158,15 +166,17 @@ export const ProposalPreview = () => {
             </BadgeAndTime>
           </RowGapBlock>
 
-          {(proposal.status === 'dormant' || votingRounds.length > 1) && (
-            <ProposalStages
-              status={proposal.status}
-              updates={proposal.proposalStatusUpdates}
-              constitutionality={constants?.constitutionality}
-              value={currentVotingRound}
-              onChange={setVotingRound}
-            />
-          )}
+          {constants?.constitutionality
+            ? constants?.constitutionality > 1 && (
+                <ProposalStages
+                  status={proposal.status}
+                  updates={proposal.proposalStatusUpdates}
+                  constitutionality={constants?.constitutionality}
+                  value={currentVotingRound}
+                  onChange={setVotingRound}
+                />
+              )
+            : ''}
         </PageHeaderWrapper>
       }
       main={
@@ -177,7 +187,12 @@ export const ProposalPreview = () => {
             {/* Proposal-specific dashboard */}
             <h3>{camelCaseToText(proposal.type)}</h3>
 
-            <ProposalDetails proposalDetails={proposal.details} />
+            <ProposalDetails
+              proposalDetails={proposal.details}
+              gracePeriod={constants?.gracePeriod}
+              exactExecutionBlock={proposal.exactExecutionBlock}
+              createdInBlock={proposal.createdInBlock}
+            />
 
             <RationalePreview rationale={proposal.rationale} />
             <ProposalDiscussions thread={proposal.discussionThread} proposalId={id} />
@@ -199,9 +214,50 @@ export const ProposalPreview = () => {
           </RowGapBlock>
         </SidePanel>
       }
+      responsiveStyle={ResponsiveStyle}
     />
   )
 }
 const BadgeAndTime = styled(BadgesRow)`
   gap: 16px;
+`
+
+const ResponsiveStyle = css`
+  aside {
+    > div {
+      padding: 0;
+    }
+  }
+
+  ${Statistics} {
+    grid-template-columns: 1fr;
+
+    @media (min-width: 1440px) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: 8fr 4fr;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'header header'
+      'main sidebar';
+
+    aside {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      padding-left: 16px;
+
+      > div {
+        min-height: 184px;
+        overflow: hidden;
+      }
+    }
+  }
+
+  ${StatsContent} {
+    gap: 16px;
+  }
 `

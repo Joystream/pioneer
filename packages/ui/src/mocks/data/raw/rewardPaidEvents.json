@@ -6,7 +6,7 @@
     "network": "OLYMPIA",
     "groupId": "membershipWorkingGroup",
     "workerId": "membershipWorkingGroup-72",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "rewardAccount": "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
     "amount": 4160,
     "type": "REGULAR"
   },
@@ -17,7 +17,7 @@
     "network": "OLYMPIA",
     "groupId": "contentWorkingGroup",
     "workerId": "contentWorkingGroup-54",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "rewardAccount": "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
     "amount": 4680,
     "type": "REGULAR"
   },
@@ -28,7 +28,7 @@
     "network": "OLYMPIA",
     "groupId": "storageWorkingGroup",
     "workerId": "storageWorkingGroup-35",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "rewardAccount": "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
     "amount": 6310,
     "type": "REGULAR"
   },
@@ -39,7 +39,7 @@
     "network": "OLYMPIA",
     "groupId": "membershipWorkingGroup",
     "workerId": "membershipWorkingGroup-71",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "rewardAccount": "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
     "amount": 1750,
     "type": "REGULAR"
   },
@@ -50,7 +50,7 @@
     "network": "OLYMPIA",
     "groupId": "forumWorkingGroup",
     "workerId": "forumWorkingGroup-3",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "rewardAccount": "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
     "amount": 7980,
     "type": "REGULAR"
   },
@@ -61,7 +61,7 @@
     "network": "OLYMPIA",
     "groupId": "membershipWorkingGroup",
     "workerId": "membershipWorkingGroup-74",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "rewardAccount": "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
     "amount": 2900,
     "type": "REGULAR"
   },
@@ -72,7 +72,7 @@
     "network": "OLYMPIA",
     "groupId": "membershipWorkingGroup",
     "workerId": "membershipWorkingGroup-76",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "rewardAccount": "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
     "amount": 2470,
     "type": "REGULAR"
   },
@@ -83,7 +83,7 @@
     "network": "OLYMPIA",
     "groupId": "forumWorkingGroup",
     "workerId": "forumWorkingGroup-19",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "rewardAccount": "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
     "amount": 5710,
     "type": "REGULAR"
   },
@@ -94,7 +94,7 @@
     "network": "OLYMPIA",
     "groupId": "storageWorkingGroup",
     "workerId": "storageWorkingGroup-38",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "rewardAccount": "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
     "amount": 1620,
     "type": "REGULAR"
   },
@@ -105,7 +105,7 @@
     "network": "OLYMPIA",
     "groupId": "contentWorkingGroup",
     "workerId": "contentWorkingGroup-51",
-    "rewardAccount": "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+    "rewardAccount": "j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT",
     "amount": 5100,
     "type": "REGULAR"
   }

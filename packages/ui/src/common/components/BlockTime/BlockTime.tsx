@@ -24,7 +24,7 @@ export const BlockTime = React.memo(({ block, layout, dateLabel, lessInfo, posit
   <BlockTimeWrapper layout={layout} position={position}>
     <AboutText>
       {dateLabel && layout == 'row' && dateLabel + ': '}
-      {formatDateString(block.timestamp, layout === 'column' ? 's' : 'l')}
+      {formatDateString(block.timestamp)}
     </AboutText>
     {layout == 'row' && <Separator>{' | '}</Separator>}
     <BlockInfo block={block} lessInfo={lessInfo} />
@@ -36,7 +36,7 @@ const Separator = styled.span`
   line-height: inherit;
 `
 
-const AboutText = styled(TextMedium)`
+export const AboutText = styled(TextMedium)`
   color: ${Colors.Black[600]};
   width: max-content;
 `
@@ -68,6 +68,13 @@ export const BlockTimeWrapper = styled.div<BlockTimeLayoutProps>`
 
           ${Separator} {
             color: ${Colors.Black[400]};
+          }
+
+          @media (max-width: 424px) {
+            grid-template-rows: auto auto;
+            ${Separator} {
+              display: none;
+            }
           }
         `
       case 'column':

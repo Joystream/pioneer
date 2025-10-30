@@ -245,7 +245,7 @@
     "statusSetAtBlock": 0,
     "statusSetAtTime": "2022-04-19T20:07:54.984Z",
     "details": {
-      "type": "editBlogPost"
+      "type": "signal"
     },
     "creatorId": "16",
     "createdAt": "2022-04-16T21:21:22.512Z",
@@ -801,7 +801,7 @@
     "statusSetAtBlock": 0,
     "statusSetAtTime": "2022-04-28T10:07:02.667Z",
     "details": {
-      "type": "createBlogPost"
+      "type": "signal"
     },
     "creatorId": "23",
     "createdAt": "2022-04-27T19:37:13.968Z",
@@ -1638,7 +1638,7 @@
     "statusSetAtBlock": 0,
     "statusSetAtTime": "2022-04-28T19:45:34.344Z",
     "details": {
-      "type": "unlockBlogPost"
+      "type": "signal"
     },
     "creatorId": "3",
     "createdAt": "2022-04-28T12:08:58.096Z",
@@ -1957,7 +1957,7 @@
     "statusSetAtBlock": 0,
     "statusSetAtTime": "2022-04-24T14:13:50.363Z",
     "details": {
-      "type": "lockBlogPost"
+      "type": "signal"
     },
     "creatorId": "1",
     "createdAt": "2022-04-19T11:59:35.018Z",

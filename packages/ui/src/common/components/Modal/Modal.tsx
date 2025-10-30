@@ -1,11 +1,11 @@
 import React, { ReactNode } from 'react'
-import styled, { ThemedStyledProps } from 'styled-components'
+import styled, { ThemedStyledProps, css } from 'styled-components'
 
 import { ConnectionStatusDot } from '@/app/components/ConnectionStatusDot'
 import { useEscape } from '@/common/hooks/useEscape'
 
-import { Animations, BorderRad, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
-import { CloseButton } from '../buttons'
+import { Animations, BorderRad, BreakPoints, Colors, Fonts, RemoveScrollbar, Shadows, ZIndex } from '../../constants'
+import { ButtonsGroup, CloseButton } from '../buttons'
 import { TextMedium, ValueInJoys } from '../typography'
 
 interface ModalHeaderBasicProps {
@@ -149,14 +149,13 @@ export const ModalBody = styled.div`
 `
 
 interface ModalFooterProps {
-  twoColumns?: boolean
   children?: ReactNode
   className?: string
 }
 
-export const ModalFooter = ({ twoColumns = false, children, className }: ModalFooterProps) => {
+export const ModalFooter = ({ children, className }: ModalFooterProps) => {
   return (
-    <ModalFooterComponent twoColumns={twoColumns} className={className}>
+    <ModalFooterComponent className={className}>
       {children}
       <ModalConnectionStatusDot onlyPerformance />
     </ModalFooterComponent>
@@ -169,34 +168,32 @@ const ModalConnectionStatusDot = styled(ConnectionStatusDot)`
   top: calc(50% - 10px);
 `
 
-export const ModalFooterComponent = styled.footer<{ twoColumns?: boolean }>`
-  display: inline-grid;
+export const ModalFooterComponent = styled.footer`
+  display: inline-flex;
+  flex-wrap: wrap;
   grid-area: modalfooter;
-  grid-template-columns: ${({ twoColumns }) => (twoColumns ? '1fr auto' : '1fr')};
-  grid-template-rows: 1fr;
-  grid-auto-flow: column;
-  grid-column-gap: 40px;
+  gap: 16px 4px;
   justify-self: end;
-  justify-items: end;
   justify-content: end;
   align-items: center;
   width: 100%;
-  height: 64px;
-  padding: 12px 26px 12px 24px;
+  height: content-fit;
+  min-height: 64px;
+  padding: 12px;
   border-radius: 0 0 2px 2px;
   position: relative;
-`
+  max-width: 100vw;
 
-export const ModalFooterGroup = styled.div<{ left?: boolean }>`
-  display: grid;
-  grid-auto-flow: column;
-  align-items: center;
-  width: fit-content;
-  height: 100%;
-  justify-self: ${({ left }) => (left ? 'start' : 'end')};
-  grid-column-gap: 40px;
-  justify-items: ${({ left }) => (left ? 'start' : 'end')};
-  justify-content: ${({ left }) => (left ? 'start' : 'end')};
+  @media (min-width: ${BreakPoints.sm}px) {
+    flex-wrap: nowrap;
+    gap: 16px;
+    padding: 12px 26px 12px 24px;
+
+    ${ButtonsGroup} {
+      gap: 16px;
+    }
+  }
+  }
 `
 
 interface ModalWrapProps {
@@ -209,6 +206,19 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   z-index: ${ZIndex.modal};
   position: absolute;
   inset: 0;
+  ${({ modalMaxSize }) => {
+    switch (modalMaxSize) {
+      case 'm':
+      case 'l':
+        // HACK: Move modals to the top on mobile because SubWallet shows the keyboard on the viewport
+        // instead of reducing the viewport size (at least on Android).
+        return css`
+          @media (max-width: ${BreakPoints.sm - 1}px) {
+            bottom: auto;
+          }
+        `
+    }
+  }};
   margin: auto auto;
   display: grid;
   @media only screen and (max-height: 700px) {
@@ -223,6 +233,9 @@ export const ModalWrap = styled.section<ModalWrapProps>`
   grid-area: modal;
   background-color: ${Colors.White};
   width: 100%;
+  @media (min-width: ${BreakPoints.sm}px) {
+    width: calc(100% - 64px);
+  }
   max-width: ${({ modalMaxSize }) => {
     switch (modalMaxSize) {
       case 'xs':
@@ -279,7 +292,10 @@ export const ModalHeaderIcon = styled.div`
 
 export const ScrolledModal = styled(Modal)`
   &${ModalWrap} {
-    max-height: calc(100% - 128px);
+    max-height: 100%;
+    @media only screen and (min-height: 800px) {
+      max-height: calc(100% - 128px);
+    }
     grid-template-rows: auto 1fr auto;
     position: fixed;
   }
@@ -302,7 +318,11 @@ export const ScrolledModalContainer = styled.div`
   grid-row-gap: 16px;
   width: 100%;
   height: 100%;
-  padding: 24px 24px 20px;
+  padding: 24px 12px 20px;
+
+  @media (min-width: ${BreakPoints.sm}px) {
+    padding: 24px 24px 20px;
+  }
 
   &:after {
     content: '';

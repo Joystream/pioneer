@@ -1,8 +1,8 @@
+import { isFunction } from 'lodash'
 import React, { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 import { BorderRad, Colors, Transitions } from '../../constants'
-import { isFunction } from '../../utils'
 import { Arrow, Icon } from '../icons'
 
 import { ButtonBareGhost } from './Buttons'

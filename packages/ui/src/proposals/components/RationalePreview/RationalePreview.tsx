@@ -33,6 +33,7 @@ const RationaleSection = styled(RowGapBlock).attrs({ gap: 24 })`
   background: ${Colors.Black[50]};
   border: 1px solid ${Colors.Black[200]};
   border-radius: ${BorderRad.s};
+  overflow: auto;
 `
 
 const RationaleToggle = styled.label`

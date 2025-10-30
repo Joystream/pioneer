@@ -13,6 +13,9 @@ export const PageTitle = styled.h2<{ $isRemovedThread?: boolean }>`
     css`
       text-decoration-line: line-through;
     `}
+  @media (max-width: 767px) {
+    display: block;
+  }
 `
 PageTitle.defaultProps = {
   $isRemovedThread: false,

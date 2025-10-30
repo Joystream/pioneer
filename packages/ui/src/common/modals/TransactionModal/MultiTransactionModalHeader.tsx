@@ -11,16 +11,19 @@ type MultiTransactionModalHeaderParams = {
   transactionSteps: TransactionStep[]
 }
 
-export const MultiTransactionModalHeader = (props: MultiTransactionModalHeaderParams) => (
-  <ModalCustomContentHeader onClick={props.onClick}>
-    {props.transactionSteps.map((step, index) => (
-      <MultiTransactionStep
-        key={index}
-        stepNumber={index + 1}
-        stepTitle={step.title}
-        active={index === props.active}
-        past={index < props.active}
-      />
-    ))}
-  </ModalCustomContentHeader>
-)
+export const MultiTransactionModalHeader = (props: MultiTransactionModalHeaderParams) => {
+  return (
+    <ModalCustomContentHeader onClick={props.onClick}>
+      {props.transactionSteps.map((step, index) => (
+        <MultiTransactionStep
+          key={index}
+          stepNumber={index + 1}
+          stepTitle={step.title}
+          active={index === props.active}
+          past={index < props.active}
+          showInfo={props.transactionSteps.length < 3 || index === props.active}
+        />
+      ))}
+    </ModalCustomContentHeader>
+  )
+}

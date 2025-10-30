@@ -119,7 +119,7 @@ describe('UI: ProposalListItem', () => {
         server.server
       )
 
-      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
+      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, isCouncilMember: true, memberId: '0' })
       expect(screen.queryByText('Approved')).toBeNull()
     })
 
@@ -133,7 +133,7 @@ describe('UI: ProposalListItem', () => {
         server.server
       )
 
-      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
+      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, isCouncilMember: true, memberId: '0' })
 
       expect(await screen.findByText('Approved')).toBeDefined()
     })
@@ -148,7 +148,7 @@ describe('UI: ProposalListItem', () => {
         server.server
       )
 
-      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
+      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, isCouncilMember: true, memberId: '0' })
 
       const vote = await screen.findByText('Rejected')
       expect(vote).toBeDefined()
@@ -171,7 +171,7 @@ describe('UI: ProposalListItem', () => {
         server.server
       )
 
-      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, memberId: '0' })
+      renderComponent({ proposal: { ...proposalData, status: 'dormant' }, isCouncilMember: true, memberId: '0' })
 
       const firstVote = await screen.findByText('Approved')
       expect(firstVote.parentNode?.parentNode?.childNodes[0].textContent).toEqual('1/2 Approved')

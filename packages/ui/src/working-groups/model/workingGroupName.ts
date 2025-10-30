@@ -1,3 +1,7 @@
+import { nameMapping } from '@/common/helpers'
+
+import { GroupIdToGroupParam } from '../constants'
+
 const exceptionWorkingGroupNames = ['hr', 'marketing', 'builders', 'apps']
 
 export const urlParamToWorkingGroupId = (name: string) => {
@@ -19,10 +23,12 @@ export const urlParamToWorkingGroupId = (name: string) => {
   return `${name.replace(/-([a-z])/g, (match, firstLetter) => firstLetter.toUpperCase())}WorkingGroup`
 }
 
+// TODO unit test this function
+export const groupIdToURLParam = (groupId: string) => nameMapping(groupId).toLowerCase()
+
 export const groupNameToURLParam = (name: string) => name.toLowerCase().replace(/ /g, '-')
 
-export const urlParamToOpeningId = (name: string) => {
-  if (name.includes('operationsWorkingGroup')) return name
-  const params = name.split('-')
-  return `${urlParamToWorkingGroupId(params[0])}-${params[1]}`
+export const urlParamToOpeningId = (param: string) => {
+  const [group, runtimeId] = param.split('-')
+  return group in GroupIdToGroupParam ? param : `${urlParamToWorkingGroupId(group)}-${runtimeId}`
 }

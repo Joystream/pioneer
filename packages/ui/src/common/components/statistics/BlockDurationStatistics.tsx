@@ -22,7 +22,7 @@ const format = splitDuration([
   [A_MINUTE / MILLISECONDS_PER_BLOCK, 'min'],
 ])
 
-export const formatDuration = (duration: number): [string | number, string][] => {
+export const formatDuration = (duration: number): ['< 1' | number, string][] => {
   if (duration < A_MINUTE / MILLISECONDS_PER_BLOCK) {
     return [['< 1', 'min']]
   }

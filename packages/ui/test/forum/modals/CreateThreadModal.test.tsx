@@ -80,11 +80,7 @@ describe('CreateThreadModal', () => {
       useMyMemberships.active = undefined
       renderModal()
       expect(useModal.showModal).toBeCalledWith({
-        modal: 'SwitchMember',
-        data: {
-          originalModalName: 'CreateThreadModal',
-          originalModalData: useModal.modalData,
-        },
+        modal: 'OnBoardingModal',
       })
     })
 
@@ -128,7 +124,7 @@ describe('CreateThreadModal', () => {
 
     it("Displays the member's controller account", async () => {
       await fillAndProceed()
-      expect(await screen.findByText(/5GrwvaEF5.*NoHGKutQY/i)).toBeDefined()
+      expect(await screen.findByText('j4W7rVcUC...hEMQxZeSf')).toBeDefined()
     })
 
     it('Insufficient funds for actual fee', async () => {

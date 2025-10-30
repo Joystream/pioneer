@@ -10,7 +10,7 @@ export const colLayoutByType = (kind: MemberItemKind) => {
   const roles = kind !== 'MyMember' ? 136 : 164
   const created = 90
   const referrer = 50
-  const count = kind !== 'MyMember' ? 20 : 76
+  const count = 76
   const total = 120
 
   switch (kind) {
@@ -48,12 +48,13 @@ export const MemberItemWrap = styled.div<{ kind: MemberItemKind }>`
   position: relative;
   grid-template-columns: ${({ kind }) => colLayoutByType(kind)};
   grid-template-rows: 1fr;
+  grid-column-gap: 16px;
   justify-content: space-between;
   justify-items: start;
   align-items: center;
   width: 100%;
   min-height: ${Sizes.accountHeight};
-  padding: 16px 0 16px 14px;
+  padding: 16px 24px;
   border: 1px solid ${Colors.Black[100]};
   border-radius: ${BorderRad.s};
   transition: ${Transitions.all};
@@ -78,3 +79,7 @@ export const MemberRolesColumn = styled(MemberColumn)`
 `
 
 export const MemberControls = styled.div``
+
+export const MemberStakeColumn = styled(MemberColumn)`
+  grid-auto-flow: row;
+`

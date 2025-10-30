@@ -4,7 +4,7 @@ import { createMemoryHistory } from 'history'
 import React from 'react'
 import { Route, Router, Switch } from 'react-router-dom'
 
-import { WorkingGroup } from '@/app/pages/WorkingGroups/WorkingGroup'
+import { WorkingGroupOpenings } from '@/app/pages/WorkingGroups/WorkingGroup'
 import { seedMember, seedOpening, seedOpeningStatuses } from '@/mocks/data'
 import { seedUpcomingOpening } from '@/mocks/data/seedUpcomingOpening'
 import { seedWorkingGroups } from '@/mocks/data/seedWorkingGroups'
@@ -37,7 +37,7 @@ describe('WorkingGroup', () => {
   })
 
   it('Loads working group by url param with a hyphen', async () => {
-    renderPage('/working-groups/content')
+    renderPage('/working-groups/content/openings')
     await waitForElementToBeRemoved(() => loaderSelector(true), {})
 
     expect(await screen.findByText(/current budget/i)).toBeDefined()
@@ -51,14 +51,14 @@ describe('WorkingGroup', () => {
     expect(await screen.findAllByText(UPCOMING_OPENING.metadata.title)).toHaveLength(2)
   })
 
-  function renderPage(path = '/working-groups/forum') {
+  function renderPage(path = '/working-groups/forum/openings') {
     const history = createMemoryHistory()
     history.push(path)
     render(
       <Router history={history}>
         <MockQueryNodeProviders>
           <Switch>
-            <Route path="/working-groups/:name" component={WorkingGroup} />
+            <Route path="/working-groups/:name/openings" component={WorkingGroupOpenings} />
           </Switch>
         </MockQueryNodeProviders>
       </Router>

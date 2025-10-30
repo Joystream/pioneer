@@ -5,7 +5,7 @@ export type NetworkType = 'BABYLON' | 'ALEXANDRIA' | 'ROME' | 'GIZA' | 'OLYMPIA'
 
 export interface Block {
   number: number
-  network: NetworkType
+  network?: NetworkType
   timestamp: string
 }
 

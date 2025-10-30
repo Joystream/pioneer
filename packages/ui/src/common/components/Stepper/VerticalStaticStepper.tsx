@@ -1,7 +1,7 @@
-import { getAllWallets } from 'injectweb3-connect'
 import React from 'react'
 import styled from 'styled-components'
 
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { TextHuge, TextInlineBig, TextMedium } from '@/common/components/typography'
 import { BorderRad, Colors } from '@/common/constants'
 import { MemberAvatar } from '@/memberships/components/Avatar'
@@ -16,6 +16,8 @@ export interface VerticalStaticStepperProps {
   steps: Array<VerticalStaticStepperData>
 }
 export const VerticalStaticStepper = ({ steps }: VerticalStaticStepperProps) => {
+  const { allWallets } = useMyAccounts()
+
   return (
     <StepperWrap>
       {steps.map((item, index) => (
@@ -29,7 +31,7 @@ export const VerticalStaticStepper = ({ steps }: VerticalStaticStepperProps) => 
               <StyledSubtitle>{item.subtitle}</StyledSubtitle>
               {item.walletIcon ?? (
                 <WalletIconWrapper>
-                  {getAllWallets().map((wallet) => (
+                  {allWallets.map((wallet) => (
                     <WalletIcons avatarUri={wallet.logo.src} />
                   ))}
                 </WalletIconWrapper>

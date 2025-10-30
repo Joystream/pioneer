@@ -1,6 +1,7 @@
 import { SubmittableExtrinsic } from '@polkadot/api/types'
 import { ISubmittableResult } from '@polkadot/types/types'
 import React, { Ref, RefObject, useCallback, useRef, useState } from 'react'
+import styled from 'styled-components'
 
 import { ButtonsGroup } from '@/common/components/buttons'
 import { TransactionButton } from '@/common/components/buttons/TransactionButton'
@@ -8,6 +9,7 @@ import { BaseCKEditor } from '@/common/components/CKEditor'
 import { Checkbox, InputComponent } from '@/common/components/forms'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig } from '@/common/components/typography'
+import { BreakPoints } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { CreatePostModalCall } from '@/forum/modals/PostActionModal/CreatePostModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
@@ -40,7 +42,7 @@ export const NewThreadPost = React.forwardRef(
     }
 
     return (
-      <RowGapBlock gap={8} ref={ref}>
+      <Wrapper gap={8} ref={ref}>
         <InputComponent
           inputSize="auto"
           message={postText === '' ? 'This field cannot be empty. Type your message here' : undefined}
@@ -60,6 +62,7 @@ export const NewThreadPost = React.forwardRef(
                 })
             }}
             disabled={postText === ''}
+            isResponsive
           >
             Create post
           </TransactionButton>
@@ -67,7 +70,7 @@ export const NewThreadPost = React.forwardRef(
             Keep editable
           </Checkbox>
         </ButtonsGroup>
-      </RowGapBlock>
+      </Wrapper>
     )
   }
 )
@@ -86,3 +89,13 @@ const EditorMemo = React.memo(({ setNewText, editorRef }: MemoEditorProps) => (
     onFocus={() => undefined}
   />
 ))
+
+// HACK: Let the user scroll down to write because SubWallet shows the keyboard on the viewport
+// instead of reducing the viewport size (at least on Android).
+const Wrapper = styled(RowGapBlock)`
+  @media (max-width: ${BreakPoints.sm - 1}px) {
+    &:has(.ck-focused) {
+      margin-bottom: 40vh;
+    }
+  }
+`

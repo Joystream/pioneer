@@ -5,7 +5,7 @@ import { benchmark } from '@/common/utils/benchmark'
 
 import { Api } from '..'
 
-const ALICE = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY'
+const ALICE = 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf'
 
 const operation = (api: Api) => {
   const tx = api.tx.members.confirmStakingAccount(0, ALICE)

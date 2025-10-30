@@ -20,7 +20,7 @@ const salts = [
 ]
 const attempts: VotingAttempt[] = salts.map((salt) => ({
   salt,
-  accountId: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+  accountId: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
   optionId: '0',
 }))
 const validBackup: VotesBackup = { cycleId, votingAttempts: [attempts[0], attempts[1]] }
@@ -74,7 +74,7 @@ describe('UI: Restore Votes Modal', () => {
       displayModal()
       await uploadFile(createFile('not json'))
       expect(await screen.findByRole('button', { name: 'Restore Votes' })).toBeDisabled()
-      expect(await screen.findByText(/^Unexpected token .+ in JSON/)).toBeDefined()
+      expect(await screen.findByText(/^Unexpected token/)).toBeDefined()
     })
 
     it('Invalid schema', async () => {

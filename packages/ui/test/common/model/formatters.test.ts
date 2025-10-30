@@ -42,15 +42,15 @@ describe('formatters', () => {
   })
 
   describe('shortenAddress', () => {
-    const address = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty'
+    const address = 'j4UYhDYJ4pz2ihhDDzu69v2JTVeGaGmTebmBdWaX2ANVinXyE'
 
     it('Shortens addresses', () => {
-      expect(shortenAddress(address)).toEqual('5FHneW46x...hjJM694ty')
+      expect(shortenAddress(address)).toEqual('j4UYhDYJ4...2ANVinXyE')
     })
 
     it('Shortens to specified length', () => {
-      expect(shortenAddress(address, 8)).toEqual('5FHn...94ty')
-      expect(shortenAddress(address, 9)).toEqual('5FHne...94ty')
+      expect(shortenAddress(address, 8)).toEqual('j4UY...nXyE')
+      expect(shortenAddress(address, 9)).toEqual('j4UYh...nXyE')
     })
 
     it('Empty string', () => {
@@ -70,7 +70,7 @@ describe('formatters', () => {
     const dateString = '1983-10-01T06:42:00.155Z'
 
     it('Default format', () => {
-      expect(formatDateString(dateString)).toMatch(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}, [0-9]{2}:[0-9]{2}(AM|PM) [A-Z]+/)
+      expect(formatDateString(dateString)).toMatch(RegExp(String.raw`\d{2}/\d{2}/\d{4}, \d{2}:\d{2}\s[AP]M [A-Z]+$`))
     })
   })
 

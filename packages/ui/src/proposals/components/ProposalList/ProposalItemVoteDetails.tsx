@@ -11,17 +11,14 @@ import { getVoteStatusComponent } from '../VoteStatusComponent'
 export interface ProposalItemVoteDetailsProps {
   proposal: Proposal
   memberId?: string
-  isCouncilMember?: boolean
 }
 
-export const ProposalItemVoteDetails = ({ proposal, memberId, isCouncilMember }: ProposalItemVoteDetailsProps) => {
+export const ProposalItemVoteDetails = ({ proposal, memberId }: ProposalItemVoteDetailsProps) => {
   const { votes } = useProposalVotesByMember(proposal.id, memberId)
   const constants = useProposalConstants(proposal.type)
   const constitutionality = constants?.constitutionality
   const canVote =
-    isCouncilMember &&
-    proposal.status === 'deciding' &&
-    (!votes || !votes.some((vote) => proposal.councilApprovals < vote.votingRound))
+    proposal.status === 'deciding' && (!votes || !votes.some((vote) => proposal.councilApprovals < vote.votingRound))
 
   return (
     <>

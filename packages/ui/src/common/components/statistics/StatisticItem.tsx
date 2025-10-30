@@ -60,10 +60,12 @@ export const StatsContent = styled.div<{ inline?: boolean }>`
     `}
 `
 
-export const StatisticItemSpacedContent = styled.div`
+export const StatisticItemSpacedContent = styled.div<{ size?: string }>`
   display: flex;
+  flex-direction: ${({ size }) => (size === 'xxs' || size === 'xs' ? 'column' : 'row')};
   justify-content: space-between;
-  align-items: center;
+  row-gap: 8px;
+  align-items: ${({ size }) => (size === 'xxs' || size === 'xs' ? 'start' : 'center')};
   width: 100%;
 `
 

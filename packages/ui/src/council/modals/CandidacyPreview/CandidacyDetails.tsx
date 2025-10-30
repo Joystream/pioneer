@@ -51,6 +51,4 @@ const HeaderImage = styled(UserImage)`
   width: 100%;
 `
 
-const Title = styled.h4`
-  word-break: break-word;
-`
+const Title = styled.h4``

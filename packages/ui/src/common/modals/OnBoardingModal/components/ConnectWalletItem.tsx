@@ -1,7 +1,8 @@
-import { getWalletBySource, Wallet } from 'injectweb3-connect'
+import { Wallet } from 'injectweb3-connect'
 import React from 'react'
 import styled from 'styled-components'
 
+import { DefaultWalletIcon } from '@/accounts/model/wallets'
 import { CheckboxIcon } from '@/common/components/icons'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { TextBig, TextMedium } from '@/common/components/typography'
@@ -14,13 +15,11 @@ interface ConnectWalletItemProps {
   onClick: () => void
 }
 
-const defaultIconSrc = getWalletBySource('polkadot-js')?.logo.src
-
 export const ConnectWalletItem = ({ wallet, selected, onClick }: ConnectWalletItemProps) => {
   return (
     <SelectListWrapper selected={selected} onClick={onClick}>
       <InnerWrapper>
-        <img src={wallet.logo.src ?? defaultIconSrc} alt={wallet.logo.alt ?? wallet.extensionName} />
+        <img src={wallet.logo.src ?? DefaultWalletIcon} alt={wallet.logo.alt ?? wallet.extensionName} />
         <RowGapBlock>
           <TextBig bold value>
             {wallet.title}

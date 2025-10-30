@@ -80,7 +80,6 @@ export const NewAddressSchema = (which: string) =>
       name: Yup.string(),
       address: Yup.string().required('This field is required'),
     })
-    .test(which, 'Address is invalid', (value, testContext) => {
-      const keyring = testContext?.options?.context?.keyring
-      return value.address ? isValidAddress(value.address, keyring) : true
+    .test(which, 'Address is invalid', (value) => {
+      return value.address ? isValidAddress(value.address) : true
     })

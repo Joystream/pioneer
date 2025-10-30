@@ -37,6 +37,7 @@ export const asMember = (data: Omit<MemberFieldsFragment, '__typename'>): Member
 export const asMemberRole = (data: MemberFieldsFragment['roles'][0]): MemberRole => ({
   id: data.id,
   isLead: data.isLead,
+  isActive: data.isActive,
   groupName: asWorkingGroupName(data.group.name),
   createdAt: data.createdAt,
 })
@@ -46,8 +47,11 @@ const asMemberEntry = (entry: MemberWithDetailsFieldsFragment['entry']): MemberE
     return { type: 'paid', block: asBlock(entry.membershipBoughtEvent) }
   } else if (entry.__typename === 'MembershipEntryInvited' && entry.memberInvitedEvent) {
     return { type: 'invited', block: asBlock(entry.memberInvitedEvent) }
+  } else if (entry.__typename === 'MembershipEntryGifted' && entry.membershipGiftedEvent) {
+    return { type: 'gifted', block: asBlock(entry.membershipGiftedEvent) }
+  } else if (entry.__typename === 'MembershipEntryMemberCreated' && entry.memberCreatedEvent) {
+    return { type: 'created', block: asBlock(entry.memberCreatedEvent) }
   }
-
   return { type: 'genesis' }
 }
 

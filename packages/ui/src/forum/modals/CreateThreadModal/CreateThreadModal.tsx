@@ -26,7 +26,7 @@ import {
   ThreadFormFields,
 } from './CreateThreadDetailsModal'
 import { CreateThreadSuccessModal } from './CreateThreadSuccessModal'
-import { createThreadMachine } from './machine'
+import { createThreadMachine, TransactionContext } from './machine'
 
 export const CreateThreadModal = () => {
   const { active: member } = useMyMemberships()
@@ -91,7 +91,7 @@ export const CreateThreadModal = () => {
 
   if (state.matches('transaction') && api && postDeposit && threadDeposit && balance) {
     const { topic, description } = form.getValues()
-    const { memberId, categoryId, controllerAccount } = state.context
+    const { memberId, categoryId, controllerAccount } = state.context as TransactionContext
     const transaction = api.tx.forum.createThread(
       memberId,
       categoryId,
@@ -117,7 +117,8 @@ export const CreateThreadModal = () => {
   }
 
   if (state.matches('success')) {
-    return <CreateThreadSuccessModal newThreadId={state.context.newThreadId.toString()} />
+    const { newThreadId } = state.context as Required<TransactionContext>
+    return <CreateThreadSuccessModal newThreadId={newThreadId.toString()} />
   }
 
   if (state.matches('requirementsFailed') && member && minimumTransactionCost) {

@@ -4,8 +4,10 @@ import { SelectAccount } from '@/accounts/components/SelectAccount'
 import { InputComponent } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { useResponsive } from '@/common/hooks/useResponsive'
 
 export const RewardAccountStep = () => {
+  const { isMobile, size } = useResponsive()
   return (
     <RowGapBlock gap={24}>
       <Row>
@@ -19,9 +21,9 @@ export const RewardAccountStep = () => {
             label="Select account receiving councilor rewards in case your candidacy is elected"
             name="reward.account"
             required
-            inputSize="l"
+            inputSize={isMobile ? 'xxl' : 'l'}
           >
-            <SelectAccount name="reward.account" />
+            <SelectAccount name="reward.account" variant={isMobile ? 's' : size === 'md' ? 'm' : 'l'} />
           </InputComponent>
         </RowGapBlock>
       </Row>

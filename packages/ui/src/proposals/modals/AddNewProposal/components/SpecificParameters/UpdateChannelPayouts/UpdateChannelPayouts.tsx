@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
-import styled from 'styled-components'
 
 import { useApi } from '@/api/hooks/useApi'
 import { CurrencyName } from '@/app/constants/currency'
@@ -13,8 +12,8 @@ import {
   Label,
   ToggleCheckbox,
   TokenInput,
+  TokenInputComponent,
 } from '@/common/components/forms'
-import { Loading } from '@/common/components/Loading'
 import { Row } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
 import { useFirstObservableValue } from '@/common/hooks/useFirstObservableValue'
@@ -67,13 +66,9 @@ export const UpdateChannelPayouts = () => {
     setValue('updateChannelPayouts.payload', payload)
   }, [payloadHash, !expectedDataObjectStateBloatBond && !expectedDataSizeFee])
 
-  const [isProcessingFile, setIsProcessingFile] = useState<boolean>(false)
   const processPayload = useCallback(
     async ([file]: File[]): Promise<File[]> => {
       if (!file) return []
-
-      setIsProcessingFile(true)
-
       setValue('updateChannelPayouts.payload', undefined)
       setValue('updateChannelPayouts.payloadSize', file.size, { shouldValidate: true }) // Set it first for when no file was set before
       setValue('updateChannelPayouts.payloadHash', undefined, { shouldValidate: true })
@@ -98,7 +93,6 @@ export const UpdateChannelPayouts = () => {
 
       await Promise.all([commitment, hash])
 
-      setIsProcessingFile(false)
       if (errors.length > 0) {
         Object.defineProperty(file, 'errors', { value: errors })
       }
@@ -124,11 +118,6 @@ export const UpdateChannelPayouts = () => {
             file.errors?.length ? { code: 'processing-failure', message: file.errors.join('\n') } : null
           }
         />
-        {isProcessingFile && (
-          <Box>
-            <Loading text="Processing your file..." withoutMargin />
-          </Box>
-        )}
       </Row>
       {payloadSize && (
         <Row>
@@ -175,25 +164,25 @@ export const UpdateChannelPayouts = () => {
       </Row>
 
       <Row>
-        <InputComponent
+        <TokenInputComponent
           label="Minimum Cashout Allowed"
           tight
           units={CurrencyName.integerValue}
           name="updateChannelPayouts.minimumCashoutAllowed"
         >
           <TokenInput id="amount-input" name="updateChannelPayouts.minimumCashoutAllowed" placeholder="0" />
-        </InputComponent>
+        </TokenInputComponent>
       </Row>
 
       <Row>
-        <InputComponent
+        <TokenInputComponent
           label="Maximum Cashout Allowed"
           tight
           units={CurrencyName.integerValue}
           name="updateChannelPayouts.maximumCashoutAllowed"
         >
           <TokenInput id="amount-input" name="updateChannelPayouts.maximumCashoutAllowed" placeholder="0" />
-        </InputComponent>
+        </TokenInputComponent>
       </Row>
 
       {/*<Row>*/}
@@ -209,10 +198,3 @@ export const UpdateChannelPayouts = () => {
     </RowGapBlock>
   )
 }
-
-const Box = styled.div`
-  > div {
-    width: 100%;
-    margin: 10px 0;
-  }
-`

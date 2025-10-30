@@ -3,8 +3,7 @@ import styled from 'styled-components'
 
 import { Colors } from '@/common/constants'
 
-import { ColumnGapBlock, RowGapBlock } from './page/PageContent'
-import { Tooltip, TooltipDefault } from './Tooltip'
+import { RowGapBlock } from './page/PageContent'
 
 export interface InfoProps {
   title?: string
@@ -14,14 +13,7 @@ export interface InfoProps {
 export const Info = ({ title, children }: InfoProps) => {
   return (
     <InfoBlock gap={8}>
-      {title && (
-        <ColumnGapBlock gap={8} align="center">
-          <Tooltip tooltipText="Lorem ipsum">
-            <TooltipDefault />
-          </Tooltip>
-          <h5>{title}</h5>
-        </ColumnGapBlock>
-      )}
+      {title && <h5>{title}</h5>}
       {children}
     </InfoBlock>
   )

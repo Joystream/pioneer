@@ -1,12 +1,15 @@
 import styled from 'styled-components'
 
 import { Subscription } from '@/common/components/typography/Subscription'
-import { Overflow } from '@/common/constants'
+import { Overflow, RemoveScrollbar } from '@/common/constants'
 
 import { ToggleableItemInfo, ToggleableItemWrap } from '../ToggleableItemStyledComponents'
 
 export const ApplicationItemWrap = styled(ToggleableItemWrap)`
   grid-template-columns: 1fr 1fr auto;
+  min-width: 704px;
+  overflow: auto;
+  ${RemoveScrollbar}
 `
 
 export const ApplicationItemInfo = styled(ToggleableItemInfo)`

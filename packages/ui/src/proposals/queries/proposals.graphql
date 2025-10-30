@@ -190,7 +190,36 @@ fragment ProposalWithDetailsFields on Proposal {
       maxCashoutAllowed
       payloadHash
     }
+    ... on UpdatePalletFrozenStatusProposalDetails {
+      frozen
+      pallet
+    }
+    ... on SetEraPayoutDampingFactorProposalDetails {
+      dampingFactor
+    }
+    ... on DecreaseCouncilBudgetProposalDetails {
+      amount
+    }
+    ... on UpdateTokenPalletTokenConstraintsProposalDetails {
+      maxYearlyRate
+      minAmmSlope
+      minSaleDuration
+      minRevenueSplitDuration
+      minRevenueSplitTimeToStart
+      salePlatformFee
+      ammBuyTxFees
+      ammSellTxFees
+      bloatBond
+    }
+    ... on UpdateArgoBridgeConstraintsProposalDetails {
+      operatorAccount
+      pauserAccounts
+      bridgingFee
+      thawnDuration
+      remoteChains
+    }
   }
+
   discussionThread {
     id
     posts {

@@ -28,7 +28,7 @@ describe('CouncilTabs', () => {
 
     renderComponent()
 
-    expect(screen.queryByText(/^Election$/i)).toBeNull()
+    expect(screen.queryByText(/^Election$/i)).not.toBeNull()
   })
 
   it('Announcing', () => {

@@ -22,6 +22,7 @@ module.exports = {
       {
         alias: {
           '@/common/utils/crypto/worker$': path.resolve(__dirname, '../src/common/utils/crypto'),
+          '@apollo/client$': path.resolve(__dirname, '../src/mocks/providers/gql'),
         },
       },
       shared.resolve
@@ -31,20 +32,21 @@ module.exports = {
 
     return config
   },
-  core: {
-    builder: 'webpack5',
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {},
   },
   typescript: {
     reactDocgen: 'none',
   },
-  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(ts|tsx)'],
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-actions'],
+  stories: ['../src/**/*.stories.@(ts|tsx)'],
+  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/addon-links'],
 }
 
 function isCssRule(rule) {
-  return rule.test.toString().indexOf('css') > -1
+  return rule.test?.toString().includes('css')
 }
 
 function isSvgRule(rule) {
-  return rule.test.toString().indexOf('svg') > -1
+  return rule.test?.toString().includes('svg')
 }

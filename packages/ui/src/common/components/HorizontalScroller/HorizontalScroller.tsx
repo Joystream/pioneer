@@ -32,8 +32,8 @@ export const HorizontalScroller = React.memo(({ items, className, title, count }
   }, [wrapperRef, wrapperWidth])
 
   useLayoutEffect(() => {
-    const childrenWidth = (wrapperRef.current?.children[0]?.clientWidth ?? 0) + 16
-    const scrollNumber = Math.trunc((wrapperWidth || 1) / childrenWidth) * childrenWidth
+    const childrenWidth = (wrapperRef.current?.children[0]?.clientWidth ?? 0) + 18
+    const scrollNumber = Math.max(Math.trunc((wrapperWidth || 1) / childrenWidth), 1) * childrenWidth
 
     if ((wrapperWidth || 1) > childrenWidth * (wrapperRef.current?.children?.length || 1)) {
       setIsTooSmallForScroll(true)
@@ -97,6 +97,10 @@ const ItemsWrapper = styled.div`
   width: 100%;
   padding: 10px 0;
   overflow-x: hidden;
+
+  @media (min-width: 1440px) {
+    column-gap: 24px;
+  }
 `
 
 const ButtonWrapper = styled.div`

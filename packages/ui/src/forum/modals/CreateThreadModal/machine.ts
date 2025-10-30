@@ -19,7 +19,7 @@ interface DetailsContext {
   controllerAccount?: Account
 }
 
-interface TransactionContext extends Required<DetailsContext> {
+export interface TransactionContext extends Required<DetailsContext> {
   newThreadId?: u64
   transactionEvents?: EventRecord[]
 }

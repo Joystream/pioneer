@@ -47,7 +47,7 @@ export const ProposalPreview = ({ proposalTitle, proposalType, proposalRationale
   const renderProposalDetail = useCallback((detail: RenderNode, index: number) => {
     const Component = renderTypeMapper[detail.renderType]
     if (Component) {
-      return <Component label={detail.label || ''} value={detail.value} key={index} />
+      return <Component {...detail} key={index} />
     }
 
     return null

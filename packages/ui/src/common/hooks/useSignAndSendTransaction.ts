@@ -6,11 +6,16 @@ import { useCallback, useEffect, useState } from 'react'
 import { ActorRef } from 'xstate'
 
 import { useBalance } from '@/accounts/hooks/useBalance'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
+import { useApi } from '@/api/hooks/useApi'
+import { getChainMetadata } from '@/api/utils/getChainMetadata'
 import { BN_ZERO } from '@/common/constants'
+import { error } from '@/common/logger'
 import { getFeeSpendableBalance } from '@/common/providers/transactionFees/provider'
 
 import { Address } from '../types'
 
+import { useFirstObservableValue } from './useFirstObservableValue'
 import { useProcessTransaction } from './useProcessTransaction'
 import { useQueryNodeTransactionStatus } from './useQueryNodeTransactionStatus'
 
@@ -37,15 +42,32 @@ export const useSignAndSendTransaction = ({
   const [blockHash, setBlockHash] = useState<Hash | string | undefined>(undefined)
   const apolloClient = useApolloClient()
   const balance = useBalance(signer)
+  const { api } = useApi()
   const { send, paymentInfo, isReady, isProcessing } = useProcessTransaction({
     transaction,
     signer,
     service,
     setBlockHash,
   })
-  const queryNodeStatus = useQueryNodeTransactionStatus(isProcessing, blockHash, skipQueryNode)
+  const blockNumber = useFirstObservableValue(() => {
+    if (blockHash) return api?.rpc.chain.getHeader(blockHash)
+  }, [api?.isConnected, blockHash])?.number.toNumber()
+  const queryNodeStatus = useQueryNodeTransactionStatus(isProcessing, blockNumber || blockHash, skipQueryNode)
+  const { wallet } = useMyAccounts()
 
-  const sign = useCallback(() => send('SIGN'), [service])
+  const sign = useCallback(() => {
+    if (wallet && api) {
+      return getChainMetadata(api).then(async (metadata) => {
+        try {
+          await wallet.updateMetadata(metadata)
+        } catch {
+          error(`Pioneer could not update the Wallet (${wallet.extensionName}) metadata.`)
+        }
+        send('SIGN')
+      })
+    }
+    send('SIGN')
+  }, [service, wallet])
 
   useEffect(() => {
     if (skipQueryNode && isProcessing) {

@@ -1,6 +1,6 @@
-import { RegistryError } from '@polkadot/types-codec/types'
 import { EventRecord } from '@polkadot/types/interfaces/system'
 import { SpRuntimeDispatchError } from '@polkadot/types/lookup'
+import { RegistryError } from '@polkadot/types-codec/types'
 
 import { isModuleEvent } from './isModuleEvent'
 
