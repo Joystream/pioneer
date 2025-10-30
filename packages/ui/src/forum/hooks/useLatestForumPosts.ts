@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 
 import { ForumPostOrderByInput } from '@/common/api/queries'
 import { useGetLatestForumPostsQuery } from '@/forum/queries'
-import { asMember } from '@/memberships/types'
+import { asMember, Member } from '@/memberships/types'
 
 export interface ForumPostWithThread {
   id: string
   createdAt: string
   updatedAt?: string
-  author: ReturnType<typeof asMember>
+  author: Member
   text: string
   threadId: string
   thread: {

@@ -10,7 +10,6 @@ import { useRefetchQueries } from '@/common/hooks/useRefetchQueries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { CategoryCard } from '@/forum/components/CategoryCard/CategoryCard'
 import { PostCard } from '@/forum/components/PostCard/PostCard'
-import { PostCardSkeleton } from '@/forum/components/PostCard/PostCardSkeleton'
 import { ThreadCard } from '@/forum/components/ThreadCard/ThreadCard'
 import { ThreadCardSkeleton } from '@/forum/components/ThreadCard/ThreadCardSkeleton'
 import { useForumCategories } from '@/forum/hooks/useForumCategories'
@@ -61,7 +60,7 @@ export const ForumMain = () => {
           }
         />
       ) : (
-        <HorizontalScroller title="Latest posts" items={<PostCardSkeleton count={10} />} />
+        <HorizontalScroller title="Latest posts" items={<ThreadCardSkeleton count={10} />} />
       )}
 
       {forumCategories?.length ? (
