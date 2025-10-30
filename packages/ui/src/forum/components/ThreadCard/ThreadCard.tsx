@@ -70,8 +70,8 @@ const ThreadCardFooter = styled.div`
   }
 `
 
-const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
-  ${({ isArchived }) => (isArchived ? `background-color: ${Colors.Black[50]}` : '')};
+const Box = styled(GhostRouterLink)<{ $isArchived: boolean }>`
+  ${({ $isArchived }) => ($isArchived ? `background-color: ${Colors.Black[50]}` : '')};
   display: grid;
   row-gap: 16px;
   border: 1px solid ${Colors.Black[100]};
