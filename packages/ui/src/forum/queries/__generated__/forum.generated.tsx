@@ -1497,6 +1497,113 @@ export type GetForumThreadMentionQuery = {
   } | null
 }
 
+export type ForumPostWithThreadFieldsFragment = {
+  __typename: 'ForumPost'
+  id: string
+  createdAt: any
+  updatedAt?: any | null
+  text: string
+  threadId: string
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    isCouncilMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
+  }
+  thread: {
+    __typename: 'ForumThread'
+    id: string
+    title: string
+    categoryId: string
+    category: { __typename: 'ForumCategory'; title: string }
+  }
+}
+
+export type GetLatestForumPostsQueryVariables = Types.Exact<{
+  where: Types.ForumPostWhereInput
+  orderBy?: Types.InputMaybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type GetLatestForumPostsQuery = {
+  __typename: 'Query'
+  forumPosts: Array<{
+    __typename: 'ForumPost'
+    id: string
+    createdAt: any
+    updatedAt?: any | null
+    text: string
+    threadId: string
+    author: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
+    }
+    thread: {
+      __typename: 'ForumThread'
+      id: string
+      title: string
+      categoryId: string
+      category: { __typename: 'ForumCategory'; title: string }
+    }
+  }>
+}
+
 export const ForumBaseCategoryFieldsFragmentDoc = gql`
   fragment ForumBaseCategoryFields on ForumCategory {
     id
@@ -1729,6 +1836,27 @@ export const ForumPostMentionFieldsFragmentDoc = gql`
     createdAt
     author {
       ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const ForumPostWithThreadFieldsFragmentDoc = gql`
+  fragment ForumPostWithThreadFields on ForumPost {
+    id
+    createdAt
+    updatedAt
+    author {
+      ...MemberFields
+    }
+    text
+    threadId
+    thread {
+      id
+      title
+      categoryId
+      category {
+        title
+      }
     }
   }
   ${MemberFieldsFragmentDoc}
@@ -2681,4 +2809,55 @@ export type GetForumThreadMentionLazyQueryHookResult = ReturnType<typeof useGetF
 export type GetForumThreadMentionQueryResult = Apollo.QueryResult<
   GetForumThreadMentionQuery,
   GetForumThreadMentionQueryVariables
+>
+export const GetLatestForumPostsDocument = gql`
+  query GetLatestForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $limit: Int) {
+    forumPosts(where: $where, orderBy: $orderBy, limit: $limit) {
+      ...ForumPostWithThreadFields
+    }
+  }
+  ${ForumPostWithThreadFieldsFragmentDoc}
+`
+
+/**
+ * __useGetLatestForumPostsQuery__
+ *
+ * To run a query within a React component, call `useGetLatestForumPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestForumPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestForumPostsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetLatestForumPostsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetLatestForumPostsQuery, GetLatestForumPostsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetLatestForumPostsQuery, GetLatestForumPostsQueryVariables>(
+    GetLatestForumPostsDocument,
+    options
+  )
+}
+export function useGetLatestForumPostsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestForumPostsQuery, GetLatestForumPostsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetLatestForumPostsQuery, GetLatestForumPostsQueryVariables>(
+    GetLatestForumPostsDocument,
+    options
+  )
+}
+export type GetLatestForumPostsQueryHookResult = ReturnType<typeof useGetLatestForumPostsQuery>
+export type GetLatestForumPostsLazyQueryHookResult = ReturnType<typeof useGetLatestForumPostsLazyQuery>
+export type GetLatestForumPostsQueryResult = Apollo.QueryResult<
+  GetLatestForumPostsQuery,
+  GetLatestForumPostsQueryVariables
 >

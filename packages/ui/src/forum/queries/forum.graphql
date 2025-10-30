@@ -350,3 +350,28 @@ query GetForumThreadMention($id: ID!) {
     ...ForumThreadMentionFields
   }
 }
+
+fragment ForumPostWithThreadFields on ForumPost {
+  id
+  createdAt
+  updatedAt
+  author {
+    ...MemberFields
+  }
+  text
+  threadId
+  thread {
+    id
+    title
+    categoryId
+    category {
+      title
+    }
+  }
+}
+
+query GetLatestForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $limit: Int) {
+  forumPosts(where: $where, orderBy: $orderBy, limit: $limit) {
+    ...ForumPostWithThreadFields
+  }
+}
