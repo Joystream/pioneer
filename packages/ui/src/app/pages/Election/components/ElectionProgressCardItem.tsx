@@ -19,16 +19,16 @@ interface CircleProgressBarProps {
 const CircleProgressBar = ({ progress }: CircleProgressBarProps) => {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" style={{ transform: 'rotate(-90deg)' }}>
-      <circle cx="10" cy="10" r="9" fill="none" stroke={Colors.Black[200]} strokeWidth="2" />
+      <circle cx="10" cy="10" r="9" fill="none" stroke={Colors.Black[200]} stroke-width="2" />
       <circle
-        strokeDasharray="100"
-        strokeDashoffset={100 - progress * 100}
+        stroke-dasharray="100"
+        stroke-dashoffset={100 - progress * 100}
         cx="10"
         cy="10"
         r="9"
         fill="none"
         stroke={Colors.Blue[500]}
-        strokeWidth="2"
+        stroke-width="2"
         pathLength="100"
       />
     </svg>
