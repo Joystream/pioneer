@@ -1,3 +1,4 @@
+import BN from 'bn.js'
 import { map, Observable, of, OperatorFunction, ReplaySubject, share, switchMap } from 'rxjs'
 
 import { Api } from '@/api'
@@ -123,14 +124,15 @@ export const getValidatorInfo = (
 
           const commission = validator.commission
           const averageReward = rewards.reduce((sum, reward) => sum.add(reward.eraReward), BN_ZERO).divn(rewards.length)
-          const apr =
-            Number(
-              averageReward
-                .muln(ERAS_PER_YEAR)
-                .muln(100 - commission)
-                .muln(100)
-                .div(staking.total)
-            ) / 100
+          const rewardPerEra = averageReward.muln(100 - commission).div(staking.total)
+          const aprValue = rewardPerEra.muln(ERAS_PER_YEAR)
+          const maxSafeValue = new BN(1000000)
+
+          if (aprValue.gt(maxSafeValue)) {
+            return { APR: 1000000 }
+          }
+
+          const apr = aprValue.toNumber()
           return { APR: apr }
         })
       )
