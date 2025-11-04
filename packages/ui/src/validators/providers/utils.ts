@@ -124,8 +124,9 @@ export const getValidatorInfo = (
 
           const commission = validator.commission
           const averageReward = rewards.reduce((sum, reward) => sum.add(reward.eraReward), BN_ZERO).divn(rewards.length)
-          const rewardPerEra = averageReward.muln(100 - commission).div(staking.total)
-          const aprValue = rewardPerEra.muln(ERAS_PER_YEAR)
+          const yearlyReward = averageReward.muln(ERAS_PER_YEAR)
+          const afterCommission = yearlyReward.muln(100 - commission).divn(100)
+          const aprValue = afterCommission.muln(100).div(staking.total)
           const maxSafeValue = new BN(1000000)
 
           if (aprValue.gt(maxSafeValue)) {
