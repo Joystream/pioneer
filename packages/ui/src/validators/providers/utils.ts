@@ -127,13 +127,9 @@ export const getValidatorInfo = (
           const yearlyReward = averageReward.muln(ERAS_PER_YEAR)
           const afterCommission = yearlyReward.muln(100 - commission).divn(100)
           const aprValue = afterCommission.muln(100).div(staking.total)
-          const maxSafeValue = new BN(1000000)
+          const maxSafeAPR = new BN(1_000_000)
 
-          if (aprValue.gt(maxSafeValue)) {
-            return { APR: 1000000 }
-          }
-
-          const apr = aprValue.toNumber()
+          const apr = aprValue.gt(maxSafeAPR) ? maxSafeAPR.toNumber() : aprValue.toNumber()
           return { APR: apr }
         })
       )
