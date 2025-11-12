@@ -1,3 +1,4 @@
+import { CastVoteOrderByInput } from '@/common/api/queries'
 import { useLatestElection } from '@/council/hooks/useLatestElection'
 import { useGetCouncilVotesQuery } from '@/council/queries'
 import { CandidacyStatus } from '@/council/types'
@@ -43,7 +44,11 @@ export const useIsCandidateLockRecoverable = (hasCandidateLock: boolean, staking
 
 export const useIsVoteLockRecoverable = (hasVoteLock: boolean, stakingAccount: string) => {
   const { data: { castVotes: [vote] } = { castVotes: [] } } = useGetCouncilVotesQuery({
-    variables: { where: { castBy_eq: stakingAccount, stakeLocked_eq: true } },
+    variables: {
+      where: { castBy_eq: stakingAccount, stakeLocked_eq: true },
+      orderBy: [CastVoteOrderByInput.CreatedAtDesc],
+      limit: 1,
+    },
     skip: !hasVoteLock,
   })
   const { election: latestElection } = useLatestElection({ skip: !hasVoteLock })
