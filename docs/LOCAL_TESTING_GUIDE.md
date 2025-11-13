@@ -1,8 +1,8 @@
-# Local Testing Guide - Real SDK Integration with Pioneer
+# Using Joystream SDK with Pioneer
 
 ## Overview
 
-This guide explains how to test the **real Joystream SDK staking functionality** locally with Pioneer UI. The SDK is now production-ready with all features implemented!
+Follow this step-by-step walk through to learn how to integrate the current SDK draft with Pioneer or other applications. At the example of the Validators page this will show how to use and test the Joystream SDK staking extension locally with Pioneer UI. The SDK staking manager offers all features needed to implemented with the Substrate staking pallet.
 
 **Status:** ✅ SDK is production-ready with 15 extrinsics, 12+ queries, and full test coverage.
 
@@ -27,12 +27,12 @@ This guide explains how to test the **real Joystream SDK staking functionality**
 
 ```bash
 # Build and link SDK
-cd  \joystream\sdk
+cd  joystream/sdk
 yarn build
 yarn link
 
 # Link in Pioneer
-cd  \joystream\pioneer\packages\ui
+cd  joystream/pioneer/packages/ui
 yarn link @joystream/sdk-core
 ```
 
@@ -53,11 +53,11 @@ const staking = useMemo(() => {
 
 ```bash
 # Terminal 1: Start local node (optional)
-cd \joystream\sdk\test-setup
+cd joystream/sdk/test-setup
 ./up.sh
 
 # Terminal 2: Start Pioneer
-cd \joystream\pioneer\packages\ui
+cd joystream/pioneer/packages/ui
 yarn dev
 
 # Open browser: http://localhost:3000
@@ -74,10 +74,7 @@ yarn dev
 Using the SDK test setup:
 
 ```bash
-cd  \joystream\sdk\test-setup
-
-# Start all services (node + orion)
-./up.sh
+cd  joystream/sdk/test-setup.sh # Start all services (node + orion)
 
 # Or start just the node
 docker-compose -f docker-compose.node.yml up
@@ -108,7 +105,7 @@ curl -H "Content-Type: application/json" \
 Create or update `.env.local`:
 
 ```bash
-cd  \joystream\pioneer\packages\ui
+cd  joystream/pioneer/packages/ui
 
 # Create environment file
 cat > .env.local << EOF
@@ -123,11 +120,11 @@ EOF
 #### Step 1: Configure for Testnet
 
 ```bash
-cd  \joystream\pioneer\packages\ui
+cd  /joystream/pioneer/packages/ui
 
 # Create environment file
 cat > .env.local << EOF
-REACT_APP_JOYSTREAM_ENDPOINT=wss://testnet.joystream.org/rpc
+REACT_APP_JOYSTREAM_ENDPOINT=wss://rpc.joystream.org
 REACT_APP_NETWORK=testnet
 REACT_APP_DEBUG=true
 EOF
@@ -145,7 +142,7 @@ EOF
 
 ```bash
 # Build SDK
-cd  \joystream\sdk
+cd  /joystream/sdk
 yarn install
 yarn build
 
@@ -156,7 +153,7 @@ ls packages/core/lib/staking/
 yarn link
 
 # Link in Pioneer
-cd  \joystream\pioneer\packages\ui
+cd  /joystream/pioneer/packages/ui
 yarn link @joystream/sdk-core
 
 # Verify link
@@ -166,13 +163,13 @@ yarn list @joystream/sdk-core
 #### Method B: Install from npm
 
 ```bash
-cd  \joystream\pioneer\packages\ui
+cd  /joystream/pioneer/packages/ui
 yarn add @joystream/sdk-core@latest
 ```
 
 ### Step 2: Update useStakingSDK Hook
 
-**File:** `\joystream\pioneer\packages\ui\src\validators\hooks\useStakingSDK.ts`
+**File:** `/joystream/pioneer/packages/ui/src/validators/hooks/useStakingSDK.ts`
 
 **Replace** the mock implementation (lines 1-94) with:
 
@@ -206,7 +203,7 @@ export const useStakingSDK = () => {
 ### Step 3: Clear Cache and Rebuild
 
 ```bash
-cd \joystream\pioneer\packages\ui
+cd /joystream/pioneer/packages/ui
 
 # Clear build cache
 rm -rf node_modules/.cache
@@ -224,7 +221,7 @@ yarn dev
 #### Terminal 1: Local Node (if using local setup)
 
 ```bash
-cd  \joystream\sdk\test-setup
+cd  /joystream/sdk/test-setup
 ./up.sh
 
 # Monitor logs
@@ -234,7 +231,7 @@ docker logs -f joystream-node
 #### Terminal 2: Pioneer UI
 
 ```bash
-cd  \joystream\pioneer\packages\ui
+cd  /joystream/pioneer/packages/ui
 yarn dev
 ```
 
@@ -535,11 +532,11 @@ docker logs -f joystream-node | grep staking
 **Solution:**
 
 ```bash
-cd \joystream\sdk
+cd /joystream/sdk
 yarn build
 yarn link
 
-cd \joystream\pioneer\packages\ui
+cd /joystream/pioneer/packages/ui
 yarn link @joystream/sdk-core
 
 # Verify
@@ -577,7 +574,7 @@ curl -H "Content-Type: application/json" \
   http://localhost:9944
 
 # If no response, start node
-cd \joystream\sdk\test-setup
+cd /joystream/sdk/test-setup
 ./up.sh
 
 # Check endpoint in .env.local
