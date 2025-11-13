@@ -120,7 +120,7 @@ EOF
 #### Step 1: Configure for Testnet
 
 ```bash
-cd  /joystream/pioneer/packages/ui
+cd  joystream/pioneer/packages/ui
 
 # Create environment file
 cat > .env.local << EOF
@@ -142,7 +142,7 @@ EOF
 
 ```bash
 # Build SDK
-cd  /joystream/sdk
+cd  joystream/sdk
 yarn install
 yarn build
 
@@ -153,7 +153,7 @@ ls packages/core/lib/staking/
 yarn link
 
 # Link in Pioneer
-cd  /joystream/pioneer/packages/ui
+cd  joystream/pioneer/packages/ui
 yarn link @joystream/sdk-core
 
 # Verify link
@@ -163,13 +163,13 @@ yarn list @joystream/sdk-core
 #### Method B: Install from npm
 
 ```bash
-cd  /joystream/pioneer/packages/ui
+cd  joystream/pioneer/packages/ui
 yarn add @joystream/sdk-core@latest
 ```
 
 ### Step 2: Update useStakingSDK Hook
 
-**File:** `/joystream/pioneer/packages/ui/src/validators/hooks/useStakingSDK.ts`
+**File:** `joystream/pioneer/packages/ui/src/validators/hooks/useStakingSDK.ts`
 
 **Replace** the mock implementation (lines 1-94) with:
 
@@ -203,7 +203,7 @@ export const useStakingSDK = () => {
 ### Step 3: Clear Cache and Rebuild
 
 ```bash
-cd /joystream/pioneer/packages/ui
+cd joystream/pioneer/packages/ui
 
 # Clear build cache
 rm -rf node_modules/.cache
@@ -221,7 +221,7 @@ yarn dev
 #### Terminal 1: Local Node (if using local setup)
 
 ```bash
-cd  /joystream/sdk/test-setup
+cd  joystream/sdk/test-setup
 ./up.sh
 
 # Monitor logs
@@ -231,7 +231,7 @@ docker logs -f joystream-node
 #### Terminal 2: Pioneer UI
 
 ```bash
-cd  /joystream/pioneer/packages/ui
+cd  joystream/pioneer/packages/ui
 yarn dev
 ```
 
@@ -532,11 +532,11 @@ docker logs -f joystream-node | grep staking
 **Solution:**
 
 ```bash
-cd /joystream/sdk
+cd joystream/sdk
 yarn build
 yarn link
 
-cd /joystream/pioneer/packages/ui
+cd joystream/pioneer/packages/ui
 yarn link @joystream/sdk-core
 
 # Verify
@@ -574,7 +574,7 @@ curl -H "Content-Type: application/json" \
   http://localhost:9944
 
 # If no response, start node
-cd /joystream/sdk/test-setup
+cd joystream/sdk/test-setup
 ./up.sh
 
 # Check endpoint in .env.local
