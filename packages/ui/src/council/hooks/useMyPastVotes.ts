@@ -2,13 +2,10 @@ import { useMemo } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { CastVoteOrderByInput } from '@/common/api/queries'
-import { SortOrder } from '@/common/hooks/useSort'
+import { sortBy, SortOrder } from '@/common/hooks/useSort'
 
 import { useGetCouncilVotesQuery } from '../queries'
 import { asVote, Vote } from '../types/Vote'
-
-const VOTES_PER_ACCOUNT_FETCH_LIMIT = 25
-const MIN_FETCH_LIMIT = 100
 
 interface UseMyPastVotesProps {
   order: SortOrder<CastVoteOrderByInput>
@@ -28,7 +25,7 @@ export const useMyPastVotes = ({ order }: UseMyPastVotesProps) => {
         electionRound: { isFinished_eq: true },
       },
       orderBy: [CastVoteOrderByInput.CreatedAtDesc],
-      limit: Math.max(addresses.length * VOTES_PER_ACCOUNT_FETCH_LIMIT, MIN_FETCH_LIMIT),
+      limit: addresses.length,
     }
   }, [addresses])
 
@@ -49,23 +46,13 @@ export const useMyPastVotes = ({ order }: UseMyPastVotesProps) => {
 
     const parsedVotes = latestVotes.map(asVote)
 
-    return sortVotes(parsedVotes, order)
+    return sortBy(parsedVotes, order, compareVote)
   }, [data?.castVotes, order])
 
   return {
     votes,
     isLoading: loading,
   }
-}
-
-const sortVotes = (votes: Vote[], order: SortOrder<CastVoteOrderByInput>) => {
-  const sorted = [...votes]
-  sorted.sort((a, b) => {
-    const comparison = compareVote(a, b, order.orderKey)
-    return order.isDescending ? -comparison : comparison
-  })
-
-  return sorted
 }
 
 const compareVote = (first: Vote, second: Vote, key: string) => {
