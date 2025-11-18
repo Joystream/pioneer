@@ -4,8 +4,9 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { SelectAccount } from '@/accounts/components/SelectAccount'
-import { Account } from '@/accounts/types'
+import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { accountOrNamed } from '@/accounts/model/accountOrNamed'
+import { Account } from '@/accounts/types'
 import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
 import { ButtonPrimary, ButtonSecondary } from '@/common/components/buttons'
@@ -18,7 +19,6 @@ import { useCurrentBlockNumber } from '@/common/hooks/useCurrentBlockNumber'
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
-import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useRoleAccount } from '@/working-groups/hooks/useRoleAccount'
 import { getGroup } from '@/working-groups/model/getGroup'
@@ -74,15 +74,32 @@ export const PayWorkerModal = () => {
     currentBlock ? currentBlock.toNumber() : undefined
   )
 
-  const { roleAccount } = useRoleAccount({
+  const { roleAccount, isLoading: isLoadingRoleAccount } = useRoleAccount({
     membership: { id_eq: active?.id },
     group: { id_eq: worker.group.id },
     isLead_eq: true,
     status_json: { isTypeOf_eq: WorkerStatusToTypename.active },
   })
 
-  if (!api || !roleAccount) {
+  if (!api) {
     return null
+  }
+
+  // Show error if user is not a lead (only check in initial state)
+  if (state.matches('selectPaymentType') && !isLoadingRoleAccount && !roleAccount) {
+    return <FailureModal onClose={hideModal}>You must be a lead for this working group to pay workers.</FailureModal>
+  }
+
+  // Show loading state while checking role account (only in initial state)
+  if (state.matches('selectPaymentType') && isLoadingRoleAccount) {
+    return (
+      <Modal onClose={hideModal} modalSize="m">
+        <ModalHeader onClick={hideModal} title="Pay Worker" />
+        <ModalBody>
+          <TextMedium>Loading...</TextMedium>
+        </ModalBody>
+      </Modal>
+    )
   }
 
   if (state.matches('selectPaymentType')) {
@@ -117,7 +134,9 @@ export const PayWorkerModal = () => {
   }
 
   if (state.matches('prepare')) {
-    const isVested = paymentType === 'vested'
+    // Use paymentType from machine context if available, otherwise use local state
+    const currentPaymentType = state.context.paymentType || paymentType
+    const isVested = currentPaymentType === 'vested'
     const accountId = selectedAccount?.address
     const canSubmit =
       accountId &&
@@ -175,7 +194,7 @@ export const PayWorkerModal = () => {
             onClick={() => {
               if (canSubmit && accountId && amount && rationale) {
                 send('DONE', {
-                  paymentType: paymentType!,
+                  paymentType: currentPaymentType!,
                   accountId,
                   amount,
                   rationale,
@@ -194,6 +213,13 @@ export const PayWorkerModal = () => {
   }
 
   if (state.matches('transaction') && state.context.accountId && state.context.amount && state.context.rationale) {
+    // Ensure we have roleAccount before proceeding with transaction
+    if (!roleAccount) {
+      return (
+        <FailureModal onClose={hideModal}>Unable to proceed: role account not found. Please try again.</FailureModal>
+      )
+    }
+
     const transaction = getTransaction(
       api,
       worker.group.id,
@@ -245,4 +271,3 @@ const PaymentTypeButtons = styled.div`
   gap: 12px;
   margin-top: 16px;
 `
-
