@@ -11,7 +11,7 @@ import { Api } from '@/api'
 import { useApi } from '@/api/hooks/useApi'
 import { ButtonPrimary, ButtonSecondary } from '@/common/components/buttons'
 import { FailureModal } from '@/common/components/FailureModal'
-import { InputComponent, InputNumber, InputTextarea, TokenInput } from '@/common/components/forms'
+import { InputComponent, InputText, InputTextarea, TokenInput } from '@/common/components/forms'
 import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium } from '@/common/components/typography'
@@ -26,6 +26,8 @@ import { WorkerStatusToTypename } from '@/working-groups/types'
 
 import { payWorkerMachine } from './machine'
 import { PayWorkerModalCall, PaymentType } from './types'
+
+const MIN_STARTING_BLOCK_OFFSET = 10
 
 const getTransaction = (
   api: Api,
@@ -70,9 +72,7 @@ export const PayWorkerModal = () => {
   const [amount, setAmount] = useState<BN | undefined>()
   const [rationale, setRationale] = useState<string>('')
   const [perBlock, setPerBlock] = useState<BN | undefined>()
-  const [startingBlock, setStartingBlock] = useState<number | undefined>(
-    currentBlock ? currentBlock.toNumber() : undefined
-  )
+  const [startingBlockInput, setStartingBlockInput] = useState<string>('')
 
   const { roleAccount, isLoading: isLoadingRoleAccount } = useRoleAccount({
     membership: { id_eq: active?.id },
@@ -138,12 +138,85 @@ export const PayWorkerModal = () => {
     const currentPaymentType = state.context.paymentType || paymentType
     const isVested = currentPaymentType === 'vested'
     const accountId = selectedAccount?.address
+    const minStartingBlockBn = currentBlock ? currentBlock.addn(MIN_STARTING_BLOCK_OFFSET) : undefined
+    const trimmedStartingBlockInput = startingBlockInput.trim()
+    const startingBlockEvaluation = (() => {
+      if (!isVested) {
+        return { resolved: undefined, error: undefined, info: undefined }
+      }
+      const baseBlock = currentBlock
+      const minBlock = minStartingBlockBn
+
+      if (!trimmedStartingBlockInput) {
+        if (!minBlock) {
+          return {
+            resolved: undefined,
+            error: 'Waiting for latest block number...',
+            info: undefined,
+          }
+        }
+        return {
+          resolved: minBlock,
+          error: undefined,
+          info: `Will use block ${minBlock.toString()} (current block + ${MIN_STARTING_BLOCK_OFFSET}).`,
+        }
+      }
+
+      const isRelative = trimmedStartingBlockInput.startsWith('+')
+      const numericPart = isRelative ? trimmedStartingBlockInput.slice(1) : trimmedStartingBlockInput
+
+      if (!/^\d+$/.test(numericPart)) {
+        return {
+          resolved: undefined,
+          error: 'Enter a positive number or +offset',
+          info: undefined,
+        }
+      }
+
+      const numericBn = new BN(numericPart)
+      let targetBn: BN | undefined
+
+      if (isRelative) {
+        if (!baseBlock) {
+          return {
+            resolved: undefined,
+            error: 'Waiting for current block to handle relative value',
+            info: undefined,
+          }
+        }
+        targetBn = baseBlock.add(numericBn)
+      } else {
+        targetBn = numericBn
+      }
+
+      if (minBlock && targetBn.lt(minBlock)) {
+        return {
+          resolved: undefined,
+          error: `Block must be at least ${minBlock.toString()}`,
+          info: undefined,
+        }
+      }
+
+      return {
+        resolved: targetBn,
+        error: undefined,
+        info: `Will use block ${targetBn.toString()}${
+          isRelative && baseBlock ? ` (current block ${baseBlock.toString()} + ${numericPart})` : ''
+        }.`,
+      }
+    })()
+
+    const resolvedStartingBlock = startingBlockEvaluation.resolved?.toNumber()
+    const perBlockMessage = perBlock
+      ? `Converted to ${perBlock.toString()} HAPI for the transaction.`
+      : 'Enter the amount in JOY; it will be converted to HAPI automatically.'
     const canSubmit =
       accountId &&
       amount &&
       !amount.isZero() &&
       rationale &&
-      (!isVested || (perBlock && !perBlock.isZero() && startingBlock !== undefined))
+      (!isVested ||
+        (perBlock && !perBlock.isZero() && resolvedStartingBlock !== undefined && !startingBlockEvaluation.error))
 
     return (
       <Modal onClose={hideModal} modalSize="m">
@@ -159,7 +232,7 @@ export const PayWorkerModal = () => {
 
           {isVested && (
             <>
-              <InputComponent label="Per Block (HAPI)" id="perblock-input" required>
+              <InputComponent label="Per Block" id="perblock-input" required units="JOY" message={perBlockMessage}>
                 <TokenInput
                   id="perblock-input"
                   value={perBlock}
@@ -168,12 +241,18 @@ export const PayWorkerModal = () => {
                 />
               </InputComponent>
 
-              <InputComponent label="Starting Block" id="startingblock-input" required>
-                <InputNumber
+              <InputComponent
+                label="Starting Block"
+                id="startingblock-input"
+                required
+                message={startingBlockEvaluation.error ?? startingBlockEvaluation.info}
+                validation={startingBlockEvaluation.error ? 'invalid' : undefined}
+              >
+                <InputText
                   id="startingblock-input"
-                  value={startingBlock !== undefined ? startingBlock.toString() : ''}
-                  onChange={(_, value) => setStartingBlock(value ? Math.floor(value) : undefined)}
-                  placeholder={currentBlock?.toString()}
+                  value={startingBlockInput}
+                  onChange={(event) => setStartingBlockInput(event.target.value)}
+                  placeholder={minStartingBlockBn?.toString()}
                 />
               </InputComponent>
             </>
@@ -193,13 +272,16 @@ export const PayWorkerModal = () => {
             size="medium"
             onClick={() => {
               if (canSubmit && accountId && amount && rationale) {
-                send('DONE', {
-                  paymentType: currentPaymentType!,
-                  accountId,
-                  amount,
-                  rationale,
-                  perBlock,
-                  startingBlock,
+                send({
+                  type: 'DONE',
+                  form: {
+                    paymentType: currentPaymentType!,
+                    accountId,
+                    amount,
+                    rationale,
+                    perBlock,
+                    startingBlock: resolvedStartingBlock,
+                  },
                 })
               }
             }}
