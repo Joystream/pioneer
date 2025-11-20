@@ -21,6 +21,7 @@ import { useModal } from '@/common/hooks/useModal'
 import { SignTransactionModal } from '@/common/modals/SignTransactionModal/SignTransactionModal'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useRoleAccount } from '@/working-groups/hooks/useRoleAccount'
+import { useWorkingGroup } from '@/working-groups/hooks/useWorkingGroup'
 import { getGroup } from '@/working-groups/model/getGroup'
 import { WorkerStatusToTypename } from '@/working-groups/types'
 
@@ -80,6 +81,7 @@ export const PayWorkerModal = () => {
     isLead_eq: true,
     status_json: { isTypeOf_eq: WorkerStatusToTypename.active },
   })
+  const { group: workingGroup, isLoading: isLoadingWorkingGroup } = useWorkingGroup({ name: worker.group.id })
 
   if (!api) {
     return null
@@ -140,6 +142,23 @@ export const PayWorkerModal = () => {
     const accountId = selectedAccount?.address
     const minStartingBlockBn = currentBlock ? currentBlock.addn(MIN_STARTING_BLOCK_OFFSET) : undefined
     const trimmedStartingBlockInput = startingBlockInput.trim()
+    const availableBudget = workingGroup?.budget
+    const hasInsufficientBudget = Boolean(amount && availableBudget && amount.gt(availableBudget))
+    const amountMessage = (() => {
+      if (isLoadingWorkingGroup) {
+        return 'Checking available budget...'
+      }
+      if (!availableBudget) {
+        return 'Could not fetch group budget. Try again in a moment.'
+      }
+      if (!amount || amount.isZero()) {
+        return `Available budget: ${availableBudget.div(new BN(10000000000)).toString()} JOY`
+      }
+      if (hasInsufficientBudget) {
+        return `Amount exceeds available budget (${availableBudget.div(new BN(10000000000)).toString()} JOY).`
+      }
+      return `Available budget: ${availableBudget.div(new BN(10000000000)).toString()} JOY`
+    })()
     const startingBlockEvaluation = (() => {
       if (!isVested) {
         return { resolved: undefined, error: undefined, info: undefined }
@@ -215,6 +234,7 @@ export const PayWorkerModal = () => {
       amount &&
       !amount.isZero() &&
       rationale &&
+      !hasInsufficientBudget &&
       (!isVested ||
         (perBlock && !perBlock.isZero() && resolvedStartingBlock !== undefined && !startingBlockEvaluation.error))
 
@@ -226,7 +246,13 @@ export const PayWorkerModal = () => {
             <SelectAccount selected={selectedAccount} onChange={setSelectedAccount} />
           </InputComponent>
 
-          <InputComponent label="Amount (JOY)" id="amount-input" required>
+          <InputComponent
+            label="Amount (JOY)"
+            id="amount-input"
+            required
+            message={amountMessage}
+            validation={hasInsufficientBudget ? 'invalid' : undefined}
+          >
             <TokenInput id="amount-input" value={amount} onChange={(_, value) => setAmount(value)} placeholder="0" />
           </InputComponent>
 

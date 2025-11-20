@@ -1,15 +1,15 @@
 import { BN_THOUSAND } from '@polkadot/util'
-import { Meta, Story, StoryContext } from '@storybook/react'
+import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
 import { HashRouter } from 'react-router-dom'
 
 import { ModalContext } from '@/common/providers/modal/context'
-import { member } from '@/mocks/data/members'
-import { MocksParameters } from '@/mocks/providers'
 import { MockApolloProvider } from '@/mocks/components/storybook/MockApolloProvider'
+import { member } from '@/mocks/data/members'
 import { randomBlock } from '@/mocks/helpers/randomBlock'
-import { GetRoleAccountsDocument } from '@/working-groups/queries'
+import { MocksParameters } from '@/mocks/providers'
+import { GetRoleAccountsDocument, GetWorkingGroupDocument } from '@/working-groups/queries'
 
 import { PayWorkerModal } from './PayWorkerModal'
 
@@ -86,6 +86,42 @@ export default {
                 return { loading: false, data: { workers: [] } }
               },
             },
+            {
+              query: GetWorkingGroupDocument,
+              resolver: (options) => {
+                if (options?.variables?.where?.name === mockWorker.group.id) {
+                  return {
+                    loading: false,
+                    data: {
+                      workingGroupByUniqueInput: {
+                        __typename: 'WorkingGroup',
+                        id: mockWorker.group.id,
+                        name: mockWorker.group.name,
+                        budget: '250000000000000', // 250k JOY in planck
+                        metadata: {
+                          __typename: 'WorkingGroupMetadata',
+                          about: 'Mock working group about text',
+                          description: 'Mock working group description',
+                          status: 'Active',
+                          statusMessage: 'All systems go',
+                        },
+                        workers: [],
+                        leader: {
+                          __typename: 'Worker',
+                          id: 'leader-1',
+                          runtimeId: 1,
+                          stake: '0',
+                          rewardPerBlock: '0',
+                          membershipId: alice.id,
+                          isActive: true,
+                        },
+                      },
+                    },
+                  }
+                }
+                return { loading: false, data: { workingGroupByUniqueInput: null } }
+              },
+            },
           ],
         },
       }
@@ -116,4 +152,3 @@ const Template: Story = () => {
 
 export const Default = Template.bind({})
 Default.args = {}
-
