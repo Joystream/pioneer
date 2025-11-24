@@ -1,8 +1,7 @@
 import BN from 'bn.js'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { combineLatest, first, map, of } from 'rxjs'
-import styled from 'styled-components'
+import React, { useEffect, useMemo, useState } from 'react'
+import { combineLatest, first, map, of, catchError } from 'rxjs'
+import styled, { createGlobalStyle } from 'styled-components'
 
 import { AccountInfo } from '@/accounts/components/AccountInfo'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
@@ -10,24 +9,13 @@ import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { Account } from '@/accounts/types'
 import { useApi } from '@/api/hooks/useApi'
 import { ButtonGhost } from '@/common/components/buttons'
-import { TransactionButtonWrapper } from '@/common/components/buttons/TransactionButton'
 import { EditSymbol } from '@/common/components/icons/symbols'
-import { DeleteSymbol } from '@/common/components/icons/symbols/DeleteSymbol'
 import { LockSymbol } from '@/common/components/icons/symbols/LockSymbol'
 import { WatchIcon } from '@/common/components/icons/WatchIcon'
 import { TableListItemAsLinkHover } from '@/common/components/List'
 import { Tooltip, TooltipPopupTitle, TooltipText } from '@/common/components/Tooltip'
 import { TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
-import {
-  BorderRad,
-  Colors,
-  Sizes,
-  Transitions,
-  BN_ZERO,
-  ERAS_PER_DAY,
-  ZIndex,
-  JOY_DECIMAL_PLACES,
-} from '@/common/constants'
+import { BorderRad, Colors, Sizes, Transitions, BN_ZERO, ERAS_PER_DAY, JOY_DECIMAL_PLACES } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
 import { error } from '@/common/logger'
@@ -38,7 +26,10 @@ import { ManageStashAction, ManageStashActionModalCall } from '@/validators/moda
 import { SetNomineesModalCall } from '@/validators/modals/SetNomineesModal'
 import { StopStakingModalCall } from '@/validators/modals/StopStakingModal'
 import { UnbondStakingModalCall } from '@/validators/modals/UnbondStakingModal'
+import { ValidateModalCall } from '@/validators/modals/ValidateModal'
 import { ValidatorWithDetails } from '@/validators/types/Validator'
+
+import { ButtonForTransfer, MenuActionItem, NominatorActionMenu } from './NominatorActionMenu'
 
 interface Props {
   account?: Account
@@ -101,29 +92,6 @@ export const NorminatorDashboardItem = ({
 }: Props) => {
   const { showModal } = useModal()
   const { allAccounts } = useMyAccounts()
-  const [isMenuOpen, setMenuOpen] = useState(false)
-  const [menuPosition, setMenuPosition] = useState<{ top: number; right: number } | null>(null)
-  const menuRef = useRef<HTMLDivElement | null>(null)
-  const menuDropdownRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    if (!isMenuOpen) return
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Node
-      const clickedOutsideMenu = menuRef.current && !menuRef.current.contains(target)
-      const clickedOutsideDropdown = menuDropdownRef.current && !menuDropdownRef.current.contains(target)
-
-      if (clickedOutsideMenu && clickedOutsideDropdown) {
-        setMenuOpen(false)
-        setMenuPosition(null)
-      }
-    }
-
-    window.addEventListener('mousedown', handleClickOutside)
-    return () => window.removeEventListener('mousedown', handleClickOutside)
-  }, [isMenuOpen])
-
   const accountInfo = useMemo<Account>(() => {
     if (account) {
       return account
@@ -283,6 +251,12 @@ export const NorminatorDashboardItem = ({
 
   const rewardDestination = useObservable(() => {
     if (!api || !position.controller) return of(undefined)
+
+    // Check if payee query is available
+    if (!api.query.staking || typeof api.query.staking.payee !== 'function') {
+      return of('Staked') // Default fallback
+    }
+
     return api.query.staking.payee(position.controller).pipe(
       map((payee) => {
         if (payee.isStaked) return 'Staked'
@@ -290,6 +264,10 @@ export const NorminatorDashboardItem = ({
         if (payee.isController) return 'Controller'
         if (payee.isAccount) return 'Account'
         return 'Staked'
+      }),
+      catchError(() => {
+        // If query fails, return default value
+        return of('Staked')
       }),
       first()
     )
@@ -412,11 +390,24 @@ export const NorminatorDashboardItem = ({
       },
     })
 
-  const menuItems: Array<{
-    label: string
-    onClick: () => void
-    disabled?: boolean
-  }> = [
+  const openChangeSessionKeysModal = () =>
+    showModal<ChangeSessionKeysModalCall>({
+      modal: 'ChangeSessionKeysModal',
+      data: {
+        stash: position.stash,
+        controller: position.controller,
+      },
+    })
+
+  const openValidateModal = () =>
+    showModal<ValidateModalCall>({
+      modal: 'Validate',
+      data: {
+        validatorAddress: position.stash,
+      },
+    })
+
+  const menuItems: MenuActionItem[] = [
     {
       label: 'Bond more / Rebond after unbonding',
       onClick: () => openManageActionModal('bondRebond'),
@@ -444,287 +435,237 @@ export const NorminatorDashboardItem = ({
     })
   }
 
+  if (position.role === 'inactive') {
+    menuItems.push(
+      {
+        label: 'Start nominating',
+        onClick: openSetNomineesModal,
+      },
+      {
+        label: 'Set validator commission',
+        onClick: openValidateModal,
+      },
+      {
+        label: 'Set session keys',
+        onClick: openChangeSessionKeysModal,
+        disabled: !position.controller,
+      }
+    )
+  }
+
   if (position.role === 'validator') {
     menuItems.push({
       label: 'Change session keys',
-      onClick: () =>
-        showModal<ChangeSessionKeysModalCall>({
-          modal: 'ChangeSessionKeysModal',
-          data: {
-            stash: position.stash,
-            controller: position.controller,
-          },
-        }),
+      onClick: openChangeSessionKeysModal,
       disabled: !position.controller,
     })
   }
 
   return (
-    <ValidatorItemWrapper>
-      <ValidatorItemWrap>
-        <RoleCell>
-          <RoleBadge role={roleVariant}>{roleLabel}</RoleBadge>
-        </RoleCell>
+    <>
+      <WideTooltipStyle />
+      <ValidatorItemWrapper>
+        <ValidatorItemWrap>
+          <RoleCell>
+            <RoleBadge role={roleVariant}>{roleLabel}</RoleBadge>
+          </RoleCell>
 
-        <AccountCell>
-          <AccountInfo account={accountInfo} />
-        </AccountCell>
+          <AccountCell>
+            <AccountInfo account={accountInfo} />
+          </AccountCell>
 
-        <ControllerCell>
-          {controllerAccountInfo ? (
-            <>
-              <AccountInfo account={controllerAccountInfo} />
-              <ButtonForTransfer
-                size="small"
-                square
-                onClick={(e) => {
-                  e.stopPropagation()
-                  openChangeControllerModal()
-                }}
-              >
-                <EditSymbol />
-              </ButtonForTransfer>
-            </>
-          ) : (
-            <TextSmall lighter>-</TextSmall>
-          )}
-        </ControllerCell>
-
-        <RewardsCell>
-          <TextSmall>{rewardDestination || '-'}</TextSmall>
-        </RewardsCell>
-
-        <StakeCell>
-          <StakeInfo>
-            <StakeRow>
-              <TokenValue value={position.activeStake} />
-            </StakeRow>
-            {unlockingTotal.gt(BN_ZERO) && (
-              <StakeRow>
-                {getUnbondingTimeInfo.hasUnbonding && !getUnbondingTimeInfo.isRecoverable && unbondingTooltipText && (
-                  <Tooltip popupContent={unbondingTooltipText}>
-                    <UnbondingClockIcon>
-                      <WatchIcon />
-                    </UnbondingClockIcon>
-                  </Tooltip>
-                )}
-                {getUnbondingTimeInfo.hasUnbonding && getUnbondingTimeInfo.isRecoverable && (
-                  <RecoverableButton
-                    size="small"
-                    square
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      openManageActionModal('withdraw')
-                    }}
-                    title="Recoverable - click to withdraw"
-                  >
-                    <LockSymbol />
-                  </RecoverableButton>
-                )}
-                <TokenValue value={unlockingTotal} />
-                <TextSmall lighter>Unbonding:</TextSmall>
-              </StakeRow>
-            )}
-          </StakeInfo>
-        </StakeCell>
-
-        <AssignmentsCell>
-          {position.role === 'nominator' && position.nominations.length > 0 ? (
-            <Tooltip
-              popupContent={
-                <NominationsTooltipContent>
-                  {nominationsInfo === undefined ? (
-                    <TextSmall lighter>Loading...</TextSmall>
-                  ) : nominationsInfo && nominationsInfo.length > 0 ? (
-                    <>
-                      {nominationsInfo.some((n) => n.isActive) && (
-                        <>
-                          <TooltipSection>
-                            <TooltipPopupTitle>
-                              Active ({nominationsInfo.filter((n) => n.isActive).length})
-                            </TooltipPopupTitle>
-                            {nominationsInfo
-                              .filter((n) => n.isActive)
-                              .map((nom) => {
-                                try {
-                                  if (!nom || !nom.address) {
-                                    error('Invalid nom object:', nom)
-                                    return null
-                                  }
-                                  return (
-                                    <TooltipRow key={nom.address}>
-                                      <TooltipText>{shortenAddress(encodeAddress(nom.address), 20)}</TooltipText>
-                                      {nom.stake && (
-                                        <TooltipText>
-                                          {(() => {
-                                            try {
-                                              const stake = nom.stake as any
-                                              if (stake instanceof BN) {
-                                                return abbreviateTokenAmount(stake)
-                                              } else if (stake && typeof stake.toNumber === 'function') {
-                                                return abbreviateTokenAmount(stake.toNumber())
-                                              } else if (stake && typeof stake.toBn === 'function') {
-                                                return abbreviateTokenAmount(stake.toBn())
-                                              } else if (typeof stake === 'number' || typeof stake === 'string') {
-                                                return abbreviateTokenAmount(stake)
-                                              } else {
-                                                error('Unexpected stake type:', stake, typeof stake)
-                                                return '0'
-                                              }
-                                            } catch (err) {
-                                              error('Error converting stake to number:', err)
-                                              error('Stake value:', nom.stake)
-                                              return '0'
-                                            }
-                                          })()}
-                                        </TooltipText>
-                                      )}
-                                    </TooltipRow>
-                                  )
-                                } catch (err) {
-                                  error('Error rendering nomination:', err)
-                                  error('Nom object:', nom)
-                                  return null
-                                }
-                              })}
-                          </TooltipSection>
-                          {nominationsInfo.some((n) => !n.isActive) && <TooltipDivider />}
-                        </>
-                      )}
-                      {nominationsInfo.some((n) => !n.isActive) && (
-                        <TooltipSection>
-                          <TooltipPopupTitle>
-                            Inactive ({nominationsInfo.filter((n) => !n.isActive).length})
-                          </TooltipPopupTitle>
-                          {nominationsInfo
-                            .filter((n) => !n.isActive)
-                            .map((nom) => (
-                              <TooltipRow key={nom.address}>
-                                <TooltipText>{shortenAddress(encodeAddress(nom.address), 20)}</TooltipText>
-                              </TooltipRow>
-                            ))}
-                        </TooltipSection>
-                      )}
-                    </>
-                  ) : (
-                    <TextSmall lighter>No nominations info available</TextSmall>
-                  )}
-                </NominationsTooltipContent>
-              }
-            >
-              <NominationsIndicator>
-                {nominationsInfo === undefined ? (
-                  <TextSmall lighter>Loading...</TextSmall>
-                ) : (
-                  <TextMedium>
-                    {activeNominationsCount} / {position.nominations.length}
-                  </TextMedium>
-                )}
+          <ControllerCell>
+            {controllerAccountInfo ? (
+              <>
+                <AccountInfo account={controllerAccountInfo} />
                 <ButtonForTransfer
                   size="small"
                   square
                   onClick={(e) => {
                     e.stopPropagation()
-                    openSetNomineesModal()
+                    openChangeControllerModal()
                   }}
                 >
                   <EditSymbol />
                 </ButtonForTransfer>
-              </NominationsIndicator>
-            </Tooltip>
-          ) : (
-            <>
-              <TextMedium>{assignmentsCount}</TextMedium>
-              <TextSmall lighter>{assignmentsLabel}</TextSmall>
-            </>
-          )}
-        </AssignmentsCell>
-
-        <TokenValue value={claimableReward} />
-
-        <TransactionButtonWrapper>
-          <MenuContainer ref={menuRef}>
-            <ButtonForTransfer
-              size="small"
-              square
-              onClick={(event) => {
-                event.stopPropagation()
-                if (!isMenuOpen && menuRef.current) {
-                  const rect = menuRef.current.getBoundingClientRect()
-                  const menuHeight = 200
-                  const spaceBelow = window.innerHeight - rect.bottom
-                  const spaceAbove = rect.top
-
-                  let top: number
-                  if (spaceBelow < menuHeight && spaceAbove > menuHeight) {
-                    top = rect.top - menuHeight - 8
-                  } else {
-                    top = rect.bottom + 8
-                  }
-
-                  setMenuPosition({
-                    top,
-                    right: window.innerWidth - rect.right,
-                  })
-                } else {
-                  setMenuPosition(null)
-                }
-                setMenuOpen((prev) => !prev)
-              }}
-              aria-haspopup="menu"
-              aria-expanded={isMenuOpen}
-            >
-              <EditSymbol />
-            </ButtonForTransfer>
-            {isMenuOpen &&
-              menuPosition &&
-              createPortal(
-                <MenuDropdown
-                  ref={menuDropdownRef}
-                  role="menu"
-                  style={{ top: `${menuPosition.top}px`, right: `${menuPosition.right}px` }}
-                >
-                  {menuItems.map(({ label, disabled, onClick }) => (
-                    <MenuItem
-                      key={label}
-                      disabled={disabled}
-                      onClick={(event) => {
-                        if (disabled) return
-                        event.stopPropagation()
-                        setMenuOpen(false)
-                        setMenuPosition(null)
-                        onClick()
-                      }}
-                    >
-                      {label}
-                    </MenuItem>
-                  ))}
-                </MenuDropdown>,
-                document.body
-              )}
-            {canStop ? (
-              <ButtonGhost size="small" onClick={openStopStakingModal} disabled={!position.controller}>
-                Stop
-              </ButtonGhost>
+              </>
             ) : (
-              <TransactionButtonWrapper>
-                <ButtonForTransfer
-                  size="small"
-                  square
-                  disabled={!canUnbond}
-                  onClick={() => {
-                    if (!canUnbond) return
-                    openUnbondModal()
-                  }}
-                >
-                  <DeleteSymbol />
-                </ButtonForTransfer>
-              </TransactionButtonWrapper>
+              <TextSmall lighter>-</TextSmall>
             )}
-          </MenuContainer>
-        </TransactionButtonWrapper>
-      </ValidatorItemWrap>
-    </ValidatorItemWrapper>
+          </ControllerCell>
+
+          <RewardsCell>
+            <TextSmall>{rewardDestination || '-'}</TextSmall>
+          </RewardsCell>
+
+          <StakeCell>
+            <StakeInfo>
+              <StakeRow>
+                <TokenValue value={position.activeStake} />
+              </StakeRow>
+              {unlockingTotal.gt(BN_ZERO) && (
+                <StakeRow>
+                  {getUnbondingTimeInfo.hasUnbonding && !getUnbondingTimeInfo.isRecoverable && unbondingTooltipText && (
+                    <Tooltip popupContent={unbondingTooltipText}>
+                      <UnbondingClockIcon>
+                        <WatchIcon />
+                      </UnbondingClockIcon>
+                    </Tooltip>
+                  )}
+                  {getUnbondingTimeInfo.hasUnbonding && getUnbondingTimeInfo.isRecoverable && (
+                    <RecoverableButton
+                      size="small"
+                      square
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        openManageActionModal('withdraw')
+                      }}
+                      title="Recoverable - click to withdraw"
+                    >
+                      <LockSymbol />
+                    </RecoverableButton>
+                  )}
+                  <TokenValue value={unlockingTotal} />
+                  <TextSmall lighter>Unbonding:</TextSmall>
+                </StakeRow>
+              )}
+            </StakeInfo>
+          </StakeCell>
+
+          <AssignmentsCell>
+            {position.role === 'nominator' && position.nominations.length > 0 ? (
+              <Tooltip
+                className="wide-tooltip"
+                popupContent={
+                  <NominationsTooltipContent>
+                    {nominationsInfo === undefined ? (
+                      <TextSmall lighter>Loading...</TextSmall>
+                    ) : nominationsInfo && nominationsInfo.length > 0 ? (
+                      <>
+                        {nominationsInfo.some((n) => n.isActive) && (
+                          <>
+                            <TooltipSection>
+                              <TooltipPopupTitle>
+                                Active ({nominationsInfo.filter((n) => n.isActive).length})
+                              </TooltipPopupTitle>
+                              {nominationsInfo
+                                .filter((n) => n.isActive)
+                                .map((nom) => {
+                                  try {
+                                    if (!nom || !nom.address) {
+                                      error('Invalid nom object:', nom)
+                                      return null
+                                    }
+                                    return (
+                                      <TooltipRow key={nom.address}>
+                                        <TooltipText>
+                                          {nom.address.includes('...')
+                                            ? nom.address
+                                            : shortenAddress(encodeAddress(nom.address), 20)}
+                                        </TooltipText>
+                                        {nom.stake && (
+                                          <TooltipText>
+                                            {(() => {
+                                              try {
+                                                const stake = nom.stake as any
+                                                if (stake instanceof BN) {
+                                                  return abbreviateTokenAmount(stake)
+                                                } else if (stake && typeof stake.toNumber === 'function') {
+                                                  return abbreviateTokenAmount(stake.toNumber())
+                                                } else if (stake && typeof stake.toBn === 'function') {
+                                                  return abbreviateTokenAmount(stake.toBn())
+                                                } else if (typeof stake === 'number' || typeof stake === 'string') {
+                                                  return abbreviateTokenAmount(stake)
+                                                } else {
+                                                  error('Unexpected stake type:', stake, typeof stake)
+                                                  return '0'
+                                                }
+                                              } catch (err) {
+                                                error('Error converting stake to number:', err)
+                                                error('Stake value:', nom.stake)
+                                                return '0'
+                                              }
+                                            })()}
+                                          </TooltipText>
+                                        )}
+                                      </TooltipRow>
+                                    )
+                                  } catch (err) {
+                                    error('Error rendering nomination:', err)
+                                    error('Nom object:', nom)
+                                    return null
+                                  }
+                                })}
+                            </TooltipSection>
+                            {nominationsInfo.some((n) => !n.isActive) && <TooltipDivider />}
+                          </>
+                        )}
+                        {nominationsInfo.some((n) => !n.isActive) && (
+                          <TooltipSection>
+                            <TooltipPopupTitle>
+                              Inactive ({nominationsInfo.filter((n) => !n.isActive).length})
+                            </TooltipPopupTitle>
+                            {nominationsInfo
+                              .filter((n) => !n.isActive)
+                              .map((nom) => (
+                                <TooltipRow key={nom.address}>
+                                  <TooltipText>
+                                    {nom.address.includes('...')
+                                      ? nom.address
+                                      : shortenAddress(encodeAddress(nom.address), 20)}
+                                  </TooltipText>
+                                </TooltipRow>
+                              ))}
+                          </TooltipSection>
+                        )}
+                      </>
+                    ) : (
+                      <TextSmall lighter>No nominations info available</TextSmall>
+                    )}
+                  </NominationsTooltipContent>
+                }
+              >
+                <NominationsIndicator>
+                  {nominationsInfo === undefined ? (
+                    <TextSmall lighter>Loading...</TextSmall>
+                  ) : (
+                    <TextMedium>
+                      {activeNominationsCount} / {position.nominations.length}
+                    </TextMedium>
+                  )}
+                  <ButtonForTransfer
+                    size="small"
+                    square
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      openSetNomineesModal()
+                    }}
+                  >
+                    <EditSymbol />
+                  </ButtonForTransfer>
+                </NominationsIndicator>
+              </Tooltip>
+            ) : (
+              <>
+                <TextMedium>{assignmentsCount}</TextMedium>
+                <TextSmall lighter>{assignmentsLabel}</TextSmall>
+              </>
+            )}
+          </AssignmentsCell>
+
+          <TokenValue value={claimableReward} />
+
+          <NominatorActionMenu
+            items={menuItems}
+            canStop={canStop}
+            stopDisabled={!position.controller}
+            onStop={openStopStakingModal}
+            canUnbond={canUnbond}
+            onUnbond={openUnbondModal}
+          />
+        </ValidatorItemWrap>
+      </ValidatorItemWrapper>
+    </>
   )
 }
 
@@ -830,6 +771,13 @@ const NominationsIndicator = styled.div`
   gap: 8px;
 `
 
+const WideTooltipStyle = createGlobalStyle`
+  .wide-tooltip {
+    max-width: 600px !important;
+    width: max-content;
+  }
+`
+
 const NominationsTooltipContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -870,53 +818,6 @@ const UnbondingTooltipContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-`
-
-const ButtonForTransfer = styled(ButtonGhost)`
-  position: relative;
-  z-index: 1;
-  svg {
-    color: ${Colors.Black[900]};
-  }
-`
-
-const MenuDropdown = styled.div`
-  position: fixed;
-  display: grid;
-  gap: 8px;
-  min-width: 240px;
-  padding: 16px 20px;
-  background-color: ${Colors.White};
-  border: 1px solid ${Colors.Black[100]};
-  border-radius: ${BorderRad.m};
-  box-shadow: 0 12px 24px rgba(17, 17, 17, 0.12);
-  z-index: ${ZIndex.dropdown};
-`
-
-const MenuItem = styled.button<{ disabled?: boolean }>`
-  display: flex;
-  width: 100%;
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 600;
-  text-align: left;
-  color: ${({ disabled }) => (disabled ? Colors.Black[300] : Colors.Black[900])};
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
-
-  &:hover,
-  &:focus {
-    color: ${({ disabled }) => (disabled ? Colors.Black[300] : Colors.Blue[500])};
-  }
-`
-
-const MenuContainer = styled.div`
-  position: relative;
-  display: flex;
-  gap: 0;
-  align-items: center;
 `
 
 type RoleVariant = 'success' | 'info' | 'neutral'

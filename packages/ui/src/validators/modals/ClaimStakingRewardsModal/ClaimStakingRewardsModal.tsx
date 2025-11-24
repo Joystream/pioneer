@@ -155,17 +155,14 @@ export const ClaimStakingRewardsModal = () => {
     )
   }, [api?.isConnected, JSON.stringify(allAccounts.map((a) => a.address))])
 
-  // Calculate maximum batch size based on block limits (following PayButton.tsx pattern)
   const maxBatchSize = useMemo(() => {
-    if (!api) return 5 // Fallback to 5 if API not available
+    if (!api) return 5
     try {
       const maxNominatorRewarded = (api.consts.staking.maxNominatorRewardedPerValidator as u32)?.toNumber() || 64
-      // Calculate max payouts per batch: 36 * 64 / maxNominatorRewardedPerValidator
-      // This fills the block with maximum amount of eras
-      const calculatedMax = Math.floor((36 * 64) / maxNominatorRewarded)
-      return Math.max(1, calculatedMax) // Ensure at least 1
+      const calculatedMax = (36 * 64) / maxNominatorRewarded
+      return Math.max(1, Math.floor(calculatedMax))
     } catch {
-      return 5 // Fallback if calculation fails
+      return 5
     }
   }, [api])
 
@@ -181,7 +178,6 @@ export const ClaimStakingRewardsModal = () => {
 
     const totalClaimable = validatorsRewards.reduce((sum, v) => sum.add(v.totalClaimable), BN_ZERO)
 
-    // Create sorted list of all unclaimed payouts (validator + era pairs)
     const allPayouts: Array<{ validatorAddress: string; era: number }> = []
     validatorsRewards.forEach((validator) => {
       validator.unclaimedEras.forEach((era) => {
@@ -219,7 +215,7 @@ export const ClaimStakingRewardsModal = () => {
       ? undefined
       : payoutCalls.length === 1
       ? payoutCalls[0]
-      : api.tx.utility.batchAll(payoutCalls)
+      : api.tx.utility.forceBatch(payoutCalls)
   }, [api, totals.allPayouts, maxBatchSize])
 
   const signerAccount = useMemo(() => {
@@ -243,7 +239,6 @@ export const ClaimStakingRewardsModal = () => {
     skipQueryNode: true,
   })
 
-  // Automatically trigger next batch after transaction is finalized
   useEffect(() => {
     if (
       state.matches('success') &&
@@ -264,27 +259,23 @@ export const ClaimStakingRewardsModal = () => {
           return newSet
         })
 
-        // Check if there are remaining eras to claim
         const remainingEras = totals.allPayouts ? totals.allPayouts.slice(maxBatchSize) : []
 
         if (remainingEras.length > 0) {
           isProcessingBatchRef.current = true
 
-          // Wait for the next block to be produced to ensure the previous transaction is finalized
+          // Wait for the next block to be produced (no need to wait for finalization)
           const subscription = api.rpc.chain
             .subscribeNewHeads()
             .pipe(take(1))
             .subscribe({
               next: () => {
-                // Wait a bit more to ensure the block is finalized
-                setTimeout(() => {
-                  pendingBatchRef.current += 1
-                  isProcessingBatchRef.current = false
-                  shouldAutoTriggerNextRef.current = true
-                  // Restart the state machine to prepare for the next batch
-                  service.stop()
-                  service.start()
-                }, 1000)
+                pendingBatchRef.current += 1
+                isProcessingBatchRef.current = false
+                shouldAutoTriggerNextRef.current = true
+                // Restart the state machine to prepare for the next batch
+                service.stop()
+                service.start()
               },
               error: () => {
                 isProcessingBatchRef.current = false

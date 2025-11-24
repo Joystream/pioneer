@@ -9,6 +9,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { joyStringToPlanckBigInt, planckToJoyString } from '@/common/model/joyValueFromString'
 import { Address } from '@/common/types'
 import { useStakingQueries, useStakingTransactions } from '@/validators/hooks/useStakingSDK'
 import { UnbondModalCall } from '@/validators/modals/UnbondModal/types'
@@ -46,17 +47,6 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
     }
   }, [])
 
-  // Real SDK utility functions
-  const joyToBalance = (joy: string): bigint => {
-    const joyAmount = parseFloat(joy)
-    return BigInt(Math.floor(joyAmount * 10_000_000_000))
-  }
-
-  const balanceToJoy = (balance: bigint): string => {
-    const joyAmount = Number(balance) / 10_000_000_000
-    return joyAmount.toFixed(4)
-  }
-
   useEffect(() => {
     const loadStakingInfo = async () => {
       if (!allAccounts[0]?.address) return
@@ -85,7 +75,7 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
       return
     }
 
-    const unbondAmount = joyToBalance(amount)
+    const unbondAmount = joyStringToPlanckBigInt(amount)
     if (unbondAmount > maxBonded) {
       setError('Amount exceeds bonded balance')
       return
@@ -120,7 +110,7 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
   }
 
   const handleMaxAmount = () => {
-    setAmount(balanceToJoy(maxBonded))
+    setAmount(planckToJoyString(maxBonded))
   }
 
   if (success) {
@@ -146,7 +136,7 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
           </TextMedium>
 
           <TextMedium>
-            <strong>Bonded Balance:</strong> {balanceToJoy(maxBonded)} JOY
+            <strong>Bonded Balance:</strong> {planckToJoyString(maxBonded)} JOY
           </TextMedium>
 
           <InputComponent label="Amount to Unbond (JOY)" required inputSize="m" id="unbond-amount">
@@ -158,7 +148,7 @@ const UnbondModalInner = ({ validatorAddress }: Props) => {
               type="number"
               step="0.1"
               min="0"
-              max={balanceToJoy(maxBonded)}
+              max={planckToJoyString(maxBonded)}
             />
           </InputComponent>
 

@@ -18,9 +18,11 @@ import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { joyStringToPlanckBigInt } from '@/common/model/joyValueFromString'
 import { transactionMachine } from '@/common/model/machines'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useStakingTransactions } from '@/validators/hooks/useStakingSDK'
+import { useUsedControllerAccounts } from '@/validators/hooks/useUsedControllerAccounts'
 import { BondModalCall } from '@/validators/modals/BondModal/types'
 
 export const BondModal = () => {
@@ -36,11 +38,6 @@ export const BondModal = () => {
   const [controller, setController] = useState('')
   const [payee, setPayee] = useState('Stash')
   const [controllerError, setControllerError] = useState<string | null>(null)
-
-  const joyToBalance = (joy: string): bigint => {
-    const joyAmount = parseFloat(joy)
-    return BigInt(Math.floor(joyAmount * 10_000_000_000))
-  }
 
   useEffect(() => {
     if (!stash && allAccounts.length > 0) {
@@ -104,48 +101,11 @@ export const BondModal = () => {
     filterByBalance: false,
   })
 
-  const usedControllers = useObservable(() => {
-    if (!api || !allAccounts.length) return of(new Set<string>())
-    const addresses = allAccounts.map((acc) => acc.address)
-    return api.query.staking.bonded.multi(addresses).pipe(
-      switchMap((bondedEntries) => {
-        const controllers = bondedEntries
-          .map((bonded, index) => ({
-            stash: addresses[index],
-            controller: bonded.isSome ? bonded.unwrap().toString() : undefined,
-          }))
-          .filter((item): item is { stash: string; controller: string } => !!item.controller)
-          .map((item) => item.controller)
-
-        if (controllers.length === 0) return of(new Set<string>())
-
-        return api.query.staking.ledger.multi(controllers).pipe(
-          map((ledgers) => {
-            const usedSet = new Set<string>()
-            ledgers.forEach((ledger, index) => {
-              if (ledger.isNone) return
-              const ledgerData = ledger.unwrap()
-              const activeStake = ledgerData.active.toBn()
-              const totalStake = ledgerData.total.toBn()
-              const hasUnlocking = ledgerData.unlocking.length > 0
-              if (!activeStake.isZero() || !totalStake.isZero() || hasUnlocking) {
-                usedSet.add(controllers[index])
-              }
-            })
-            return usedSet
-          }),
-          first(),
-          catchError(() => of(new Set<string>()))
-        )
-      }),
-      first(),
-      catchError(() => of(new Set<string>()))
-    )
-  }, [api?.isConnected, JSON.stringify(allAccounts.map((a) => a.address))])
+  const usedControllers = useUsedControllerAccounts()
 
   const transaction = useMemo(() => {
     if (!api || !amount || parseFloat(amount) <= 0 || !controller || !stash) return undefined
-    return bond(controller, joyToBalance(amount), payee)
+    return bond(controller, joyStringToPlanckBigInt(amount), payee)
   }, [api, amount, controller, payee, stash, bond])
 
   const signerAccount = useMemo(() => {
@@ -255,9 +215,7 @@ export const BondModal = () => {
               placeholder="Select controller account"
               filter={(account) => {
                 if (!account.address) return false
-                // Always show the currently selected controller
                 if (account.address === controller) return true
-                // Hide accounts that are already used as controllers
                 return !usedControllers?.has(account.address)
               }}
             />

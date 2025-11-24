@@ -83,12 +83,14 @@ const SetNomineesModalInner = ({ stash, currentNominations }: SetNomineesModalIn
 
   // Get validator options for the select dropdown
   const validatorOptions = useMemo(() => {
-    return availableValidators.map((v) => {
-      const address = encodeAddress(v.account)
-      const commission = v.commission !== undefined ? ` (${v.commission.toFixed(2)}%)` : ''
-      return `${address}${commission}`
-    })
-  }, [availableValidators])
+    return availableValidators
+      .filter((v) => !selectedValidators.includes(encodeAddress(v.account)))
+      .map((v) => {
+        const address = encodeAddress(v.account)
+        const commission = v.commission !== undefined ? ` (${v.commission.toFixed(2)}%)` : ''
+        return `${address}${commission}`
+      })
+  }, [availableValidators, selectedValidators])
 
   // Handle adding a validator from the select
   const handleAddValidator = (value: string | null) => {

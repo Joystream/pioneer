@@ -14,6 +14,7 @@ import { TextMedium, TextSmall, TokenValue } from '@/common/components/typograph
 import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { joyStringToPlanckBigInt, planckToJoyString } from '@/common/model/joyValueFromString'
 import { transactionMachine } from '@/common/model/machines'
 import { useStakingTransactions } from '@/validators/hooks/useStakingSDK'
 
@@ -44,21 +45,11 @@ const UnbondStakingModalInner = ({ stash, controller, bonded }: UnbondStakingMod
 
   const [amount, setAmount] = useState('')
 
-  const joyToBalance = (joy: string): bigint => {
-    const joyAmount = parseFloat(joy)
-    return BigInt(Math.floor(joyAmount * 10_000_000_000))
-  }
-
-  const balanceToJoy = (balance: bigint): string => {
-    const joyAmount = Number(balance) / 10_000_000_000
-    return joyAmount.toFixed(4)
-  }
-
   const bondedBigInt = BigInt(bonded.toString())
 
   const transaction = useMemo(() => {
     if (!api || !amount || parseFloat(amount) <= 0) return undefined
-    const unbondAmount = joyToBalance(amount)
+    const unbondAmount = joyStringToPlanckBigInt(amount)
     if (unbondAmount > bondedBigInt) return undefined
     return unbond(unbondAmount)
   }, [api, amount, unbond, bondedBigInt])
@@ -85,7 +76,7 @@ const UnbondStakingModalInner = ({ stash, controller, bonded }: UnbondStakingMod
   }
 
   const handleMaxAmount = () => {
-    setAmount(balanceToJoy(bondedBigInt))
+    setAmount(planckToJoyString(bondedBigInt))
   }
 
   if (state.matches('canceled')) {
@@ -122,7 +113,7 @@ const UnbondStakingModalInner = ({ stash, controller, bonded }: UnbondStakingMod
     !canAfford ||
     !amount ||
     parseFloat(amount) <= 0 ||
-    (parseFloat(amount) > 0 && joyToBalance(amount) > bondedBigInt)
+    (parseFloat(amount) > 0 && joyStringToPlanckBigInt(amount) > bondedBigInt)
 
   return (
     <Modal modalSize="m" modalHeight="m" onClose={hideModal}>
@@ -147,7 +138,7 @@ const UnbondStakingModalInner = ({ stash, controller, bonded }: UnbondStakingMod
               type="number"
               step="0.1"
               min="0"
-              max={balanceToJoy(bondedBigInt)}
+              max={planckToJoyString(bondedBigInt)}
             />
           </InputComponent>
 
@@ -155,7 +146,7 @@ const UnbondStakingModalInner = ({ stash, controller, bonded }: UnbondStakingMod
             Use Max Amount
           </ButtonSecondary>
 
-          {amount && parseFloat(amount) > 0 && joyToBalance(amount) > bondedBigInt && (
+          {amount && parseFloat(amount) > 0 && joyStringToPlanckBigInt(amount) > bondedBigInt && (
             <TextSmall style={{ color: 'red' }}>
               <strong>Error:</strong> Amount exceeds bonded balance
             </TextSmall>

@@ -1,12 +1,101 @@
 import { Meta, Story } from '@storybook/react'
 import BN from 'bn.js'
 import React from 'react'
+import styled, { createGlobalStyle } from 'styled-components'
 
+import { encodeAddress } from '@/accounts/model/encodeAddress'
 import { createType } from '@/common/model/createType'
+import { Tooltip, TooltipPopupTitle, TooltipText } from '@/common/components/Tooltip'
+import { TextSmall } from '@/common/components/typography'
+import { Colors, JOY_DECIMAL_PLACES } from '@/common/constants'
+import { shortenAddress } from '@/common/model/formatters'
 import { MockProvidersDecorator } from '@/mocks/providers'
 import { NominatorPositionsTable, Props } from '@/validators/components/nominator/NominatorPositionsTable'
 import { MyStashPosition } from '@/validators/hooks/useMyStashPositions'
 import { ValidatorWithDetails } from '@/validators/types/Validator'
+
+const WideTooltipStyle = createGlobalStyle`
+  .wide-tooltip {
+    max-width: 600px !important;
+    width: max-content;
+  }
+`
+
+// Helper function to abbreviate token amounts (e.g., 500k, 2.3M)
+const abbreviateTokenAmount = (value: BN | number | string | undefined | null): string => {
+  try {
+    if (!value) return '0'
+
+    // Convert to BN if needed
+    let bnValue: BN
+    if (typeof value === 'number') {
+      bnValue = new BN(value)
+    } else if (typeof value === 'string') {
+      bnValue = new BN(value)
+    } else if (value instanceof BN) {
+      bnValue = value
+    } else {
+      return '0'
+    }
+
+    if (bnValue.isZero()) return '0'
+
+    const joyValue = bnValue.divn(Math.pow(10, JOY_DECIMAL_PLACES)).toNumber()
+    const absValue = Math.abs(joyValue)
+
+    if (absValue >= 1_000_000_000) {
+      const billions = joyValue / 1_000_000_000
+      return `${billions.toFixed(1)}B`
+    } else if (absValue >= 1_000_000) {
+      const millions = joyValue / 1_000_000
+      return `${millions.toFixed(1)}M`
+    } else if (absValue >= 1_000) {
+      const thousands = joyValue / 1_000
+      return `${thousands.toFixed(0)}k`
+    } else {
+      return joyValue.toFixed(1)
+    }
+  } catch (err) {
+    return '0'
+  }
+}
+
+const NominationsTooltipContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 500px;
+  width: 100%;
+`
+
+const TooltipSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`
+
+const TooltipRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`
+
+const TooltipDivider = styled.div`
+  height: 1px;
+  background-color: ${Colors.Black[500]};
+  margin: 8px 0;
+`
 
 export default {
   title: 'Validators/NominatorPositionsTable',
@@ -266,6 +355,154 @@ WithNominationsTooltip.parameters = {
           ],
         },
       },
+    },
+  },
+}
+
+// Story to test tooltip in active/open state
+export const TooltipActiveState: Story = () => {
+  const mockNominationsInfo = [
+    {
+      address: 'j4W7rVcUCxi2crhhjRq46fNDRbVHTjJrz6bKxZwehEMQxZeSf',
+      isActive: true,
+      stake: new BN('40000000000000'), // 40,000 JOY
+    },
+    {
+      address: 'j4UYhDYJ4pz2ihhDDzu69v2JTVeGaGmTebmBdWaX2ANVinXyE',
+      isActive: true,
+      stake: new BN('30000000000000'), // 30,000 JOY
+    },
+    {
+      address: 'j4ShWRXxTG...wAy3eTLsJt',
+      isActive: true,
+      stake: new BN('943671330000000'), // 943,671.33 JOY
+    },
+    {
+      address: 'j4W2bw7ggG...Ziym77yzMJ',
+      isActive: true,
+      stake: new BN('1780361650000000'), // 1,780,361.65 JOY
+    },
+    {
+      address: 'j4UzoJUhDG...9MSN6rYjim',
+      isActive: true,
+      stake: new BN('246028840000000'), // 246,028.84 JOY
+    },
+    {
+      address: 'j4UKAaX3QJ...N8XwBpQTCe',
+      isActive: true,
+      stake: new BN('0'), // 0 JOY
+    },
+    {
+      address: 'j4Rew6mSZa...Gz9kPt8iER',
+      isActive: true,
+      stake: new BN('0'), // 0 JOY
+    },
+    {
+      address: 'j4VDzwrAD5...BdzNwnufft',
+      isActive: true,
+      stake: new BN('0'), // 0 JOY
+    },
+    {
+      address: 'j4VtV2kGzG...HEaVwYJITV',
+      isActive: true,
+      stake: new BN('0'), // 0 JOY
+    },
+    {
+      address: 'j4W8paZENR...HhqDmcmNr9',
+      isActive: true,
+      stake: new BN('0'), // 0 JOY
+    },
+    {
+      address: 'j4Rc8VUXGY...nWTh5SpemP',
+      isActive: true,
+      stake: new BN('1529938210000000'), // 1,529,938.21 JOY
+    },
+    {
+      address: 'j4VdDQVdwFYfQ2MvEdLT2EYZx4ALPQQ6yMyZopKoZEQmXcJrT',
+      isActive: false,
+    },
+  ]
+
+  const activeNominations = mockNominationsInfo.filter((n) => n.isActive)
+  const inactiveNominations = mockNominationsInfo.filter((n) => !n.isActive)
+
+  return (
+    <>
+      <WideTooltipStyle />
+      <div style={{ padding: '100px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Tooltip
+          className="wide-tooltip"
+          tooltipOpen={true}
+          popupContent={
+          <NominationsTooltipContent>
+            {activeNominations.length > 0 && (
+              <>
+                <TooltipSection>
+                  <TooltipPopupTitle>Active ({activeNominations.length})</TooltipPopupTitle>
+                  {activeNominations.map((nom) => (
+                    <TooltipRow key={nom.address}>
+                      <TooltipText>
+                        {nom.address.includes('...')
+                          ? nom.address
+                          : shortenAddress(encodeAddress(nom.address), 20)}
+                      </TooltipText>
+                      {nom.stake && (
+                        <TooltipText>
+                          {(() => {
+                            try {
+                              const stake = nom.stake as any
+                              if (stake instanceof BN) {
+                                return abbreviateTokenAmount(stake)
+                              } else if (stake && typeof stake.toNumber === 'function') {
+                                return abbreviateTokenAmount(stake.toNumber())
+                              } else if (stake && typeof stake.toBn === 'function') {
+                                return abbreviateTokenAmount(stake.toBn())
+                              } else if (typeof stake === 'number' || typeof stake === 'string') {
+                                return abbreviateTokenAmount(stake)
+                              } else {
+                                return '0'
+                              }
+                            } catch (err) {
+                              return '0'
+                            }
+                          })()}
+                        </TooltipText>
+                      )}
+                    </TooltipRow>
+                  ))}
+                </TooltipSection>
+                {inactiveNominations.length > 0 && <TooltipDivider />}
+              </>
+            )}
+            {inactiveNominations.length > 0 && (
+              <TooltipSection>
+                <TooltipPopupTitle>Inactive ({inactiveNominations.length})</TooltipPopupTitle>
+                {inactiveNominations.map((nom) => (
+                  <TooltipRow key={nom.address}>
+                    <TooltipText>
+                      {nom.address.includes('...')
+                        ? nom.address
+                        : shortenAddress(encodeAddress(nom.address), 20)}
+                    </TooltipText>
+                  </TooltipRow>
+                ))}
+              </TooltipSection>
+            )}
+          </NominationsTooltipContent>
+        }
+      >
+        <div style={{ padding: '20px', background: Colors.Black[100], borderRadius: '4px', cursor: 'pointer' }}>
+          Hover or click to see tooltip (tooltip is forced open in this story)
+        </div>
+      </Tooltip>
+      </div>
+    </>
+  )
+}
+TooltipActiveState.parameters = {
+  docs: {
+    description: {
+      story: 'This story shows the nominations tooltip in an active/open state for testing purposes. The tooltip displays active and inactive nominations with their stake amounts.',
     },
   },
 }

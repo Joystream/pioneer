@@ -9,6 +9,7 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { SuccessModal } from '@/common/components/SuccessModal'
 import { TextMedium, TextSmall } from '@/common/components/typography'
 import { useModal } from '@/common/hooks/useModal'
+import { joyStringToPlanckBigInt, planckToJoyString } from '@/common/model/joyValueFromString'
 import { Address } from '@/common/types'
 import { useStakingQueries, useStakingTransactions } from '@/validators/hooks/useStakingSDK'
 import { RebondModalCall } from '@/validators/modals/RebondModal/types'
@@ -46,17 +47,6 @@ const RebondModalInner = ({ validatorAddress }: Props) => {
     }
   }, [])
 
-  // Real SDK utility functions
-  const joyToBalance = (joy: string): bigint => {
-    const joyAmount = parseFloat(joy)
-    return BigInt(Math.floor(joyAmount * 10_000_000_000))
-  }
-
-  const balanceToJoy = (balance: bigint): string => {
-    const joyAmount = Number(balance) / 10_000_000_000
-    return joyAmount.toFixed(4)
-  }
-
   useEffect(() => {
     const loadUnbondingInfo = async () => {
       if (!allAccounts[0]?.address) return
@@ -83,7 +73,7 @@ const RebondModalInner = ({ validatorAddress }: Props) => {
       return
     }
 
-    const rebondAmount = joyToBalance(amount)
+    const rebondAmount = joyStringToPlanckBigInt(amount)
     if (unbondingInfo && rebondAmount > unbondingInfo.totalUnbonding) {
       setError('Amount exceeds unbonding balance')
       return
@@ -115,7 +105,7 @@ const RebondModalInner = ({ validatorAddress }: Props) => {
 
   const handleMaxAmount = () => {
     if (unbondingInfo) {
-      setAmount(balanceToJoy(unbondingInfo.totalUnbonding))
+      setAmount(planckToJoyString(unbondingInfo.totalUnbonding))
     }
   }
 
@@ -144,7 +134,7 @@ const RebondModalInner = ({ validatorAddress }: Props) => {
               <TextMedium>
                 <strong>Unbonding Info:</strong>
               </TextMedium>
-              <TextSmall>Total Unbonding: {balanceToJoy(unbondingInfo.totalUnbonding)} JOY</TextSmall>
+              <TextSmall>Total Unbonding: {planckToJoyString(unbondingInfo.totalUnbonding)} JOY</TextSmall>
               <TextSmall>Unbonding Chunks: {unbondingInfo.chunks.length}</TextSmall>
             </div>
           )}
@@ -158,7 +148,7 @@ const RebondModalInner = ({ validatorAddress }: Props) => {
               type="number"
               step="0.001"
               min="0"
-              // max={unbondingInfo ? balanceToJoy(unbondingInfo.totalUnbonding) : undefined}
+              // max={unbondingInfo ? planckToJoyString(unbondingInfo.totalUnbonding) : undefined}
             />
           </InputComponent>
 

@@ -19,9 +19,11 @@ import { useMachine } from '@/common/hooks/useMachine'
 import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
 import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransaction'
+import { joyStringToPlanckBigInt, planckToJoyString } from '@/common/model/joyValueFromString'
 import { transactionMachine } from '@/common/model/machines'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
 import { useStakingQueries, useStakingTransactions } from '@/validators/hooks/useStakingSDK'
+import { useUsedControllerAccounts } from '@/validators/hooks/useUsedControllerAccounts'
 
 import { ManageStashActionModalCall } from '.'
 
@@ -53,6 +55,7 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
   const { active: activeMembership } = useMyMemberships()
   const { bondExtra, rebond, withdrawUnbonded, setController, setPayee: setPayeeTx } = useStakingTransactions()
   const { getUnbondingInfo, getSlashingSpans } = useStakingQueries()
+  const usedControllers = useUsedControllerAccounts()
   const [state, , service] = useMachine(transactionMachine)
 
   const [amount, setAmount] = useState('')
@@ -116,16 +119,6 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
     loadInfo()
   }, [modalData.action, modalData.stash, modalData.controller, getSlashingSpans, getUnbondingInfo])
 
-  const joyToBalance = (joy: string): bigint => {
-    const joyAmount = parseFloat(joy)
-    return BigInt(Math.floor(joyAmount * 10_000_000_000))
-  }
-
-  const balanceToJoy = (balance: bigint): string => {
-    const joyAmount = Number(balance) / 10_000_000_000
-    return joyAmount.toFixed(4)
-  }
-
   const transaction = useMemo(() => {
     if (!api) return undefined
 
@@ -134,10 +127,10 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
         if (!amount || parseFloat(amount) <= 0) return undefined
         const hasUnbonding = modalData.unlocking && modalData.unlocking.length > 0
         if (hasUnbonding) {
-          return rebond(joyToBalance(amount))
+          return rebond(joyStringToPlanckBigInt(amount))
         } else {
           try {
-            return bondExtra(joyToBalance(amount))
+            return bondExtra(joyStringToPlanckBigInt(amount))
           } catch (err) {
             return undefined
           }
@@ -271,7 +264,7 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
               {modalData.unlocking && modalData.unlocking.length > 0 && (
                 <TextSmall>
                   <strong>Unbonding:</strong>{' '}
-                  {balanceToJoy(
+                  {planckToJoyString(
                     BigInt(modalData.unlocking.reduce((sum, chunk) => sum.add(chunk.value), new BN(0)).toString())
                   )}{' '}
                   JOY
@@ -279,12 +272,12 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
               )}
 
               <TextSmall>
-                <strong>Active Stake:</strong> {balanceToJoy(BigInt(modalData.activeStake.toString()))} JOY
+                <strong>Active Stake:</strong> {planckToJoyString(modalData.activeStake)} JOY
               </TextSmall>
 
               {stashBalance?.transferable && (
                 <TextSmall>
-                  <strong>Available Balance:</strong> {balanceToJoy(BigInt(stashBalance.transferable.toString()))} JOY
+                  <strong>Available Balance:</strong> {planckToJoyString(stashBalance.transferable)} JOY
                 </TextSmall>
               )}
 
@@ -302,7 +295,7 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
 
               {amount && stashBalance?.transferable && parseFloat(amount) > 0 && (
                 <>
-                  {joyToBalance(amount) > BigInt(stashBalance.transferable.toString()) && (
+                  {joyStringToPlanckBigInt(amount) > BigInt(stashBalance.transferable.toString()) && (
                     <TextSmall style={{ color: 'red' }}>
                       <strong>Error:</strong> Amount exceeds available balance
                     </TextSmall>
@@ -327,7 +320,7 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
 
               {hasWithdrawableFunds ? (
                 <TextSmall>
-                  <strong>Available to withdraw:</strong> {balanceToJoy(BigInt(withdrawableAmount.toString()))} JOY
+                  <strong>Available to withdraw:</strong> {planckToJoyString(withdrawableAmount)} JOY
                 </TextSmall>
               ) : (
                 <TextSmall style={{ color: 'orange' }}>
@@ -339,7 +332,7 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
               {modalData.unlocking && modalData.unlocking.length > 0 && !hasWithdrawableFunds && (
                 <TextSmall>
                   <strong>Total unbonding:</strong>{' '}
-                  {balanceToJoy(
+                  {planckToJoyString(
                     BigInt(modalData.unlocking.reduce((sum, chunk) => sum.add(chunk.value), new BN(0)).toString())
                   )}{' '}
                   JOY (not yet available)
@@ -364,6 +357,11 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
                   onChange={(account) => setSelectedController(account?.address || '')}
                   selected={allAccounts.find((acc) => acc.address === selectedController)}
                   placeholder="Select controller account"
+                  filter={(account) => {
+                    if (!account.address) return false
+                    if (account.address === selectedController) return true
+                    return !usedControllers?.has(account.address)
+                  }}
                 />
               </InputComponent>
 
@@ -381,6 +379,7 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
                 options={['Stash', 'Controller', 'Account']}
                 value={payee}
                 onChange={(value) => setPayee(value || 'Stash')}
+                selectSize="l"
               />
 
               <TextSmall>
