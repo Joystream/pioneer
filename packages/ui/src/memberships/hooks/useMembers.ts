@@ -55,24 +55,15 @@ type FilterGqlInput = Pick<
   | 'externalResources_some'
 >
 
-/**
- * Converts a groupName (e.g., "Membership", "Operations Alpha") to groupId (e.g., "membershipWorkingGroup", "operationsWorkingGroupAlpha")
- */
 const groupNameToGroupId = (groupName: string): string | null => {
-  // Create reverse mapping from display name to groupId
-  // Handle both "Operations Alpha" (with space) and "OperationsAlpha" (without space)
-  const nameToIdMap = Object.entries(GroupIdToGroupParam).reduce(
-    (acc, [groupId, displayName]) => {
-      acc[displayName] = groupId
-      // Also map the version with spaces (e.g., "Operations Alpha" -> "operationsWorkingGroupAlpha")
-      const withSpaces = displayName.replace(/([a-z])([A-Z])/g, '$1 $2')
-      if (withSpaces !== displayName) {
-        acc[withSpaces] = groupId
-      }
-      return acc
-    },
-    {} as Record<string, string>
-  )
+  const nameToIdMap = Object.entries(GroupIdToGroupParam).reduce((acc, [groupId, displayName]) => {
+    acc[displayName] = groupId
+    const withSpaces = displayName.replace(/([a-z])([A-Z])/g, '$1 $2')
+    if (withSpaces !== displayName) {
+      acc[withSpaces] = groupId
+    }
+    return acc
+  }, {} as Record<string, string>)
 
   return nameToIdMap[groupName] ?? null
 }
@@ -85,7 +76,6 @@ const filterToGqlInput = ({
   onlyVerified,
   searchFilter,
 }: MemberListFilter): FilterGqlInput => {
-  // Convert MemberRole objects to groupId strings for the GraphQL query
   const groupIds = roles
     .map((role) => groupNameToGroupId(role.groupName))
     .filter((groupId): groupId is string => groupId !== null)
