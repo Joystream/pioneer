@@ -21,17 +21,11 @@ export const CategoryCard = ({ className, category, archivedStyles }: CategoryCa
   const history = useHistory()
 
   const hoverComponent = useMemo(() => {
-    const handleSubcategoryClick = (e: React.MouseEvent, subcategoryId: string) => {
-      e.preventDefault()
-      e.stopPropagation()
-      history.push(generatePath(ForumRoutes.category, { id: subcategoryId }))
-    }
-
     return (
       <CategoriesBox className="category-subcategories">
         {category.subcategories.length &&
           category.subcategories.map((subcategory) => (
-            <StyledBadge key={subcategory.title} onClick={(e) => handleSubcategoryClick(e, subcategory.id)}>
+            <StyledBadge key={subcategory.title} to={generatePath(ForumRoutes.category, { id: subcategory.id })}>
               {subcategory.title}
             </StyledBadge>
           ))}
@@ -64,12 +58,8 @@ export const CategoryCard = ({ className, category, archivedStyles }: CategoryCa
   )
 }
 
-const StyledBadge = styled.button`
+const StyledBadge = styled(Link)`
   ${BadgeStatusCss}
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 0;
 `
 
 const Box = styled(Link)<{ $archivedStyles?: boolean; $ignoreHover?: boolean }>`
