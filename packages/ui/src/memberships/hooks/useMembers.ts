@@ -4,6 +4,7 @@ import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
 import { error } from '@/common/logger'
 import { MemberListFilter } from '@/memberships/components/MemberListFilters'
 import { useGetMembersCountQuery, useGetMembersWithDetailsQuery } from '@/memberships/queries'
+import { GroupIdToGroupParam } from '@/working-groups/constants'
 
 import { asMemberWithDetails } from '../types'
 
@@ -54,6 +55,28 @@ type FilterGqlInput = Pick<
   | 'externalResources_some'
 >
 
+/**
+ * Converts a groupName (e.g., "Membership", "Operations Alpha") to groupId (e.g., "membershipWorkingGroup", "operationsWorkingGroupAlpha")
+ */
+const groupNameToGroupId = (groupName: string): string | null => {
+  // Create reverse mapping from display name to groupId
+  // Handle both "Operations Alpha" (with space) and "OperationsAlpha" (without space)
+  const nameToIdMap = Object.entries(GroupIdToGroupParam).reduce(
+    (acc, [groupId, displayName]) => {
+      acc[displayName] = groupId
+      // Also map the version with spaces (e.g., "Operations Alpha" -> "operationsWorkingGroupAlpha")
+      const withSpaces = displayName.replace(/([a-z])([A-Z])/g, '$1 $2')
+      if (withSpaces !== displayName) {
+        acc[withSpaces] = groupId
+      }
+      return acc
+    },
+    {} as Record<string, string>
+  )
+
+  return nameToIdMap[groupName] ?? null
+}
+
 const filterToGqlInput = ({
   search,
   roles,
@@ -61,13 +84,20 @@ const filterToGqlInput = ({
   onlyFounder,
   onlyVerified,
   searchFilter,
-}: MemberListFilter): FilterGqlInput => ({
-  ...(roles.length ? { roles_some: { groupId_in: roles.map(toString) } } : {}),
-  ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
-  ...(searchFilter ? searchFilterToGqlInput(searchFilter, search) : {}),
-  ...(onlyCouncil ? { isCouncilMember_eq: true } : {}),
-  ...(onlyVerified ? { isVerified_eq: true } : {}),
-})
+}: MemberListFilter): FilterGqlInput => {
+  // Convert MemberRole objects to groupId strings for the GraphQL query
+  const groupIds = roles
+    .map((role) => groupNameToGroupId(role.groupName))
+    .filter((groupId): groupId is string => groupId !== null)
+
+  return {
+    ...(groupIds.length > 0 ? { roles_some: { groupId_in: groupIds } } : {}),
+    ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
+    ...(searchFilter ? searchFilterToGqlInput(searchFilter, search) : {}),
+    ...(onlyCouncil ? { isCouncilMember_eq: true } : {}),
+    ...(onlyVerified ? { isVerified_eq: true } : {}),
+  }
+}
 
 const searchFilterToGqlInput = (
   searchFilter: NonNullable<MemberListFilter['searchFilter']>,
