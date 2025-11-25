@@ -8,8 +8,8 @@ import { SearchBox } from '@/common/components/forms/FilterBox/FilterSearchBox'
 import { FilterSelect } from '@/common/components/selects'
 import { useModal } from '@/common/hooks/useModal'
 import { useSelectedValidators } from '@/validators/context/SelectedValidatorsContext'
+import { useClaimAllNavigation } from '@/validators/hooks/useClaimAllNavigation'
 import { BondModalCall } from '@/validators/modals/BondModal'
-import { PayoutModalCall } from '@/validators/modals/PayoutModal'
 
 interface ValidatorFilterProps {
   filter: {
@@ -25,9 +25,9 @@ interface ValidatorFilterProps {
 
 export const ValidatorsFilter = ({ filter, onNominate }: ValidatorFilterProps) => {
   const [search, setSearch] = useState('')
-  const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
   const { showModal: showBondModal } = useModal<BondModalCall>()
   const { selectedValidators } = useSelectedValidators()
+  const openClaimAllModal = useClaimAllNavigation()
 
   useEffect(() => {
     setSearch(filter.search)
@@ -48,7 +48,7 @@ export const ValidatorsFilter = ({ filter, onNominate }: ValidatorFilterProps) =
       : undefined
 
   const handlePayout = () => {
-    showPayoutModal({ modal: 'Payout' })
+    openClaimAllModal()
   }
 
   const handleBond = () => {

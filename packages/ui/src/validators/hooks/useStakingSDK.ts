@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
+import { firstValueFrom } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
+import { percentToPerbill } from '@/common/utils'
 // import { StakingManager } from '@joystream/sdk-core/staking'
 // For local testing, we'll use the mock implementation
 
@@ -13,25 +15,44 @@ export const useStakingSDK = () => {
     return {
       // Mock transaction methods - will be replaced with real SDK methods
       // Note: Based on SDK implementation, these methods accept bigint directly
-      bond: (controller: string, amount: bigint, payee: string) =>
-        api.tx.staking.bond(controller, amount, payee),
+      bond: (controller: string, amount: bigint, payee: string) => api.tx.staking.bond(controller, amount, payee),
       bondExtra: (amount: bigint) => api.tx.staking.bondExtra(amount),
       unbond: (amount: bigint) => api.tx.staking.unbond(amount),
       rebond: (amount: bigint) => api.tx.staking.rebond(amount),
       nominate: (targets: string[]) => api.tx.staking.nominate(targets),
-      validate: () => ({ signAndSend: () => Promise.resolve() }),
+      validate: (commission: number, blocked = false) =>
+        api.tx.staking.validate({
+          commission: percentToPerbill(commission),
+          blocked,
+        }),
       payoutStakers: () => ({ signAndSend: () => Promise.resolve() }),
       rebag: () => ({ signAndSend: () => Promise.resolve() }),
       setController: (controller: string) => api.tx.staking.setController(controller),
       setPayee: (payee: string) => api.tx.staking.setPayee(payee),
       withdrawUnbonded: (slashingSpans: number) => api.tx.staking.withdrawUnbonded(slashingSpans),
       chill: () => api.tx.staking.chill(),
+      canBond: async (_accountId: string, _amount: bigint) => {
+        void _accountId
+        void _amount
+        return { canBond: true }
+      },
+      canUnbond: async (_accountId: string, _amount: bigint) => {
+        void _accountId
+        void _amount
+        return { canUnbond: true }
+      },
+      canNominate: async (_accountId: string, _targets: string[]) => {
+        void _accountId
+        void _targets
+        return { canNominate: true }
+      },
+      canValidate: async (_accountId: string) => {
+        void _accountId
+        return true
+      },
       setSessionKeys: (keys: any, proof: any) => api.tx.session.setKeys(keys, proof),
       bondAndNominate: (controller: string, amount: bigint, targets: string[], payee: string) =>
-        api.tx.utility.batch([
-          api.tx.staking.bond(controller, amount, payee),
-          api.tx.staking.nominate(targets),
-        ]),
+        api.tx.utility.batch([api.tx.staking.bond(controller, amount, payee), api.tx.staking.nominate(targets)]),
 
       // Mock query methods - will be replaced with real SDK methods
       getStakingInfo: async (accountId: string) => ({
@@ -43,11 +64,41 @@ export const useStakingSDK = () => {
         stash: accountId,
         nominations: [],
       }),
-      getValidators: async () => [
-        { account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', commission: 5.0, isActive: true },
-        { account: '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty', commission: 3.0, isActive: true },
-        { account: '5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy', commission: 7.0, isActive: false },
-      ],
+      getValidators: async () => {
+        const validatorEntriesResult = api.query.staking.validators.entries()
+        const validatorEntries = await ((validatorEntriesResult as any)?.pipe
+          ? firstValueFrom(validatorEntriesResult as any)
+          : validatorEntriesResult)
+
+        const activeValidatorsResult = api.query.session.validators()
+        const activeValidators = await ((activeValidatorsResult as any)?.pipe
+          ? firstValueFrom(activeValidatorsResult as any)
+          : activeValidatorsResult)
+
+        const activeSet = new Set(
+          (activeValidators as any[]).map((validator: any) => validator && validator.toString())
+        )
+
+        return (validatorEntries as Array<[any, any]>).map(([storageKey, prefs]) => {
+          const validator = storageKey.args[0].toString()
+          if (!prefs || (prefs as any).isEmpty) {
+            return {
+              account: validator,
+              commission: undefined,
+              isActive: activeSet.has(validator),
+            }
+          }
+
+          const prefsData = (prefs as any).unwrap ? (prefs as any).unwrap() : prefs
+          const commission = prefsData?.commission ? prefsData.commission.toNumber() / 10_000_000 : undefined
+
+          return {
+            account: validator,
+            commission,
+            isActive: activeSet.has(validator),
+          }
+        })
+      },
       getWaitingValidators: async () => [
         { account: '5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocYcC1hjnk34iw', commission: 4.0 },
       ],

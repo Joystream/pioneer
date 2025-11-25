@@ -510,7 +510,7 @@ export const NorminatorDashboardItem = ({
                                           ? nom.address
                                           : shortenAddress(encodeAddress(nom.address), 20)}
                                       </TooltipText>
-                                      {nom.stake && <TokenValue mjoy value={nom.stake} />}
+                                      {nom.stake && <TokenValue value={nom.stake} />}
                                     </TooltipRow>
                                   )
                                 })}

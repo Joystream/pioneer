@@ -21,6 +21,7 @@ import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransact
 import { joyStringToPlanckBigInt } from '@/common/model/joyValueFromString'
 import { transactionMachine } from '@/common/model/machines'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { UsedControllerAccountsInfo } from '@/validators/components/UsedControllerAccountsInfo'
 import { useStakingTransactions } from '@/validators/hooks/useStakingSDK'
 import { useUsedControllerAccounts } from '@/validators/hooks/useUsedControllerAccounts'
 import { BondModalCall } from '@/validators/modals/BondModal/types'
@@ -216,7 +217,8 @@ export const BondModal = () => {
               filter={(account) => {
                 if (!account.address) return false
                 if (account.address === controller) return true
-                return !usedControllers?.has(account.address)
+                const isRestricted = usedControllers?.restrictedAccounts?.has(account.address)
+                return !isRestricted
               }}
             />
           </InputComponent>
@@ -231,6 +233,8 @@ export const BondModal = () => {
             <strong>Note:</strong> The controller account manages nominations and other staking operations. It can be
             the same as the stash account, but cannot be used as a controller for another stash.
           </TextSmall>
+
+          <UsedControllerAccountsInfo allAccounts={allAccounts} usedAccounts={usedControllers} />
 
           <FilterTextSelect
             options={['Stash', 'Controller', 'Account']}

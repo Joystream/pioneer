@@ -10,16 +10,16 @@ import { ButtonPrimary } from '@/common/components/buttons'
 import { TableListItemAsLinkHover } from '@/common/components/List'
 import { Skeleton } from '@/common/components/Skeleton'
 import { Tooltip, TooltipPopupTitle, TooltipText } from '@/common/components/Tooltip'
-import { TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
+import { TextMedium, TokenValue } from '@/common/components/typography'
 import { BorderRad, Colors, Sizes, Transitions, BN_ZERO } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
 import { useObservable } from '@/common/hooks/useObservable'
-import { whenDefined } from '@/common/utils'
 import { shortenAddress } from '@/common/model/formatters'
+import { whenDefined } from '@/common/utils'
+import { useClaimAllNavigation } from '@/validators/hooks/useClaimAllNavigation'
 import { useMyStashPositions } from '@/validators/hooks/useMyStashPositions'
 import { BondModalCall } from '@/validators/modals/BondModal'
 import { NominatingRedirectModalCall } from '@/validators/modals/NominatingRedirectModal'
-import { PayoutModalCall } from '@/validators/modals/PayoutModal'
 // import { RebagModalCall } from '@/validators/modals/RebagModal'
 // import { RebondModalCall } from '@/validators/modals/RebondModal'
 // import { UnbondModalCall } from '@/validators/modals/UnbondModal'
@@ -42,7 +42,7 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
   const { showModal } = useModal<NominatingRedirectModalCall>()
   const { showModal: showBondModal } = useModal<BondModalCall>()
   // const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
-  const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
+  const openClaimAllModal = useClaimAllNavigation()
   // const { showModal: showRebagModal } = useModal<RebagModalCall>()
   // const { showModal: showRebondModal } = useModal<RebondModalCall>()
   const { isSelected, toggleSelection, selectedValidators, maxSelection } = useSelectedValidators()
@@ -103,7 +103,7 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
         showBondModal({ modal: 'Bond', data: { validatorAddress } })
         break
       case 'Payout':
-        showPayoutModal({ modal: 'Payout', data: { validatorAddress } })
+        openClaimAllModal()
         break
 
       default:
@@ -141,9 +141,7 @@ export const ValidatorItem = ({ validator, onClick, isNominated = false }: Valid
                 <Tooltip
                   popupContent={
                     <NominatorsTooltipContent>
-                      <TooltipPopupTitle>
-                        Nominated by {nominatedStakesInfo.length} stashes:
-                      </TooltipPopupTitle>
+                      <TooltipPopupTitle>Nominated by {nominatedStakesInfo.length} stashes:</TooltipPopupTitle>
                       {nominatedStakesInfo.map((info) => (
                         <TooltipRow key={info.stash}>
                           <TooltipText>{shortenAddress(encodeAddress(info.stash), 20)}</TooltipText>

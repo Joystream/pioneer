@@ -76,7 +76,6 @@ import { ManageStashActionModal, ManageStashActionModalCall } from '@/validators
 import { NominateValidatorModal } from '@/validators/modals/NominateValidatorModal'
 import { NominateValidatorModalCall } from '@/validators/modals/NominateValidatorModal/types'
 import { NominatingRedirectModal, NominatingRedirectModalCall } from '@/validators/modals/NominatingRedirectModal'
-import { PayoutModal, PayoutModalCall } from '@/validators/modals/PayoutModal'
 import { RebagModal, RebagModalCall } from '@/validators/modals/RebagModal'
 import { RebondModal, RebondModalCall } from '@/validators/modals/RebondModal'
 import { SetNomineesModal, SetNomineesModalCall } from '@/validators/modals/SetNomineesModal'
@@ -154,7 +153,6 @@ type ModalNamesBase =
   | ModalName<SetNomineesModalCall>
   | ModalName<StopStakingModalCall>
   | ModalName<UnbondStakingModalCall>
-  | ModalName<PayoutModalCall>
   | ModalName<NominateValidatorModalCall>
   | ModalName<StakeModalCall>
   | ModalName<ValidateModalCall>
@@ -219,7 +217,6 @@ const modals: Record<ModalNames, ReactElement> = {
   NominatingRedirect: <NominatingRedirectModal />,
   Bond: <BondModal />,
   Unbond: <UnbondModal />,
-  Payout: <PayoutModal />,
   NominateValidator: <NominateValidatorModal />,
   Stake: <StakeModal />,
   StopStakingModal: <StopStakingModal />,

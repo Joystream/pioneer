@@ -22,6 +22,7 @@ import { useSignAndSendTransaction } from '@/common/hooks/useSignAndSendTransact
 import { joyStringToPlanckBigInt, planckToJoyString } from '@/common/model/joyValueFromString'
 import { transactionMachine } from '@/common/model/machines'
 import { useMyMemberships } from '@/memberships/hooks/useMyMemberships'
+import { UsedControllerAccountsInfo } from '@/validators/components/UsedControllerAccountsInfo'
 import { useStakingQueries, useStakingTransactions } from '@/validators/hooks/useStakingSDK'
 import { useUsedControllerAccounts } from '@/validators/hooks/useUsedControllerAccounts'
 
@@ -360,7 +361,8 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
                   filter={(account) => {
                     if (!account.address) return false
                     if (account.address === selectedController) return true
-                    return !usedControllers?.has(account.address)
+                    const isRestricted = usedControllers?.restrictedAccounts?.has(account.address)
+                    return !isRestricted
                   }}
                 />
               </InputComponent>
@@ -368,6 +370,8 @@ const ManageStashActionModalInner = ({ modalData }: ManageStashActionModalInnerP
               <TextSmall>
                 <strong>Note:</strong> The controller account must be different from the stash account.
               </TextSmall>
+
+              <UsedControllerAccountsInfo allAccounts={allAccounts} usedAccounts={usedControllers} />
             </>
           )}
 

@@ -39,7 +39,9 @@ export const ClaimStakingRewardsModal = () => {
   const { api } = useApi()
   const { allAccounts } = useMyAccounts()
   const { active: activeMembership } = useMyMemberships()
-  const [state, , service] = useMachine(transactionMachine)
+  const [machineIteration, setMachineIteration] = useState(0)
+  const transactionMachineInstance = useMemo(() => transactionMachine.withContext({ events: [] }), [machineIteration])
+  const [state, , service] = useMachine(transactionMachineInstance)
   const [claimedEras, setClaimedEras] = useState<Set<string>>(new Set())
   const pendingBatchRef = useRef<number>(0)
   const isProcessingBatchRef = useRef<boolean>(false)
@@ -273,9 +275,8 @@ export const ClaimStakingRewardsModal = () => {
                 pendingBatchRef.current += 1
                 isProcessingBatchRef.current = false
                 shouldAutoTriggerNextRef.current = true
-                // Restart the state machine to prepare for the next batch
-                service.stop()
-                service.start()
+                // Restart the transaction state machine to handle the next batch
+                setMachineIteration((prev) => prev + 1)
               },
               error: () => {
                 isProcessingBatchRef.current = false

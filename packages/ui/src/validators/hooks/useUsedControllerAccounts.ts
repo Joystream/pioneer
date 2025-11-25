@@ -4,27 +4,33 @@ import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useApi } from '@/api/hooks/useApi'
 import { useObservable } from '@/common/hooks/useObservable'
 
-/**
- * Hook that returns a Set of account addresses that cannot be used as controllers.
- * This includes:
- * - Accounts that are already stash accounts (have a controller set)
- * - Accounts that are actively being used as controllers (have active stake)
- */
-export const useUsedControllerAccounts = (): Set<string> | undefined => {
+export interface UsedControllerAccounts {
+  stashAccounts: Set<string>
+  controllerAccounts: Set<string>
+  restrictedAccounts: Set<string>
+}
+
+export const useUsedControllerAccounts = (): UsedControllerAccounts | undefined => {
   const { api } = useApi()
   const { allAccounts } = useMyAccounts()
 
   return useObservable(() => {
-    if (!api || !allAccounts.length) return of(new Set<string>())
+    if (!api || !allAccounts.length) {
+      return of({
+        stashAccounts: new Set<string>(),
+        controllerAccounts: new Set<string>(),
+        restrictedAccounts: new Set<string>(),
+      })
+    }
     const addresses = allAccounts.map((acc) => acc.address)
     return api.query.staking.bonded.multi(addresses).pipe(
       switchMap((bondedEntries) => {
-        const usedSet = new Set<string>()
+        const stashAccounts = new Set<string>()
 
         // Find all accounts that are already stash accounts (have a controller set)
         bondedEntries.forEach((bonded, index) => {
           if (bonded.isSome) {
-            usedSet.add(addresses[index])
+            stashAccounts.add(addresses[index])
           }
         })
 
@@ -37,10 +43,17 @@ export const useUsedControllerAccounts = (): Set<string> | undefined => {
           .filter((item): item is { stash: string; controller: string } => !!item.controller)
           .map((item) => item.controller)
 
-        if (controllers.length === 0) return of(usedSet)
+        if (controllers.length === 0) {
+          return of({
+            stashAccounts,
+            controllerAccounts: new Set<string>(),
+            restrictedAccounts: new Set<string>(stashAccounts),
+          })
+        }
 
         return api.query.staking.ledger.multi(controllers).pipe(
           map((ledgers) => {
+            const controllerAccounts = new Set<string>()
             ledgers.forEach((ledger, index) => {
               if (ledger.isNone) return
               const ledgerData = ledger.unwrap()
@@ -48,18 +61,33 @@ export const useUsedControllerAccounts = (): Set<string> | undefined => {
               const totalStake = ledgerData.total.toBn()
               const hasUnlocking = ledgerData.unlocking.length > 0
               if (!activeStake.isZero() || !totalStake.isZero() || hasUnlocking) {
-                usedSet.add(controllers[index])
+                controllerAccounts.add(controllers[index])
               }
             })
-            return usedSet
+            return {
+              stashAccounts,
+              controllerAccounts,
+              restrictedAccounts: new Set<string>([...stashAccounts, ...controllerAccounts]),
+            }
           }),
           first(),
-          catchError(() => of(usedSet))
+          catchError(() =>
+            of({
+              stashAccounts,
+              controllerAccounts: new Set<string>(),
+              restrictedAccounts: new Set<string>(stashAccounts),
+            })
+          )
         )
       }),
       first(),
-      catchError(() => of(new Set<string>()))
+      catchError(() =>
+        of({
+          stashAccounts: new Set<string>(),
+          controllerAccounts: new Set<string>(),
+          restrictedAccounts: new Set<string>(),
+        })
+      )
     )
   }, [api?.isConnected, JSON.stringify(allAccounts.map((a) => a.address))])
 }
-

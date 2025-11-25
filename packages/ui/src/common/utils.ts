@@ -30,7 +30,11 @@ export const toNumber = (value: any): number => value?.toNumber?.() ?? (isNumber
 
 export const clamp = (min: number, value: number, max: number) => Math.max(min, Math.min(max, value))
 
-export const perbillToPercent = (perbill: BN) => perbill.toNumber() / 10 ** 7
+const PERBILL_FACTOR = 10 ** 7
+
+export const perbillToPercent = (perbill: BN) => perbill.toNumber() / PERBILL_FACTOR
+
+export const percentToPerbill = (percent: number) => new BN(Math.round(percent * PERBILL_FACTOR))
 
 export const permillToPercent = (permill: number) => permill / 10 ** 4
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useApi } from '@/api/hooks/useApi'
@@ -40,6 +40,10 @@ const ValidateModalInner = ({ validatorAddress }: Props) => {
   const [success, setSuccess] = useState(false)
   const [canValidateAccount, setCanValidateAccount] = useState<boolean | null>(null)
   const isMountedRef = useRef(true)
+  const selectedAccount = useMemo(() => {
+    if (!allAccounts.length) return null
+    return allAccounts.find((account) => account.address === validatorAddress) ?? allAccounts[0]
+  }, [allAccounts, validatorAddress])
 
   useEffect(() => {
     return () => {
@@ -49,22 +53,32 @@ const ValidateModalInner = ({ validatorAddress }: Props) => {
 
   useEffect(() => {
     const checkValidation = async () => {
-      if (!allAccounts[0]?.address) return
+      if (!selectedAccount?.address) {
+        setCanValidateAccount(null)
+        setError('No account available to submit this transaction')
+        return
+      }
 
       try {
-        const canValidateResult = await canValidate(allAccounts[0].address)
+        const canValidateResult = await canValidate(selectedAccount.address)
         setCanValidateAccount(canValidateResult)
+        setError(null)
       } catch (err) {
         setError('Failed to check validation status')
       }
     }
 
     checkValidation()
-  }, [allAccounts, canValidate])
+  }, [canValidate, selectedAccount])
 
   const handleValidate = async () => {
     if (!api || !isConnected) {
       setError('API not connected')
+      return
+    }
+
+    if (!selectedAccount?.address) {
+      setError('No account available to sign the transaction')
       return
     }
 
@@ -83,7 +97,7 @@ const ValidateModalInner = ({ validatorAddress }: Props) => {
 
     try {
       const validateTx = validate(parseFloat(commission), blocked)
-      await validateTx.signAndSend(allAccounts[0])
+      await validateTx.signAndSend(selectedAccount.address)
 
       if (isMountedRef.current) {
         setSuccess(true)
@@ -99,8 +113,19 @@ const ValidateModalInner = ({ validatorAddress }: Props) => {
     const value = e.target.value
     if (value === '' || (!isNaN(parseFloat(value)) && parseFloat(value) >= 0 && parseFloat(value) <= 100)) {
       setCommission(value)
+      setError(null)
     }
   }
+
+  const actionDisabled =
+    isLoading ||
+    !commission ||
+    parseFloat(commission) < 0 ||
+    parseFloat(commission) > 100 ||
+    canValidateAccount === false ||
+    !selectedAccount ||
+    canValidateAccount === null ||
+    !!error
 
   if (success) {
     return (
@@ -171,17 +196,7 @@ const ValidateModalInner = ({ validatorAddress }: Props) => {
         <ButtonSecondary size="medium" onClick={hideModal}>
           Cancel
         </ButtonSecondary>
-        <ButtonPrimary
-          size="medium"
-          onClick={handleValidate}
-          disabled={
-            isLoading ||
-            !commission ||
-            parseFloat(commission) < 0 ||
-            parseFloat(commission) > 100 ||
-            canValidateAccount === false
-          }
-        >
+        <ButtonPrimary size="medium" onClick={handleValidate} disabled={actionDisabled}>
           {isLoading ? 'Validating...' : 'Become Validator'}
         </ButtonPrimary>
       </ModalFooter>

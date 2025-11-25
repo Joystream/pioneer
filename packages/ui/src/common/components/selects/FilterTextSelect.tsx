@@ -11,7 +11,7 @@ export const FilterTextSelect = (
   const options = useMemo(() => {
     if (!search) return props.options
     return props.options.filter((option) => option.toLowerCase().includes(search.toLowerCase()))
-  }, [search])
+  }, [props.options, search])
   useEffect(() => {
     search && setSearch('')
   }, [props.value])

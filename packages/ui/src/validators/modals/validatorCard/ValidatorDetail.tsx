@@ -18,13 +18,13 @@ import { useObservable } from '@/common/hooks/useObservable'
 import { whenDefined } from '@/common/utils'
 import RewardPointsChart from '@/validators/components/RewardPointChart'
 import { useSelectedValidators } from '@/validators/context/SelectedValidatorsContext'
+import { useClaimAllNavigation } from '@/validators/hooks/useClaimAllNavigation'
 import { useMyStashPositions } from '@/validators/hooks/useMyStashPositions'
 
 import { ValidatorWithDetails } from '../../types'
 import { BondModalCall } from '../BondModal'
 import { NominateValidatorModalCall } from '../NominateValidatorModal'
 import { NominatingRedirectModalCall } from '../NominatingRedirectModal'
-import { PayoutModalCall } from '../PayoutModal'
 import { StakeModalCall } from '../StakeModal'
 import { UnbondModalCall } from '../UnbondModal'
 
@@ -43,8 +43,8 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal, isNominated = 
   const { showModal: showStakeModal } = useModal<StakeModalCall>()
   const { showModal: showBondModal } = useModal<BondModalCall>()
   const { showModal: showUnbondModal } = useModal<UnbondModalCall>()
-  const { showModal: showPayoutModal } = useModal<PayoutModalCall>()
   const { isSelected, toggleSelection, selectedValidators, maxSelection } = useSelectedValidators()
+  const openClaimAllModal = useClaimAllNavigation()
 
   // Get stake amount for this nominated validator
   const nominatedStake = useObservable<BN | undefined>(() => {
@@ -122,7 +122,7 @@ export const ValidatorDetail = ({ validator, eraIndex, hideModal, isNominated = 
       case 'Payout':
         await new Promise((resolve) => setTimeout(resolve, 0)) // Make async
         hideModal()
-        showPayoutModal({ modal: 'Payout', data: { validatorAddress } })
+        openClaimAllModal()
         break
       default:
         await new Promise((resolve) => setTimeout(resolve, 0)) // Make async
