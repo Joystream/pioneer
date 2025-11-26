@@ -53,6 +53,7 @@ type FilterGqlInput = Pick<
   | 'isCouncilMember_eq'
   | 'isVerified_eq'
   | 'externalResources_some'
+  | 'OR'
 >
 
 const groupNameToGroupId = (groupName: string): string | null => {
@@ -76,12 +77,64 @@ const filterToGqlInput = ({
   onlyVerified,
   searchFilter,
 }: MemberListFilter): FilterGqlInput => {
-  const groupIds = roles
-    .map((role) => groupNameToGroupId(role.groupName))
-    .filter((groupId): groupId is string => groupId !== null)
+  const rolesByGroup = roles.reduce((acc, role) => {
+    const groupId = groupNameToGroupId(role.groupName)
+    if (!groupId) return acc
+
+    if (!acc[groupId]) {
+      acc[groupId] = { hasLead: false, hasWorker: false }
+    }
+
+    if (role.isLead) {
+      acc[groupId].hasLead = true
+    } else {
+      acc[groupId].hasWorker = true
+    }
+
+    return acc
+  }, {} as Record<string, { hasLead: boolean; hasWorker: boolean }>)
+
+  const groupIds = Object.keys(rolesByGroup)
+  if (groupIds.length === 0) {
+    return {
+      ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
+      ...(searchFilter ? searchFilterToGqlInput(searchFilter, search) : {}),
+      ...(onlyCouncil ? { isCouncilMember_eq: true } : {}),
+      ...(onlyVerified ? { isVerified_eq: true } : {}),
+    }
+  }
+
+  const leadOnlyGroupIds = groupIds.filter(
+    (groupId) => rolesByGroup[groupId].hasLead && !rolesByGroup[groupId].hasWorker
+  )
+  const workerOnlyGroupIds = groupIds.filter(
+    (groupId) => rolesByGroup[groupId].hasWorker && !rolesByGroup[groupId].hasLead
+  )
+  const bothGroupIds = groupIds.filter((groupId) => rolesByGroup[groupId].hasLead && rolesByGroup[groupId].hasWorker)
+
+  const rolesFilters: Array<{ groupId_in: string[]; isLead_eq?: boolean }> = []
+
+  if (bothGroupIds.length > 0) {
+    rolesFilters.push({ groupId_in: bothGroupIds })
+  }
+
+  if (leadOnlyGroupIds.length > 0) {
+    rolesFilters.push({ groupId_in: leadOnlyGroupIds, isLead_eq: true })
+  }
+
+  if (workerOnlyGroupIds.length > 0) {
+    rolesFilters.push({ groupId_in: workerOnlyGroupIds, isLead_eq: false })
+  }
+
+  const rolesFilter =
+    rolesFilters.length === 1
+      ? { roles_some: rolesFilters[0] }
+      : rolesFilters.length > 1
+      ? { OR: rolesFilters.map((filter) => ({ roles_some: filter })) }
+      : {}
 
   return {
-    ...(groupIds.length > 0 ? { roles_some: { groupId_in: groupIds } } : {}),
+    ...rolesFilter,
     ...(onlyFounder ? { isFoundingMember_eq: true } : {}),
     ...(searchFilter ? searchFilterToGqlInput(searchFilter, search) : {}),
     ...(onlyCouncil ? { isCouncilMember_eq: true } : {}),
