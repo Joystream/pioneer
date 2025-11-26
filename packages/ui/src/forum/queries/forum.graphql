@@ -314,6 +314,11 @@ query SearchForumPost($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByI
   forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     id
     text
+    createdAt
+    author {
+      id
+      handle
+    }
     thread {
       id
       title

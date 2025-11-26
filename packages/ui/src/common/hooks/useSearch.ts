@@ -14,6 +14,8 @@ export type GroupedForumPost = {
   posts: Array<{
     id: string
     text: string
+    createdAt: string
+    author: { id: string; handle: string | null } | null
     thread: { id: string; title: string; categoryId: string }
   }>
 }
@@ -63,7 +65,17 @@ export const useSearch = (search: string, kind: SearchKind) => {
           posts: [],
         })
       }
-      threadMap.get(threadId)!.posts.push(post)
+      threadMap.get(threadId)!.posts.push({
+        id: post.id,
+        text: post.text,
+        createdAt: typeof post.createdAt === 'string' ? post.createdAt : new Date(post.createdAt).toISOString(),
+        author: post.author ? { id: post.author.id, handle: post.author.handle ?? null } : null,
+        thread: {
+          id: post.thread.id,
+          title: post.thread.title,
+          categoryId: post.thread.categoryId,
+        },
+      })
     }
 
     const groupedResults = Array.from(threadMap.values()).sort((a, b) => {

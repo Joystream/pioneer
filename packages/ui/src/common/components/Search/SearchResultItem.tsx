@@ -1,8 +1,10 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { GhostRouterLink } from '@/common/components/RouterLink'
-import { Colors, Transitions } from '@/common/constants'
+import { BreadcrumbsItem, BreadcrumbsItemLink } from '@/common/components/page/Sidebar/Breadcrumbs/BreadcrumbsItem'
+import { BreadcrumbsListComponent } from '@/common/components/page/Sidebar/Breadcrumbs/BreadcrumbsList'
+import { Colors, Fonts, Transitions } from '@/common/constants'
 
 import { TextMedium } from '../typography'
 
@@ -11,18 +13,22 @@ import { HighlightedText } from './HighlightedText'
 interface SearchResultItemProp {
   onClick: () => void
   pattern: RegExp | null
-  breadcrumbs: ReactNode
+  author: string
+  date: string
   to: string
-  title: string
   children: string
 }
-export const SearchResultItem = ({ pattern, breadcrumbs, to, title, children, onClick }: SearchResultItemProp) => (
+export const SearchResultItem = ({ pattern, author, date, to, children, onClick }: SearchResultItemProp) => (
   <ResultItemStyle>
-    {breadcrumbs}
+    <SearchBreadcrumbs>
+      <BreadcrumbsItem url="" isLink={false}>
+        {author}
+      </BreadcrumbsItem>
+      <BreadcrumbsItem url="" isLink={false}>
+        {date}
+      </BreadcrumbsItem>
+    </SearchBreadcrumbs>
     <ResultLink onClick={onClick} as={GhostRouterLink} to={to}>
-      <ResultTitle>
-        <HighlightedText pattern={pattern}>{title}</HighlightedText>
-      </ResultTitle>
       <ResultText>
         <HighlightedText pattern={pattern} shorten>
           {children}
@@ -32,11 +38,6 @@ export const SearchResultItem = ({ pattern, breadcrumbs, to, title, children, on
   </ResultItemStyle>
 )
 
-const ResultTitle = styled.h5`
-  margin: 8px 0;
-  transition: ${Transitions.all};
-`
-
 const ResultItemStyle = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,6 +46,7 @@ const ResultItemStyle = styled.div`
   overflow-x: hidden;
   padding-bottom: 14px;
   transition: ${Transitions.all};
+  min-width: 0;
 
   &:hover,
   &:focus,
@@ -55,14 +57,22 @@ const ResultItemStyle = styled.div`
 
 const ResultText = styled(TextMedium)`
   color: ${Colors.Black[500]};
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  min-width: 0;
 `
 
 const ResultLink = styled.a`
-  &:hover,
-  &:focus,
-  &:focus-within {
-    ${ResultTitle} {
-      color: ${Colors.Blue[500]};
+  margin-top: 4px;
+  min-width: 0;
+`
+
+const SearchBreadcrumbs = styled(BreadcrumbsListComponent)`
+  ${BreadcrumbsItemLink} {
+    &,
+    &:visited {
+      color: ${Colors.Black[400]};
+      font-family: ${Fonts.Grotesk};
     }
   }
 `

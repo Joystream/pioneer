@@ -1405,6 +1405,8 @@ export type SearchForumPostQuery = {
     __typename: 'ForumPost'
     id: string
     text: string
+    createdAt: any
+    author: { __typename: 'Membership'; id: string; handle: string }
     thread: { __typename: 'ForumThread'; id: string; title: string; categoryId: string }
   }>
 }
@@ -2474,6 +2476,11 @@ export const SearchForumPostDocument = gql`
     forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
       id
       text
+      createdAt
+      author {
+        id
+        handle
+      }
       thread {
         id
         title
