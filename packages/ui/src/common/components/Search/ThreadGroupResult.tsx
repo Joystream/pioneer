@@ -55,7 +55,7 @@ export const ThreadGroupResult = ({ group, pattern, onItemClick }: ThreadGroupRe
       <ThreadGroupPostsContainer>
         <ThreadGroupPosts>
           {group.posts.map((post, position) =>
-            !isExpanded || position > 0 ? null : (
+            !isExpanded && position > 0 ? null : (
               <SearchResultItem
                 key={post.id}
                 pattern={pattern}
