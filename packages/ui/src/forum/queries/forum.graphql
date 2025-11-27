@@ -98,6 +98,9 @@ fragment ForumThreadFields on ForumThread {
   categoryId
   category {
     title
+    status {
+      __typename
+    }
   }
   title
   initialPost {

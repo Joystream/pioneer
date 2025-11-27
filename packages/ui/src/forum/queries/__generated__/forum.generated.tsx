@@ -224,7 +224,14 @@ export type ForumThreadFieldsFragment = {
   categoryId: string
   title: string
   visiblePostsCount: number
-  category: { __typename: 'ForumCategory'; title: string }
+  category: {
+    __typename: 'ForumCategory'
+    title: string
+    status:
+      | { __typename: 'CategoryStatusActive' }
+      | { __typename: 'CategoryStatusArchived' }
+      | { __typename: 'CategoryStatusRemoved' }
+  }
   initialPost?: { __typename: 'ForumPost'; text: string } | null
   author: {
     __typename: 'Membership'
@@ -592,7 +599,14 @@ export type ForumThreadDetailedFieldsFragment = {
   categoryId: string
   title: string
   visiblePostsCount: number
-  category: { __typename: 'ForumCategory'; title: string }
+  category: {
+    __typename: 'ForumCategory'
+    title: string
+    status:
+      | { __typename: 'CategoryStatusActive' }
+      | { __typename: 'CategoryStatusArchived' }
+      | { __typename: 'CategoryStatusRemoved' }
+  }
   initialPost?: { __typename: 'ForumPost'; text: string } | null
   author: {
     __typename: 'Membership'
@@ -989,7 +1003,14 @@ export type GetForumThreadsQuery = {
     categoryId: string
     title: string
     visiblePostsCount: number
-    category: { __typename: 'ForumCategory'; title: string }
+    category: {
+      __typename: 'ForumCategory'
+      title: string
+      status:
+        | { __typename: 'CategoryStatusActive' }
+        | { __typename: 'CategoryStatusArchived' }
+        | { __typename: 'CategoryStatusRemoved' }
+    }
     initialPost?: { __typename: 'ForumPost'; text: string } | null
     author: {
       __typename: 'Membership'
@@ -1072,7 +1093,14 @@ export type GetForumThreadQuery = {
     categoryId: string
     title: string
     visiblePostsCount: number
-    category: { __typename: 'ForumCategory'; title: string }
+    category: {
+      __typename: 'ForumCategory'
+      title: string
+      status:
+        | { __typename: 'CategoryStatusActive' }
+        | { __typename: 'CategoryStatusArchived' }
+        | { __typename: 'CategoryStatusRemoved' }
+    }
     initialPost?: { __typename: 'ForumPost'; text: string } | null
     author: {
       __typename: 'Membership'
@@ -1701,6 +1729,9 @@ export const ForumThreadFieldsFragmentDoc = gql`
     categoryId
     category {
       title
+      status {
+        __typename
+      }
     }
     title
     initialPost {
