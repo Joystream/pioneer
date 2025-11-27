@@ -48,7 +48,7 @@ export const CategoryListItem = ({ category, isArchive = false }: CategoryListIt
 
       <ThreadCount categoryId={category.id} isArchive={isArchive} />
 
-      <LatestPost categoryId={category.id} />
+      <LatestPost categoryId={category.id} isArchive={isArchive} />
 
       {isArchive ? (
         block && <BlockTime block={block} layout="column" />
