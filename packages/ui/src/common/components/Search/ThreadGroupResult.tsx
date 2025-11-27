@@ -52,20 +52,22 @@ export const ThreadGroupResult = ({ group, pattern, onItemClick }: ThreadGroupRe
           </ThreadTitle>
         </ThreadGroupHeaderContent>
       </ThreadGroupHeader>
-      <ThreadGroupPostsContainer isExpanded={isExpanded}>
+      <ThreadGroupPostsContainer>
         <ThreadGroupPosts>
-          {group.posts.map((post) => (
-            <SearchResultItem
-              key={post.id}
-              pattern={pattern}
-              author={post.author?.handle || 'Unknown'}
-              date={relativeIfRecent(post.createdAt)}
-              to={`${generatePath(ForumRoutes.thread, { id: group.threadId })}?post=${post.id}`}
-              onClick={onItemClick}
-            >
-              {post.text}
-            </SearchResultItem>
-          ))}
+          {group.posts.map((post, position) =>
+            !isExpanded || position > 0 ? null : (
+              <SearchResultItem
+                key={post.id}
+                pattern={pattern}
+                author={post.author?.handle || 'Unknown'}
+                date={relativeIfRecent(post.createdAt)}
+                to={`${generatePath(ForumRoutes.thread, { id: group.threadId })}?post=${post.id}`}
+                onClick={onItemClick}
+              >
+                {post.text}
+              </SearchResultItem>
+            )
+          )}
         </ThreadGroupPosts>
       </ThreadGroupPostsContainer>
     </ThreadGroupContainer>
@@ -133,8 +135,7 @@ const ThreadTitleText = styled.h5`
   }
 `
 
-const ThreadGroupPostsContainer = styled.div<{ isExpanded: boolean }>`
-  max-height: ${({ isExpanded }) => (isExpanded ? '10000px' : '0')};
+const ThreadGroupPostsContainer = styled.div`
   overflow: hidden;
   transition: max-height 250ms ease-in-out;
   will-change: max-height;
