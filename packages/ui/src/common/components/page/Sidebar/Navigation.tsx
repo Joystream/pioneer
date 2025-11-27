@@ -30,7 +30,7 @@ export const NavigationInnerWrapper = styled.div`
   height: 100%;
   padding-bottom: 2px;
   color: ${Colors.White};
-  background-color: ${Colors.Black[900]};
+  background-color: rgba(0, 0, 0, 0.85);
   z-index: ${ZIndex.navbarInner};
 
   @media (min-width: 1024px) {
