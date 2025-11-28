@@ -255,15 +255,18 @@ export const ClaimStakingRewardsModal = () => {
         : []
 
       if (currentBatch.length > 0) {
+        // Calculate remaining eras before updating claimedEras
+        // After we mark these as claimed, totals.allPayouts will be recalculated and exclude them
+        const totalUnclaimedBefore = totals.allPayouts ? totals.allPayouts.length : 0
+        const willRemainAfter = Math.max(0, totalUnclaimedBefore - currentBatch.length)
+
         setClaimedEras((prev) => {
           const newSet = new Set(prev)
           currentBatch.forEach((key) => newSet.add(key))
           return newSet
         })
 
-        const remainingEras = totals.allPayouts ? totals.allPayouts.slice(maxBatchSize) : []
-
-        if (remainingEras.length > 0) {
+        if (willRemainAfter > 0) {
           isProcessingBatchRef.current = true
 
           // Wait for the next block to be produced (no need to wait for finalization)
@@ -303,21 +306,23 @@ export const ClaimStakingRewardsModal = () => {
       validatorsRewards &&
       validatorsRewards.length > 0 &&
       !isProcessingBatchRef.current &&
-      shouldAutoTriggerNextRef.current
+      shouldAutoTriggerNextRef.current &&
+      transaction // Ensure transaction is ready
     ) {
-      const remainingEras = totals.allPayouts ? totals.allPayouts.slice(maxBatchSize) : []
-
-      if (remainingEras.length > 0) {
+      // Check if there are any remaining unclaimed eras
+      // totals.allPayouts already excludes claimed eras, so we just need to check if it has items
+      if (totals.allPayouts && totals.allPayouts.length > 0) {
         shouldAutoTriggerNextRef.current = false
         // Automatically trigger the next batch
+        // Use a slightly longer delay to ensure all state updates have propagated
         setTimeout(() => {
           service.send('SIGN')
-        }, 100)
+        }, 200)
       } else {
         shouldAutoTriggerNextRef.current = false
       }
     }
-  }, [state.value, validatorsRewards, claimedEras, service, totals.allPayouts, maxBatchSize])
+  }, [state.value, validatorsRewards, claimedEras, service, totals.allPayouts, maxBatchSize, transaction])
 
   if (state.matches('canceled')) {
     return (
@@ -365,16 +370,17 @@ export const ClaimStakingRewardsModal = () => {
   }
 
   if (state.matches('success')) {
-    const remainingEras = totals.allPayouts ? totals.allPayouts.slice(maxBatchSize) : []
+    // totals.allPayouts already excludes claimed eras, so we just need to check its length
+    const remainingErasCount = totals.allPayouts ? totals.allPayouts.length : 0
 
-    if (remainingEras.length > 0) {
+    if (remainingErasCount > 0) {
       return (
         <Modal onClose={hideModal} modalSize="s" modalHeight="s">
           <ModalHeader title="Claiming Rewards" onClick={hideModal} />
           <ModalBody>
             <RowGapBlock gap={20}>
               <TextMedium>
-                Claiming batch {pendingBatchRef.current + 1}... {remainingEras.length} eras remaining.
+                Claiming batch {pendingBatchRef.current + 1}... {remainingErasCount} eras remaining.
               </TextMedium>
               <TextMedium lighter>Please wait while we continue claiming the remaining rewards.</TextMedium>
             </RowGapBlock>
