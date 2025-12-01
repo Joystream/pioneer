@@ -364,8 +364,17 @@ fragment ForumPostWithThreadFields on ForumPost {
     id
     title
     categoryId
+    status {
+      __typename
+    }
     category {
       title
+      status {
+        __typename
+      }
+    }
+    status {
+      __typename
     }
   }
 }
