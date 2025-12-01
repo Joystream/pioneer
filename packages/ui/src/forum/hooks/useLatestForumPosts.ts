@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { ForumPostOrderByInput } from '@/common/api/queries'
+import { ActiveStatus } from '@/forum/hooks/useForumCategories'
 import { useGetLatestForumPostsQuery } from '@/forum/queries'
 import { asMember, Member } from '@/memberships/types'
 
@@ -31,6 +32,11 @@ export const useLatestForumPosts = (limit: number) => {
         thread: {
           status_json: {
             isTypeOf_eq: 'ThreadStatusActive',
+          },
+          category: {
+            status_json: {
+              isTypeOf_eq: ActiveStatus,
+            },
           },
         },
       },
