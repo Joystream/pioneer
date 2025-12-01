@@ -373,9 +373,6 @@ fragment ForumPostWithThreadFields on ForumPost {
         __typename
       }
     }
-    status {
-      __typename
-    }
   }
 }
 
