@@ -19,8 +19,8 @@ import { useLatestForumThreads } from '@/forum/hooks/useLatestForumThreads'
 export const ForumMain = () => {
   const { isLoading: isLoadingCategories, forumCategories } = useForumCategories({ isRoot: true })
   const isRefetched = useRefetchQueries({ interval: MILLISECONDS_PER_BLOCK, include: ['GetForumCategories'] })
-  const { threads, isLoading: isLoadingThreads } = useLatestForumThreads(10)
-  const { posts, isLoading: isLoadingPosts } = useLatestForumPosts(20)
+  const { threads, isLoading: isLoadingThreads } = useLatestForumThreads()
+  const { posts, isLoading: isLoadingPosts } = useLatestForumPosts()
   const isLoading = isLoadingCategories || isLoadingThreads || isLoadingPosts
 
   if (isLoading && !isRefetched) {

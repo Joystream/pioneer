@@ -19,35 +19,25 @@ export interface ForumPostWithThread {
   }
 }
 
-export const useLatestForumPosts = (limit: number) => {
+export const useLatestForumPosts = () => {
   // Fetch more posts than needed since we'll filter client-side
-  const fetchLimit = limit * 3
   const { data, loading } = useGetLatestForumPostsQuery({
     variables: {
       orderBy: [ForumPostOrderByInput.UpdatedAtDesc],
-      limit: fetchLimit,
-      where: {
-        status_json: {
-          isTypeOf_not: 'PostStatusRemoved',
-        },
-      },
+      limit: 50,
+      where: {},
     },
   })
 
   const posts = useMemo(() => {
     if (!data?.forumPosts) return []
 
-    // Client-side filtering: only include posts from active threads in active categories
     const filtered = data.forumPosts
-      .filter((post) => {
-        // Type assertion needed until GraphQL types are regenerated
-        const thread = post.thread as any
-        const threadStatus = thread?.status?.__typename
-        const categoryStatus = thread?.category?.status?.__typename
-
-        return threadStatus === 'ThreadStatusActive' && categoryStatus === 'CategoryStatusActive'
-      })
-      .slice(0, limit) // Take only the requested limit after filtering
+      .filter(
+        (post) =>
+          post.thread.status.__typename === 'ThreadStatusActive' &&
+          post.thread.category.status.__typename === 'CategoryStatusActive'
+      )
       .map((post) => ({
         id: post.id,
         createdAt: post.createdAt,
@@ -64,7 +54,7 @@ export const useLatestForumPosts = (limit: number) => {
       }))
 
     return filtered
-  }, [data, limit])
+  }, [data])
 
   return { posts, isLoading: loading }
 }
