@@ -1,7 +1,7 @@
 import type { u32 } from '@polkadot/types'
 import BN from 'bn.js'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { combineLatest, filter, first, map, of, switchMap, catchError, take } from 'rxjs'
+import { combineLatest, filter, first, map, of, switchMap, catchError } from 'rxjs'
 
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { Account } from '@/accounts/types'
@@ -269,25 +269,21 @@ export const ClaimStakingRewardsModal = () => {
         if (willRemainAfter > 0) {
           isProcessingBatchRef.current = true
 
-          // Wait for the next block to be produced (no need to wait for finalization)
-          const subscription = api.rpc.chain
-            .subscribeNewHeads()
-            .pipe(take(1))
-            .subscribe({
-              next: () => {
-                pendingBatchRef.current += 1
-                isProcessingBatchRef.current = false
-                shouldAutoTriggerNextRef.current = true
-                // Restart the transaction state machine to handle the next batch
-                setMachineIteration((prev) => prev + 1)
-              },
-              error: () => {
-                isProcessingBatchRef.current = false
-              },
-            })
+          // Use setInterval to check every second instead of waiting for finalization
+          // This is much faster and avoids the slow finalization wait
+          // The effect will re-run and clean up this interval if state changes
+          const intervalId = setInterval(() => {
+            // Trigger the next batch after 1 second
+            pendingBatchRef.current += 1
+            isProcessingBatchRef.current = false
+            shouldAutoTriggerNextRef.current = true
+            // Restart the transaction state machine to handle the next batch
+            setMachineIteration((prev) => prev + 1)
+            clearInterval(intervalId)
+          }, 1000) // Check every second
 
           return () => {
-            subscription.unsubscribe()
+            clearInterval(intervalId)
           }
         } else {
           isProcessingBatchRef.current = false
@@ -299,7 +295,6 @@ export const ClaimStakingRewardsModal = () => {
     }
   }, [state.value, validatorsRewards, claimedEras, service, api, totals.allPayouts, maxBatchSize])
 
-  // Auto-trigger next batch when machine is reset and ready
   useEffect(() => {
     if (
       state.matches('prepare') &&
@@ -307,14 +302,10 @@ export const ClaimStakingRewardsModal = () => {
       validatorsRewards.length > 0 &&
       !isProcessingBatchRef.current &&
       shouldAutoTriggerNextRef.current &&
-      transaction // Ensure transaction is ready
+      transaction
     ) {
-      // Check if there are any remaining unclaimed eras
-      // totals.allPayouts already excludes claimed eras, so we just need to check if it has items
       if (totals.allPayouts && totals.allPayouts.length > 0) {
         shouldAutoTriggerNextRef.current = false
-        // Automatically trigger the next batch
-        // Use a slightly longer delay to ensure all state updates have propagated
         setTimeout(() => {
           service.send('SIGN')
         }, 200)

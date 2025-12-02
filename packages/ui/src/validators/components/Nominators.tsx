@@ -5,19 +5,17 @@ import styled from 'styled-components'
 import { AccountItemLoading } from '@/accounts/components/AccountItem/AccountItemLoading'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { useMyBalances } from '@/accounts/hooks/useMyBalances'
-import { Account } from '@/accounts/types'
 import { filterAccounts } from '@/accounts/model/filterAccounts'
 import { sortAccounts, SortKey, setOrder } from '@/accounts/model/sortAccounts'
+import { useApi } from '@/api/hooks/useApi'
 import { ButtonPrimary } from '@/common/components/buttons'
 import { EmptyPagePlaceholder } from '@/common/components/EmptyPagePlaceholder/EmptyPagePlaceholder'
 import { List, ListItem } from '@/common/components/List'
 import { ContentWithTabs } from '@/common/components/page/PageContent'
 import { HeaderText, SortIconDown, SortIconUp } from '@/common/components/SortedListHeaders'
-import { Colors } from '@/common/constants'
-import { useApi } from '@/api/hooks/useApi'
-import { BN_ZERO } from '@/common/constants'
-import { useObservable } from '@/common/hooks/useObservable'
+import { Colors, BN_ZERO } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { useObservable } from '@/common/hooks/useObservable'
 import { NominatorInfo } from '@/validators/hooks/useNominatorInfo'
 
 import { NominatorAccountItem } from './dashboard/NominatorItem'
@@ -45,14 +43,10 @@ export function Nominators() {
 
     return combineLatest(
       sortedAccounts.map((account) =>
-        combineLatest([
-          api.query.staking.nominators(account.address),
-          api.query.staking.bonded(account.address),
-        ]).pipe(
+        combineLatest([api.query.staking.nominators(account.address), api.query.staking.bonded(account.address)]).pipe(
           switchMap(([nominations, bonded]) => {
             const isNominating = !nominations.isEmpty
             const targets = isNominating ? nominations.unwrap().targets.map((target) => target.toString()) : []
-            
             if (bonded.isNone) {
               return of({
                 address: account.address,
