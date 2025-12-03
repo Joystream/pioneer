@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { UnknownAccountInfo } from '@/accounts/components/UnknownAccountInfo'
 import { BlockTime } from '@/common/components/BlockTime'
-import { ButtonGhost, ResponsiveButtonsGroup } from '@/common/components/buttons'
+import { ButtonGhost, ButtonPrimary, ResponsiveButtonsGroup } from '@/common/components/buttons'
 import { LinkButtonGhost } from '@/common/components/buttons/LinkButtons'
 import { ToggleableItem, ToggleButton } from '@/common/components/buttons/Toggle'
 import { Arrow } from '@/common/components/icons'
@@ -14,9 +14,11 @@ import { useModal } from '@/common/hooks/useModal'
 import { useToggle } from '@/common/hooks/useToggle'
 import { Member } from '@/memberships/types'
 import { workerRoleTitle } from '@/working-groups/helpers'
+import { useIsLeadForGroup } from '@/working-groups/hooks/useIsLeadForGroup'
 import { useRewardPeriod } from '@/working-groups/hooks/useRewardPeriod'
 import { useWorkerEarnings } from '@/working-groups/hooks/useWorkerEarnings'
 import { ApplicationDetailsModalCall } from '@/working-groups/modals/ApplicationDetailsModal'
+import { PayWorkerModalCall } from '@/working-groups/modals/PayWorkerModal'
 import { WorkerWithDetails } from '@/working-groups/types'
 
 export interface MemberRoleToggleProps {
@@ -26,10 +28,17 @@ export interface MemberRoleToggleProps {
 
 export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
   const { showModal } = useModal()
+  const isLead = useIsLeadForGroup(role.group.id)
   const showApplicationModal = useCallback(() => {
     showModal<ApplicationDetailsModalCall>({
       modal: 'ApplicationDetails',
       data: { applicationId: role.applicationId },
+    })
+  }, [role])
+  const showPayWorkerModal = useCallback(() => {
+    showModal<PayWorkerModalCall>({
+      modal: 'PayWorker',
+      data: { worker: role },
     })
   }, [role])
   const { earnings } = useWorkerEarnings(role.id)
@@ -62,9 +71,16 @@ export const MemberRoleToggle = ({ role }: MemberRoleToggleProps) => {
               <SidePaneRow>
                 <SidePaneLabel text="Earned total" />
                 <SidePaneColumn>
-                  <SidePaneText>
-                    <TokenValue value={earnings} />
-                  </SidePaneText>
+                  <EarnedTotalContainer>
+                    <SidePaneText>
+                      <TokenValue value={earnings} />
+                    </SidePaneText>
+                    {isLead && (
+                      <PayWorkerButton size="small" onClick={showPayWorkerModal}>
+                        Pay Worker
+                      </PayWorkerButton>
+                    )}
+                  </EarnedTotalContainer>
                 </SidePaneColumn>
               </SidePaneRow>
               {/** TODO fix calculation <SidePaneRow>
@@ -152,4 +168,14 @@ const MemberRoleTable = styled(SidePaneTable)`
   &:after {
     display: none;
   }
+`
+
+const EarnedTotalContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`
+
+const PayWorkerButton = styled(ButtonPrimary)`
+  margin-left: auto;
 `

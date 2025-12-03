@@ -62,7 +62,7 @@ export const AccountLockTooltip = ({ locks, children, boundaryClassName }: Props
           recovered after the role is terminated, while proposal locks get recovered automatically, when proposals get
           executed.{' '}
           <InlineExternalLink
-            href="https://joystream.gitbook.io/testnet-workspace/system/accounts-and-staking#locks-1"
+            href="https://joystream.gitbook.io/testnet-workspace/system/accounts-and-staking#rivalry"
             target="_blank"
           >
             <LinkText>Learn more about Locks.</LinkText>

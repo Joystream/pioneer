@@ -28,64 +28,74 @@ interface Props {
   validator: ValidatorWithDetails
   selectCard: (cardNumber: number | null) => void
   totalCards: number
+  isNominated?: boolean
 }
 
-export const ValidatorCard = React.memo(({ cardNumber, validator, eraIndex, selectCard, totalCards }: Props) => {
-  const hideModal = () => {
-    selectCard(null)
-  }
-  const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (e.target === e.currentTarget) {
-      hideModal()
+export const ValidatorCard = React.memo(
+  ({ cardNumber, validator, eraIndex, selectCard, totalCards, isNominated = false }: Props) => {
+    const hideModal = () => {
+      selectCard(null)
     }
-  }
-  useEscape(() => hideModal())
-  const [activeTab, setActiveTab] = useState<ValidatorCardTabs>('Details')
+    const onBackgroundClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (e.target === e.currentTarget) {
+        hideModal()
+      }
+    }
+    useEscape(() => hideModal())
+    const [activeTab, setActiveTab] = useState<ValidatorCardTabs>('Details')
 
-  const onClickRight = () => {
-    selectCard(cardNumber + 1)
-  }
-  const onClickLeft = () => {
-    selectCard(cardNumber - 1)
-  }
+    const onClickRight = () => {
+      selectCard(cardNumber + 1)
+    }
+    const onClickLeft = () => {
+      selectCard(cardNumber - 1)
+    }
 
-  const title = `Validor ${cardNumber} of ${totalCards}`
-  const tabs = [
-    {
-      title: 'Validator details',
-      active: activeTab === 'Details',
-      onClick: () => setActiveTab('Details'),
-    },
-    { title: 'Nominators', active: activeTab === 'Nominators', onClick: () => setActiveTab('Nominators') },
-  ]
+    const title = `Validor ${cardNumber} of ${totalCards}`
+    const tabs = [
+      {
+        title: 'Validator details',
+        active: activeTab === 'Details',
+        onClick: () => setActiveTab('Details'),
+      },
+      { title: 'Nominators', active: activeTab === 'Nominators', onClick: () => setActiveTab('Nominators') },
+    ]
 
-  return (
-    <SidePaneGlass onClick={onBackgroundClick}>
-      <SidePane>
-        <SidePaneHeader>
-          <SidePanelTop>
-            <SidePaneTitle>{title}</SidePaneTitle>
-            <SidePaneTopButtonsGroup>
-              <ButtonGhost title="Previous validator" size="small" disabled={cardNumber <= 1} onClick={onClickLeft}>
-                <Arrow direction="left" />
-              </ButtonGhost>
-              <ButtonGhost
-                title="Next validator"
-                size="small"
-                disabled={cardNumber >= totalCards}
-                onClick={onClickRight}
-              >
-                <Arrow direction="right" />
-              </ButtonGhost>
-            </SidePaneTopButtonsGroup>
-            <CloseButton onClick={hideModal} />
-          </SidePanelTop>
-          <ValidatorInfo member={validator.membership} address={encodeAddress(validator.stashAccount)} size="l" />
-          <Tabs tabs={tabs} tabsSize="xs" />
-        </SidePaneHeader>
-        {activeTab === 'Details' && <ValidatorDetail validator={validator} eraIndex={eraIndex} hideModal={hideModal} />}
-        {activeTab === 'Nominators' && <Nominators validator={validator} />}
-      </SidePane>
-    </SidePaneGlass>
-  )
-})
+    return (
+      <SidePaneGlass onClick={onBackgroundClick}>
+        <SidePane>
+          <SidePaneHeader>
+            <SidePanelTop>
+              <SidePaneTitle>{title}</SidePaneTitle>
+              <SidePaneTopButtonsGroup>
+                <ButtonGhost title="Previous validator" size="small" disabled={cardNumber <= 1} onClick={onClickLeft}>
+                  <Arrow direction="left" />
+                </ButtonGhost>
+                <ButtonGhost
+                  title="Next validator"
+                  size="small"
+                  disabled={cardNumber >= totalCards}
+                  onClick={onClickRight}
+                >
+                  <Arrow direction="right" />
+                </ButtonGhost>
+              </SidePaneTopButtonsGroup>
+              <CloseButton onClick={hideModal} />
+            </SidePanelTop>
+            <ValidatorInfo member={validator.membership} address={encodeAddress(validator.stashAccount)} size="l" />
+            <Tabs tabs={tabs} tabsSize="xs" />
+          </SidePaneHeader>
+          {activeTab === 'Details' && (
+            <ValidatorDetail
+              validator={validator}
+              eraIndex={eraIndex}
+              hideModal={hideModal}
+              isNominated={isNominated}
+            />
+          )}
+          {activeTab === 'Nominators' && <Nominators validator={validator} />}
+        </SidePane>
+      </SidePaneGlass>
+    )
+  }
+)

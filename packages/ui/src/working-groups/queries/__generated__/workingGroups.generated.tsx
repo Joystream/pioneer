@@ -747,7 +747,7 @@ export type CountWorkingGroupWorkersQuery = {
 
 export type GetWorkingGroupOpeningsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.WorkingGroupOpeningWhereInput>
-  order?: Types.InputMaybe<Array<Types.WorkingGroupOpeningOrderByInput> | Types.WorkingGroupOpeningOrderByInput>
+  order?: Types.InputMaybe<Types.WorkingGroupOpeningOrderByInput>
   limit?: Types.InputMaybe<Types.Scalars['Int']>
   offset?: Types.InputMaybe<Types.Scalars['Int']>
 }>
@@ -2557,6 +2557,7 @@ export function useGetWorkingGroupApplicationMentionQuery(
     options
   )
 }
+
 export function useGetWorkingGroupApplicationMentionLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
     GetWorkingGroupApplicationMentionQuery,

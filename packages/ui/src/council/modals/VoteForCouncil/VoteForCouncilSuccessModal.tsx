@@ -1,13 +1,10 @@
 import React, { useCallback } from 'react'
-import { generatePath } from 'react-router'
-import { useHistory } from 'react-router-dom'
 
 import { ButtonGhost } from '@/common/components/buttons'
 import { SuccessIcon } from '@/common/components/icons'
 import { Modal, ModalFooter, ModalHeader, SuccessModalBody } from '@/common/components/Modal'
 import { TextMedium } from '@/common/components/typography'
 import { BackupVotesButton } from '@/council/components/election/BackupVotesButton'
-import { ElectionRoutes } from '@/council/constants'
 import { useCandidate } from '@/council/hooks/useCandidate'
 import { SelectedMember } from '@/memberships/components/SelectMember'
 
@@ -17,11 +14,9 @@ interface Props {
 }
 
 export const VoteForCouncilSuccessModal = ({ onClose, candidateId }: Props) => {
-  const history = useHistory()
   const { candidate } = useCandidate(candidateId)
 
   const goToElection = useCallback(() => {
-    history.push(generatePath(ElectionRoutes.currentElection))
     onClose()
   }, [onClose])
 

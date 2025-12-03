@@ -116,6 +116,22 @@ query GetBudgetSpending($where: BudgetSpendingEventWhereInput) {
   }
 }
 
+fragment VestedBudgetSpendingEventFields on VestedBudgetSpendingEvent {
+  id
+  groupId
+  receiver
+  amount
+  perBlock
+  startingBlock
+  rationale
+}
+
+query GetVestedBudgetSpending($where: VestedBudgetSpendingEventWhereInput) {
+  vestedBudgetSpendingEvents(where: $where) {
+    ...VestedBudgetSpendingEventFields
+  }
+}
+
 fragment RewardPaidEventFields on RewardPaidEvent {
   id
   amount

@@ -46,11 +46,19 @@ export const transactionMachine = createMachine<TransactionContext, TransactionE
     prepare: {
       on: {
         SIGN: 'signing',
+        CANCELED: 'canceled',
       },
     },
     signing: {
       on: {
         SIGN_EXTERNAL: 'signWithExtension',
+        CANCELED: 'canceled',
+        ERROR: {
+          target: 'error',
+          actions: assign({
+            events: (_, event) => event.events,
+          }),
+        },
       },
     },
     signWithExtension: {

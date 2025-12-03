@@ -7,8 +7,8 @@ interface StatisticsLayoutProps {
 
 export const Statistics = styled.div<StatisticsLayoutProps>`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: ${({ gapSize }) => (gapSize === 's' ? '16px' : '24px')};
   width: 100%;
   max-width: 100%;
   ${({ withMargin }) => (withMargin ? 'margin-top: 8px;' : null)};

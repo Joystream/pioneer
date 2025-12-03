@@ -38,6 +38,7 @@ export const ForumThread = () => {
   const history = useHistory()
 
   const isThreadActive = !!(thread && thread.status.__typename === 'ThreadStatusActive')
+  const isCategoryArchived = !!(thread && thread.categoryStatus === 'CategoryStatusArchived')
 
   const getTransaction = (postText: string, isEditable: boolean) => {
     if (api && active && thread) {
@@ -106,7 +107,9 @@ export const ForumThread = () => {
       ) : (
         <>
           <PostList threadId={id} isThreadActive={isThreadActive} isLoading={isLoading} />
-          {thread && isThreadActive && <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />}
+          {thread && isThreadActive && !isCategoryArchived && (
+            <NewThreadPost ref={newPostRef} getTransaction={getTransaction} />
+          )}
         </>
       )}
     </ThreadPanel>

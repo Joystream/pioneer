@@ -18,9 +18,10 @@ interface ValueProps extends ValueSizingProps {
   className?: string
   isLoading?: boolean
   mjoy?: boolean
+  placement?: 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'
 }
 
-export const TokenValue = React.memo(({ className, value, size, isLoading, mjoy }: ValueProps) => {
+export const TokenValue = React.memo(({ className, value, size, isLoading, mjoy, placement }: ValueProps) => {
   if (isLoading) {
     return <Skeleton id="tokenValueSkeleton" variant="rect" height="32px" width="50%" />
   }
@@ -29,7 +30,7 @@ export const TokenValue = React.memo(({ className, value, size, isLoading, mjoy 
     return <span>-</span>
   }
   return (
-    <Tooltip tooltipText={<JOYSuffix>{formatJoyValue(value)}</JOYSuffix>}>
+    <Tooltip tooltipText={<JOYSuffix>{formatJoyValue(value)}</JOYSuffix>} placement={placement}>
       {mjoy ? (
         <ValueInMJoys className={className} size={size}>
           {formatJoyValue(value.divn(Math.pow(10, 6)), { precision: 2 })}

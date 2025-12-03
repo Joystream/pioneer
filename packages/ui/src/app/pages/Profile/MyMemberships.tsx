@@ -18,10 +18,10 @@ export const MyMemberships = () => (
         <MyMembershipsHeaderWrapper>
           <PageTitle>My Profile</PageTitle>
           <ButtonsGroup>
-            <InviteMemberButton size="medium">Invite a member</InviteMemberButton>
+            <InviteMemberButton size="medium">Invite</InviteMemberButton>
             <AddMembershipButton size="medium">
               <PlusIcon />
-              Add Membership
+              New Member
             </AddMembershipButton>
           </ButtonsGroup>
         </MyMembershipsHeaderWrapper>

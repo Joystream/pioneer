@@ -9,6 +9,7 @@ import { DisconnectWalletIcon } from '@/common/components/page/Sidebar/LinksIcon
 import { SignOutIcon } from '@/common/components/page/Sidebar/LinksIcons/SignOutIcon'
 import { BorderRad, Colors, RemoveScrollbar, Transitions } from '@/common/constants'
 import { useModal } from '@/common/hooks/useModal'
+import { AnyModalCall } from '@/common/providers/modal/types'
 import { DisconnectWalletModalCall } from '@/memberships/modals/DisconnectWalletModal'
 import { SwitchMemberModalCall } from '@/memberships/modals/SwitchMemberModal/types'
 import { sortMemberships } from '@/memberships/model/sortMemberships'
@@ -28,7 +29,10 @@ export const SwitchMemberModal = () => {
     setActive(member)
     hideModal()
     if (modalData?.originalModalName) {
-      showModal({ modal: modalData.originalModalName, data: modalData?.originalModalData })
+      showModal({
+        modal: modalData.originalModalName,
+        data: modalData.originalModalData,
+      } as AnyModalCall)
     }
   }
 

@@ -12,8 +12,8 @@ import { MemberInfo } from '@/memberships/components'
 
 import { CategoryItemFieldProps } from './CategoryListItem'
 
-export const LatestPost = memo(({ categoryId }: CategoryItemFieldProps) => {
-  const { post, thread } = useCategoryLatestPost(categoryId)
+export const LatestPost = memo(({ categoryId, isArchive }: CategoryItemFieldProps) => {
+  const { post, thread } = useCategoryLatestPost(categoryId, { skip: Boolean(isArchive) })
 
   if (!post) return <TextMedium>-</TextMedium>
 

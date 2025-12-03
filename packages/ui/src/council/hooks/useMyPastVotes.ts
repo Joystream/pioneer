@@ -1,40 +1,73 @@
+import { useMemo } from 'react'
+
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { CastVoteOrderByInput } from '@/common/api/queries'
-import { usePagination } from '@/common/hooks/usePagination'
-import { SortOrder, toQueryOrderByInput } from '@/common/hooks/useSort'
+import { sortBy, SortOrder } from '@/common/hooks/useSort'
 
-import { useGetCouncilVotesCountQuery, useGetCouncilVotesQuery } from '../queries'
-import { asVote } from '../types/Vote'
+import { useGetCouncilVotesQuery } from '../queries'
+import { asVote, Vote } from '../types/Vote'
 
 interface UseMyPastVotesProps {
   order: SortOrder<CastVoteOrderByInput>
-  perPage?: number
 }
 
-export const useMyPastVotes = ({ order, perPage = 5 }: UseMyPastVotesProps) => {
+export const useMyPastVotes = ({ order }: UseMyPastVotesProps) => {
   const { allAccounts } = useMyAccounts()
 
-  const where = {
-    castBy_in: allAccounts.map((account) => account.address),
-    electionRound: { isFinished_eq: true },
-  }
+  const addresses = useMemo(() => allAccounts.map((account) => account.address), [allAccounts])
 
-  const { data: countData, loading: countLoading } = useGetCouncilVotesCountQuery({ variables: { where } })
-  const totalCount = countData?.castVotesConnection.totalCount
-  const { offset, pagination } = usePagination(perPage, totalCount ?? 0, [order, totalCount])
+  const variables = useMemo(() => {
+    if (!addresses.length) return undefined
 
-  const variables = {
-    where,
-    orderBy: toQueryOrderByInput<CastVoteOrderByInput>(order),
-    limit: perPage,
-    offset,
-  }
+    return {
+      where: {
+        castBy_in: addresses,
+        electionRound: { isFinished_eq: true },
+      },
+      orderBy: [CastVoteOrderByInput.CreatedAtDesc],
+      limit: addresses.length,
+    }
+  }, [addresses])
 
-  const { data, loading } = useGetCouncilVotesQuery({ variables })
+  const { data, loading } = useGetCouncilVotesQuery({
+    variables,
+    skip: !variables,
+  })
+
+  const votes = useMemo(() => {
+    if (!data?.castVotes) return []
+
+    const seenAccounts = new Set<string>()
+    const latestVotes = data.castVotes.filter((vote) => {
+      if (seenAccounts.has(vote.castBy)) return false
+      seenAccounts.add(vote.castBy)
+      return true
+    })
+
+    const parsedVotes = latestVotes.map(asVote)
+
+    return sortBy(parsedVotes, order, compareVote)
+  }, [data?.castVotes, order])
 
   return {
-    votes: data?.castVotes.map(asVote),
-    isLoading: loading || countLoading,
-    pagination: pagination,
+    votes,
+    isLoading: loading,
+  }
+}
+
+const compareVote = (first: Vote, second: Vote, key: string) => {
+  switch (key) {
+    case 'stake':
+      return first.stake.cmp(second.stake)
+    case 'castBy':
+      return first.castBy.localeCompare(second.castBy)
+    case 'stakeLocked':
+      return Number(first.stakeLocked) - Number(second.stakeLocked)
+    case 'createdAt':
+    default: {
+      const firstTime = Date.parse(first.createdAtBlock?.timestamp ?? '0')
+      const secondTime = Date.parse(second.createdAtBlock?.timestamp ?? '0')
+      return firstTime - secondTime
+    }
   }
 }

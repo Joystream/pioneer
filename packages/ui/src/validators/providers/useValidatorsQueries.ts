@@ -63,27 +63,29 @@ export const useValidatorsQueries = (): CommonValidatorsQueries | undefined => {
     const eraRewardPoints$ = api.derive.staking.erasPoints()
 
     const validatorsRewards$ = combineLatest([erasRewards$, eraRewardPoints$]).pipe(
-      map(([erasRewards, eraRewardPoints]) =>
-        eraRewardPoints.map<EraRewards>((points, index) => {
-          const era = points.era.toNumber()
-          const reward = erasRewards[index]
+      map(([erasRewards, eraRewardPoints]) => {
+        const rewardsByEra = new Map(erasRewards.map((reward) => [reward.era.toNumber(), reward]))
 
-          if (era !== reward?.era.toNumber()) {
-            throw Error(
-              `derive.staking.erasRewards and derive.staking.erasPoints eras didn't match. Era #${era} is missing`
-            )
-          }
+        return eraRewardPoints
+          .map<EraRewards | null>((points) => {
+            const era = points.era.toNumber()
+            const reward = rewardsByEra.get(era)
 
-          return {
-            era,
-            totalPoints: points.eraPoints.toNumber(),
-            totalReward: reward.eraReward,
-            individual: Object.fromEntries(
-              Object.entries(points.validators).map(([address, points]) => [address, points.toNumber()])
-            ),
-          }
-        })
-      ),
+            if (!reward) {
+              return null
+            }
+
+            return {
+              era,
+              totalPoints: points.eraPoints.toNumber(),
+              totalReward: reward.eraReward,
+              individual: Object.fromEntries(
+                Object.entries(points.validators).map(([address, points]) => [address, points.toNumber()])
+              ),
+            }
+          })
+          .filter((reward): reward is EraRewards => reward !== null)
+      }),
       keepFirst()
     )
 

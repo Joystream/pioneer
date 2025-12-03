@@ -79,7 +79,7 @@ export const testProposals: ProposalMock[] = [
     ...baseMock,
     id: '3',
     title: 'Quite Similar Named Proposal',
-    status: 'vetoed',
+    status: 'dormant',
     createdAt: '2021-07-08T10:00:00.000Z',
     statusSetAtTime: '2021-07-14T10:00:00.000Z',
     details: {

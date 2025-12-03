@@ -339,7 +339,7 @@ In case there is the network you wish to connect to has no JSON configuration (o
 
 To use custom addresses add the `.env` file in `packages/ui` (example: `packages/ui/.env.example`) and set
 
-1. `REACT_APP_MAINNET_NODE_SOCKET` example `wss://rpc.joystream.org:9944`
+1. `REACT_APP_MAINNET_NODE_SOCKET` example `wss://rpc.joystream.org`
 2. `REACT_APP_MAINNET_QUERY_NODE` example `https://query.joystream.org/graphql`
 3. `REACT_APP_MAINNET_QUERY_NODE_SOCKET` example `wss://query.joystream.org/graphql`
 4. `REACT_APP_MAINNET_MEMBERSHIP_FAUCET_URL` example `https://faucet.joystream.org/member-faucet/register`

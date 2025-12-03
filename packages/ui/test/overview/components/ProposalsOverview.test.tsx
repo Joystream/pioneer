@@ -99,7 +99,7 @@ describe('UI: Proposals overview', () => {
     renderComponent()
     await waitForElementToBeRemoved(() => loaderSelector(true))
 
-    expect((await screen.findByText('proposals.new')).previousSibling?.textContent).toBe('1')
+    expect((await screen.findByText('proposals.new')).previousSibling?.textContent).toBe('2')
     expect((await screen.findByText('proposals.approved')).previousSibling?.textContent).toBe('3')
     expect((await screen.findByText('proposals.rejected')).previousSibling?.textContent).toBe('2')
   })

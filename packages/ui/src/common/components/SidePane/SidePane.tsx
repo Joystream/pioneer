@@ -65,7 +65,7 @@ export const SidePane = styled.div<{ topSize?: 'xs' | 's' | 'm' }>`
     'modalfooter';
   grid-area: modal;
   position: relative;
-  background-color: ${Colors.White};
+  background-color: rgba(255, 255, 255, 0.85);
   width: 100%;
   max-width: 552px;
   height: 100%;

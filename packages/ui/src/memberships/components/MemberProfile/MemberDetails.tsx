@@ -138,7 +138,9 @@ export const MemberDetails = React.memo(({ member }: Props) => {
             <SidePaneText>
               {has(externalResource.source, ExternalResourceLink) ? (
                 <Link
-                  href={`${ExternalResourceLink[externalResource.source]}${externalResource.value}`}
+                  href={`${
+                    externalResource.value.startsWith('http') ? '' : ExternalResourceLink[externalResource.source]
+                  }${externalResource.value}`}
                   target="_blank"
                 >
                   {externalResource.value}

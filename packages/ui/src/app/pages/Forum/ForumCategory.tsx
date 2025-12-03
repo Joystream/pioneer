@@ -78,14 +78,16 @@ export const ForumCategory = () => {
             </TextMedium>
           }
           buttons={
-            <TransactionButton
-              style="primary"
-              size="medium"
-              onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
-              isResponsive
-            >
-              <PlusIcon /> Add New Thread
-            </TransactionButton>
+            category.status.__typename !== 'CategoryStatusArchived' && (
+              <TransactionButton
+                style="primary"
+                size="medium"
+                onClick={() => showModal({ modal: 'CreateThreadModal', data: { categoryId: id } })}
+                isResponsive
+              >
+                <PlusIcon /> Add New Thread
+              </TransactionButton>
+            )
           }
         >
           <ModeratorsContainer>

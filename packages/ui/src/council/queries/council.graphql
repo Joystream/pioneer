@@ -232,14 +232,18 @@ query GetPastCouncil($id: ID!, $fromBlock: Int!, $toBlock: Int!) {
   electedCouncilByUniqueInput(where: { id: $id }) {
     ...PastCouncilDetailedFields
   }
-  budgetSpendingEvents(where: { inBlock_gte: $fromBlock, inBlock_lte: $toBlock }) {
-    ...CouncilSpendingEventFields
-  }
   fundingRequestsApproved: proposals(
     where: {
-      statusSetAtBlock_gt: $fromBlock
-      statusSetAtBlock_lt: $toBlock
       details_json: { isTypeOf_eq: "FundingRequestProposalDetails" }
+      OR: [
+        { status_json: { isTypeOf_eq: "ProposalStatusExecuted" } }
+        # Here gracing funding requests are considered spent (if the execution fails it will be removed from the total spent)
+        { status_json: { isTypeOf_eq: "ProposalStatusGracing" } }
+      ]
+      # I.e the last approval was after the targeted council started
+      proposaldecisionmadeeventproposal_some: { inBlock_gte: $fromBlock }
+      # I.e all approvals were before targeted council ended (proposaldecisionmadeeventproposal_every doesn't work)
+      proposaldecisionmadeeventproposal_none: { inBlock_gt: $toBlock }
     }
   ) {
     ...FundingRequestApproved
@@ -391,15 +395,6 @@ query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
   proposalsApproved: proposalExecutedEventsConnection(where: { inBlock_gt: $startBlock, inBlock_lt: $endBlock }) {
     totalCount
   }
-  fundingRequestsApproved: proposals(
-    where: {
-      statusSetAtBlock_gt: $startBlock
-      statusSetAtBlock_lt: $endBlock
-      details_json: { isTypeOf_eq: "FundingRequestProposalDetails" }
-    }
-  ) {
-    ...FundingRequestApproved
-  }
   ## Rejected + Slashed could be fetched using `isTypeOf_in: []` but it is not supported by Hydra now
   proposalsRejected: proposalDecisionMadeEventsConnection(
     where: {
@@ -418,9 +413,6 @@ query GetPastCouncilStats($startBlock: Int!, $endBlock: Int!) {
     }
   ) {
     totalCount
-  }
-  budgetSpendingEvents(where: { inBlock_gte: $startBlock, inBlock_lte: $endBlock }) {
-    ...CouncilSpendingEventFields
   }
 }
 

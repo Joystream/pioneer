@@ -79,6 +79,7 @@ In order to work on Pioneer 2 you'll need following tools for development and te
 
 In order to interact with the Joystream ecosystem
 
+- [Joystream SDK integration tutorial](./SDK-tutorial.md)
 - [Joystream node](https://github.com/Joystream/joystream/tree/master/bin/node) _optional_
 - [Joystream Query node](https://github.com/Joystream/joystream/tree/master/query-node) _optional_
 

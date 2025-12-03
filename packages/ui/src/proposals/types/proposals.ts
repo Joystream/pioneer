@@ -16,7 +16,6 @@ export type ProposalStatus =
   | 'deciding'
   | 'gracing'
   | 'dormant'
-  | 'vetoed'
   | 'executed'
   | 'executionFailed'
   | 'slashed'
@@ -46,7 +45,6 @@ export type ProposalType =
         | 'slashWorkingGroupLead'
         | 'setWorkingGroupLeadReward'
         | 'terminateWorkingGroupLead'
-        | 'amendConstitution'
         | 'cancelWorkingGroupLeadOpening'
         | 'setMembershipPrice'
         | 'setCouncilBudgetIncrement'
@@ -55,11 +53,6 @@ export type ProposalType =
         | 'setInitialInvitationCount'
         | 'setMembershipLeadInvitationQuota'
         | 'setReferralCut'
-        | 'createBlogPost'
-        | 'editBlogPost'
-        | 'lockBlogPost'
-        | 'unlockBlogPost'
-        | 'veto'
         | 'updateChannelPayouts'
         | 'updatePalletFrozenStatus'
         | 'setEraPayoutDampingFactor'
@@ -67,8 +60,6 @@ export type ProposalType =
         | 'updateTokenPalletTokenConstraints'
         | 'updateArgoBridgeConstraints'
       )
-
-export type DisabledProposal = 'createBlogPost' | 'editBlogPost' | 'lockBlogPost' | 'unlockBlogPost'
 
 export interface Proposal {
   id: string

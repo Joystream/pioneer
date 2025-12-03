@@ -10,12 +10,11 @@ import { OverviewWrapper } from '@/overview/components/OverviewWrapper'
 
 import { ForumThreadTilesList } from './ForumThreadTilesList'
 
-const THREADS_NUMBER = 5
 const WEEK_AGO = subDays(startOfToday(), 7).toISOString()
 
 export const ForumThreadsOverview = () => {
   const { t } = useTranslation('overview')
-  const { threads } = useLatestForumThreads(THREADS_NUMBER)
+  const { threads } = useLatestForumThreads()
   const { threadsCount, isLoading: threadsCountLoading } = useThreadsCount(WEEK_AGO)
 
   const infoElements = useMemo(

@@ -1,7 +1,7 @@
-import { DisabledProposal, ProposalType } from '@/proposals/types'
+import { ProposalType } from '@/proposals/types'
 
 type ProposalDescriptions = {
-  [key in ProposalType | DisabledProposal]: string
+  [key in ProposalType]: string
 }
 export const proposalDescriptions: ProposalDescriptions = {
   signal:
@@ -18,7 +18,6 @@ export const proposalDescriptions: ProposalDescriptions = {
   setWorkingGroupLeadReward: 'Same effect as updating the reward of the worker.',
   terminateWorkingGroupLead:
     'Same as when terminating a worker in group with given inputs, and removing lead designation.',
-  amendConstitution: 'Proposal to amend constitution. Does not effect platform parameters.',
   cancelWorkingGroupLeadOpening: 'Same as when cancelling an opening for workers in the given group with given inputs.',
   setMembershipPrice: 'Sets new membership price.',
   setCouncilBudgetIncrement:
@@ -41,9 +40,4 @@ export const proposalDescriptions: ProposalDescriptions = {
   decreaseCouncilBudget: 'Reduce the council budget by burning part of the tokens',
   updateTokenPalletTokenConstraints: 'Update CRT pallet constraints.',
   updateArgoBridgeConstraints: 'Update Argo Bridge constraints.',
-  createBlogPost: 'Council blog',
-  editBlogPost: 'Unlocked blog post can be edited.',
-  lockBlogPost: 'When a post is locked it can no longer be modified.',
-  unlockBlogPost: 'Unlocked post can be modified.',
-  veto: 'Veto for a particular, previously issued proposal. Vetoed proposal is automatically discarded.',
 }

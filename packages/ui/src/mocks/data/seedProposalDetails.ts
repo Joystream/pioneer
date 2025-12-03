@@ -84,7 +84,6 @@ const proposalDetailsSeeds: Partial<Record<ProposalType, (data: any, server: any
   setInitialInvitationBalance: seedObjectCopy,
   setInitialInvitationCount: seedObjectCopy,
   setCouncilorReward: seedObjectCopy,
-  veto: seedObjectCopy,
 }
 
 export const seedProposalDetails = (details: { type: string; data?: any }, server: any) => {

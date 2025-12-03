@@ -55,7 +55,7 @@ Past.args = {
       type: 'signal',
       id: '1',
       proposer: getMember('bob'),
-      status: 'vetoed',
+      status: 'cancelled',
       title: 'Computer Directives grey Clothing',
       councilApprovals: 0,
     },
