@@ -113,7 +113,7 @@ describe('UI: Announce Candidacy Modal', () => {
         modal: 'OnBoardingModal',
       }
 
-      expect(showModal).toBeCalledTimes(1)
+      await waitFor(() => expect(showModal).toBeCalledTimes(1))
       expect(showModal).toBeCalledWith({ ...onBoardingModalCall })
     })
 

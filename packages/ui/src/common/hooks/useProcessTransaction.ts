@@ -26,6 +26,19 @@ interface UseSignAndSendTransactionParams {
   setBlockHash?: SetBlockHash
 }
 
+const isCancelledMessage = (error: unknown) => {
+  if (!error) return false
+
+  if (error === 'Cancelled') return true
+
+  const message = typeof error === 'string' ? error : (error as Error)?.message || String(error)
+  if (!message) {
+    return false
+  }
+  const normalized = message.toLowerCase()
+  return normalized.includes('cancelled') || normalized.includes('canceled')
+}
+
 const observeTransaction = (
   transaction: Observable<ISubmittableResult>,
   send: Sender<any>,
@@ -33,7 +46,11 @@ const observeTransaction = (
   nodeRpcEndpoint: string,
   setBlockHash?: SetBlockHash
 ) => {
+  let hasReceivedStatus = false
+  let subscription: { unsubscribe: () => void } | null = null
+
   const statusCallback = (result: ISubmittableResult) => {
+    hasReceivedStatus = true
     const { status, events } = result
 
     if (status.isReady) {
@@ -52,7 +69,10 @@ const observeTransaction = (
       setBlockHash && setBlockHash(hash)
 
       if (hasErrorEvent(events)) {
-        subscription.unsubscribe()
+        if (subscription) {
+          subscription.unsubscribe()
+          subscription = null
+        }
         send({ type: 'ERROR', events })
         error('Transaction error:', transactionInfo)
       } else {
@@ -63,7 +83,10 @@ const observeTransaction = (
 
     if (status.isFinalized) {
       if (hasErrorEvent(events)) {
-        subscription.unsubscribe()
+        if (subscription) {
+          subscription.unsubscribe()
+          subscription = null
+        }
         send({ type: 'ERROR', events })
       } else {
         send({ type: 'PROCESSING', events })
@@ -71,14 +94,20 @@ const observeTransaction = (
     }
   }
 
-  const errorHandler = (error: string | Error) => {
-    subscription.unsubscribe()
-
-    if (error === 'Cancelled') {
-      return send({ type: 'CANCELED', events: [] })
+  const errorHandler = (error: string | Error | unknown) => {
+    if (subscription) {
+      subscription.unsubscribe()
+      subscription = null
     }
 
-    const errorMessage = (error as any).message ?? String(error)
+    const isCancelled = isCancelledMessage(error) || error === 'Cancelled' || (error as Error)?.message === 'Cancelled'
+
+    if (isCancelled) {
+      send({ type: 'CANCELED', events: [] })
+      return
+    }
+
+    const errorMessage = (error as any)?.message ?? String(error)
     const errorData = {
       error: errorMessage.startsWith('1010:')
         ? {
@@ -92,10 +121,28 @@ const observeTransaction = (
     send({ type: 'ERROR', events: [{ event: { method: 'TransactionCanceled', data: [errorData] } }] })
   }
 
-  const subscription = transaction.subscribe({
+  const completeHandler = () => {
+    if (subscription) {
+      subscription.unsubscribe()
+      subscription = null
+    }
+
+    if (!hasReceivedStatus) {
+      setTimeout(() => {
+        if (!hasReceivedStatus) {
+          send({ type: 'CANCELED', events: [] })
+        }
+      }, 200)
+    }
+  }
+
+  subscription = transaction.subscribe({
     next: statusCallback,
     error: errorHandler,
+    complete: completeHandler,
   })
+
+  return subscription
 }
 
 export const useProcessTransaction = ({
@@ -112,7 +159,49 @@ export const useProcessTransaction = ({
 
   useEffect(() => {
     setService(service)
-  }, [])
+
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      const error = event.reason
+      const isCancelled = isCancelledMessage(error)
+
+      if (isCancelled) {
+        event.preventDefault()
+        if (
+          state.matches('signing') ||
+          state.matches('signWithExtension') ||
+          state.matches('prepare') ||
+          state.matches('pending')
+        ) {
+          send({ type: 'CANCELED', events: [] })
+        }
+      }
+    }
+
+    const handleError = (event: ErrorEvent) => {
+      const error = event.error || event.message
+      const isCancelled = isCancelledMessage(error)
+
+      if (isCancelled) {
+        event.preventDefault()
+        if (
+          state.matches('signing') ||
+          state.matches('signWithExtension') ||
+          state.matches('prepare') ||
+          state.matches('pending')
+        ) {
+          send({ type: 'CANCELED', events: [] })
+        }
+      }
+    }
+
+    window.addEventListener('unhandledrejection', handleUnhandledRejection)
+    window.addEventListener('error', handleError)
+
+    return () => {
+      window.removeEventListener('unhandledrejection', handleUnhandledRejection)
+      window.removeEventListener('error', handleError)
+    }
+  }, [service, state, send])
 
   useEffect(() => {
     const hasSigner = allAccounts.find((acc) => acc.address === signer)
@@ -123,16 +212,26 @@ export const useProcessTransaction = ({
 
     const fee = paymentInfo.partialFee.toBn()
 
-    observeTransaction(
-      transaction.signAndSend(signer, { signer: wallet?.signer }),
-      send,
-      fee,
-      endpoints.nodeRpcEndpoint,
-      setBlockHash
-    )
+    try {
+      const txObservable = transaction.signAndSend(signer, { signer: wallet?.signer })
 
-    send('SIGN_EXTERNAL')
-  }, [state.value.toString(), paymentInfo, wallet])
+      observeTransaction(txObservable, send, fee, endpoints.nodeRpcEndpoint, setBlockHash)
+
+      send('SIGN_EXTERNAL')
+    } catch (err) {
+      const isCancelled = isCancelledMessage(err) || err === 'Cancelled' || (err as Error)?.message === 'Cancelled'
+
+      if (isCancelled) {
+        send({ type: 'CANCELED', events: [] })
+      } else {
+        const errorMessage = (err as any)?.message ?? String(err)
+        send({
+          type: 'ERROR',
+          events: [{ event: { method: 'TransactionFailed', data: [{ error: errorMessage }] } }],
+        })
+      }
+    }
+  }, [state.value.toString(), paymentInfo, wallet, state])
 
   return {
     send,

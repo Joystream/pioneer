@@ -5045,6 +5045,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jridgewell/gen-mapping@npm:^0.3.5":
+  version: 0.3.13
+  resolution: "@jridgewell/gen-mapping@npm:0.3.13"
+  dependencies:
+    "@jridgewell/sourcemap-codec": ^1.5.0
+    "@jridgewell/trace-mapping": ^0.3.24
+  checksum: f2105acefc433337145caa3c84bba286de954f61c0bc46279bbd85a9e6a02871089717fa060413cfb6a9d44189fe8313b2d1cabf3a2eb3284d208fd5f75c54ff
+  languageName: node
+  linkType: hard
+
 "@jridgewell/resolve-uri@npm:3.1.0":
   version: 3.1.0
   resolution: "@jridgewell/resolve-uri@npm:3.1.0"
@@ -5052,27 +5062,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jridgewell/resolve-uri@npm:^3.0.3":
-  version: 3.1.1
-  resolution: "@jridgewell/resolve-uri@npm:3.1.1"
-  checksum: f5b441fe7900eab4f9155b3b93f9800a916257f4e8563afbcd3b5a5337b55e52bd8ae6735453b1b745457d9f6cdb16d74cd6220bbdd98cf153239e13f6cbb653
+"@jridgewell/resolve-uri@npm:^3.0.3, @jridgewell/resolve-uri@npm:^3.1.0":
+  version: 3.1.2
+  resolution: "@jridgewell/resolve-uri@npm:3.1.2"
+  checksum: 83b85f72c59d1c080b4cbec0fef84528963a1b5db34e4370fa4bd1e3ff64a0d80e0cee7369d11d73c704e0286fb2865b530acac7a871088fbe92b5edf1000870
   languageName: node
   linkType: hard
 
 "@jridgewell/set-array@npm:^1.0.1":
-  version: 1.1.2
-  resolution: "@jridgewell/set-array@npm:1.1.2"
-  checksum: 69a84d5980385f396ff60a175f7177af0b8da4ddb81824cb7016a9ef914eee9806c72b6b65942003c63f7983d4f39a5c6c27185bbca88eb4690b62075602e28e
+  version: 1.2.1
+  resolution: "@jridgewell/set-array@npm:1.2.1"
+  checksum: 832e513a85a588f8ed4f27d1279420d8547743cc37fcad5a5a76fc74bb895b013dfe614d0eed9cb860048e6546b798f8f2652020b4b2ba0561b05caa8c654b10
   languageName: node
   linkType: hard
 
 "@jridgewell/source-map@npm:^0.3.3":
-  version: 0.3.3
-  resolution: "@jridgewell/source-map@npm:0.3.3"
+  version: 0.3.11
+  resolution: "@jridgewell/source-map@npm:0.3.11"
   dependencies:
-    "@jridgewell/gen-mapping": ^0.3.0
-    "@jridgewell/trace-mapping": ^0.3.9
-  checksum: ae1302146339667da5cd6541260ecbef46ae06819a60f88da8f58b3e64682f787c09359933d050dea5d2173ea7fa40f40dd4d4e7a8d325c5892cccd99aaf8959
+    "@jridgewell/gen-mapping": ^0.3.5
+    "@jridgewell/trace-mapping": ^0.3.25
+  checksum: c8a0011cc67e701f270fa042e32b312f382c413bcc70ca9c03684687cbf5b64d5eed87d4afa36dddaabe60ab3da6db4935f878febd9cfc7f82724ea1a114d344
   languageName: node
   linkType: hard
 
@@ -5087,6 +5097,13 @@ __metadata:
   version: 1.4.15
   resolution: "@jridgewell/sourcemap-codec@npm:1.4.15"
   checksum: b881c7e503db3fc7f3c1f35a1dd2655a188cc51a3612d76efc8a6eb74728bef5606e6758ee77423e564092b4a518aba569bbb21c9bac5ab7a35b0c6ae7e344c8
+  languageName: node
+  linkType: hard
+
+"@jridgewell/sourcemap-codec@npm:^1.4.14, @jridgewell/sourcemap-codec@npm:^1.5.0":
+  version: 1.5.5
+  resolution: "@jridgewell/sourcemap-codec@npm:1.5.5"
+  checksum: c2e36e67971f719a8a3a85ef5a5f580622437cc723c35d03ebd0c9c0b06418700ef006f58af742791f71f6a4fc68fcfaf1f6a74ec2f9a3332860e9373459dae7
   languageName: node
   linkType: hard
 
@@ -5107,6 +5124,16 @@ __metadata:
     "@jridgewell/resolve-uri": 3.1.0
     "@jridgewell/sourcemap-codec": 1.4.14
   checksum: 0572669f855260808c16fe8f78f5f1b4356463b11d3f2c7c0b5580c8ba1cbf4ae53efe9f627595830856e57dbac2325ac17eb0c3dd0ec42102e6f227cc289c02
+  languageName: node
+  linkType: hard
+
+"@jridgewell/trace-mapping@npm:^0.3.24, @jridgewell/trace-mapping@npm:^0.3.25":
+  version: 0.3.31
+  resolution: "@jridgewell/trace-mapping@npm:0.3.31"
+  dependencies:
+    "@jridgewell/resolve-uri": ^3.1.0
+    "@jridgewell/sourcemap-codec": ^1.4.14
+  checksum: af8fda2431348ad507fbddf8e25f5d08c79ecc94594061ce402cf41bc5aba1a7b3e59bf0fd70a619b35f33983a3f488ceeba8faf56bff784f98bb5394a8b7d47
   languageName: node
   linkType: hard
 
@@ -13838,11 +13865,11 @@ __metadata:
   linkType: hard
 
 "chart.js@npm:^4.4.1":
-  version: 4.4.1
-  resolution: "chart.js@npm:4.4.1"
+  version: 4.5.1
+  resolution: "chart.js@npm:4.5.1"
   dependencies:
     "@kurkle/color": ^0.3.0
-  checksum: 8c108f137824ea0e3d79914708b409298c12ed7d16da99a40ca3cab51466ef7b0068ad82ac0addeb288b938fe0621d3e5a6a913b60e72a729aa42aa96705fcad
+  checksum: 34b35b373642994b2adac197e91363625930530e29fc1baa6dbb411b5e1295f9f6572922003a0224a21a3019aec916567c1ed00c33b1373081f189fc188e5a7b
   languageName: node
   linkType: hard
 

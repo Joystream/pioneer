@@ -3,11 +3,11 @@ import styled from 'styled-components'
 
 import { ModalBlock, ScrollBlock, TemplateBlock } from '../storybookParts/previewStyles'
 
-import { SimpleSelect, FilterSelect, MultiSelect } from '.'
+import { SimpleSelect, FilterSelect, FilterTextSelect, MultiSelect } from '.'
 
 export default {
   title: 'Common/Forms/Select',
-  subcomponents: { SimpleSelect, FilterSelect, MultiSelect },
+  subcomponents: { SimpleSelect, FilterSelect, FilterTextSelect, MultiSelect },
   argTypes: {
     onApply: { action: 'Apply' },
   },
@@ -58,6 +58,15 @@ export const Default = {
             </Row>
             <Row>
               <FilterSelect title="Filter Select" options={options} value={value} onChange={setValue} />
+            </Row>
+            <Row>
+              <FilterTextSelect
+                title="Filter Text Select (42px height)"
+                options={['Stash', 'Controller', 'Account']}
+                value={value}
+                onChange={setValue}
+                selectSize="m"
+              />
             </Row>
             <Row>
               <SimpleSelect

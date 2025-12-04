@@ -38,6 +38,7 @@ export interface TooltipPopupProps extends TooltipContentProp {
   forBig?: boolean
   hideOnComponentLeave?: boolean
   boundaryClassName?: string
+  placement?: 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'
 }
 
 export interface DarkTooltipInnerItemProps {
@@ -47,7 +48,6 @@ export interface DarkTooltipInnerItemProps {
 export const Tooltip = ({
   absolute,
   maxWidth,
-  placement,
   children,
   tooltipText,
   tooltipOpen = false,
@@ -60,6 +60,7 @@ export const Tooltip = ({
   offset,
   hideOnComponentLeave,
   boundaryClassName,
+  placement = 'bottom-start',
 }: TooltipProps) => {
   const [isTooltipActive, setTooltipActive] = useState(tooltipOpen)
   const [referenceElementRef, setReferenceElementRef] = useState<HTMLElement | null>(null)
@@ -366,7 +367,7 @@ export const TooltipComponent = styled.i<{ maxWidth?: boolean }>`
   }
 `
 
-export const TooltipContainer = styled.div<{ absolute?: boolean; maxWidth?: boolean }>`
+export const TooltipContainer = styled.span<{ absolute?: boolean; maxWidth?: boolean }>`
   display: inline-flex;
   position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
   right: ${({ absolute }) => (absolute ? '-24px' : 'auto')};

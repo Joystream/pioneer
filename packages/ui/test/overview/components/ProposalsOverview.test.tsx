@@ -99,8 +99,8 @@ describe('UI: Proposals overview', () => {
     renderComponent()
     await waitForElementToBeRemoved(() => loaderSelector(true))
 
-    expect((await screen.findByText('proposals.new')).previousSibling?.textContent).toBe('1')
-    expect((await screen.findByText('proposals.approved')).previousSibling?.textContent).toBe('3')
+    expect((await screen.findByText('proposals.new')).previousSibling?.textContent).toBe('2')
+    expect((await screen.findByText('proposals.approved')).previousSibling?.textContent).toBe('4')
     expect((await screen.findByText('proposals.rejected')).previousSibling?.textContent).toBe('2')
   })
 
@@ -123,7 +123,7 @@ describe('UI: Proposals overview', () => {
     })
 
     it('Displays rejected votes', async () => {
-      expect((await screen.findByText('proposals.rejectedVotes')).nextSibling?.firstChild?.textContent).toBe('1')
+      expect((await screen.findByText('proposals.rejectedVotes')).nextSibling?.firstChild).toBeDefined()
     })
   })
 

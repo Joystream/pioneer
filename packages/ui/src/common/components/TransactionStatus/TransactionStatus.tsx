@@ -7,7 +7,6 @@ import { TransactionStateValue } from '@/common/model/machines'
 
 import { TransactionStatusNotification } from './TransactionStatusNotification'
 
-// Time after TransactionStatus with Success disappears
 const HIDE_STATUS_TIMEOUT = 5000
 
 export const TransactionStatus = () => {
@@ -22,9 +21,16 @@ export const TransactionStatus = () => {
     if (status === 'success') {
       const timeout = setTimeout(() => setVisible(false), HIDE_STATUS_TIMEOUT)
       return () => clearTimeout(timeout)
-    } else {
-      setVisible(true)
     }
+
+    if (status === 'canceled') {
+      setVisible(true)
+      // Auto-hide canceled notification after a timeout
+      const timeout = setTimeout(() => setVisible(false), HIDE_STATUS_TIMEOUT)
+      return () => clearTimeout(timeout)
+    }
+
+    setVisible(true)
   }, [status])
 
   if (isVisible && status) {
@@ -51,6 +57,7 @@ const TransactionStatusContent = ({ status, onClose, events }: Props) => {
         title="Waiting for the extension"
         message="Please, sign the transaction using external signer app."
         state="loading"
+        onClose={onClose}
       />
     )
   }

@@ -29,9 +29,13 @@ export function ProfileComponent() {
         </BalanceTitle>
         <TotalBalance>
           <TokenDetail>
-            {isBalanceHidden ? <TextInlineMedium>*****</TextInlineMedium> : <TotalTokenValue value={total} />}
+            {isBalanceHidden ? (
+              <TextInlineMedium>*****</TextInlineMedium>
+            ) : (
+              <TotalTokenValue value={total} placement="top-start" />
+            )}
             <StyledTooltip
-              tooltipLinkText="Learn how to earn JOY’s"
+              tooltipLinkText="Learn how to earn JOY's"
               tooltipLinkURL="https://www.joystream.org/token#earn"
               placement="top-start"
             >

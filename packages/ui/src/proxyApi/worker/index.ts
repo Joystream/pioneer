@@ -38,6 +38,7 @@ messages.subscribe(({ data }) => {
           consts: api.consts,
           genesisHash: api.genesisHash,
           runtimeVersion: api.runtimeVersion,
+          runtimeMetadata: api.runtimeMetadata.toHex() as `0x${string}`,
         }
         postMessage({ messageType: 'init', payload: initPayload })
         postMessage({ messageType: 'isConnected', payload: true })

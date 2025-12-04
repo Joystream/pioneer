@@ -27,7 +27,7 @@ export const ThreadCard = ({ thread, className, watchlistButton }: ThreadCardPro
     <Box
       to={generatePath(ForumRoutes.thread, { id: thread.id })}
       className={className}
-      isArchived={thread.status.__typename === 'ThreadStatusRemoved'}
+      $isArchived={thread.status.__typename === 'ThreadStatusRemoved'}
     >
       <div>
         <MemberInfo size="s" hideGroup onlyTop member={thread.author} />
@@ -70,8 +70,8 @@ const ThreadCardFooter = styled.div`
   }
 `
 
-const Box = styled(GhostRouterLink)<{ isArchived: boolean }>`
-  ${({ isArchived }) => (isArchived ? `background-color: ${Colors.Black[50]}` : '')};
+const Box = styled(GhostRouterLink)<{ $isArchived: boolean }>`
+  ${({ $isArchived }) => ($isArchived ? `background-color: ${Colors.Black[50]}` : '')};
   display: grid;
   row-gap: 16px;
   border: 1px solid ${Colors.Black[100]};

@@ -1,6 +1,7 @@
 fragment ProposalCreatedEventFields on ProposalCreatedEvent {
   id
   createdAt
+  inBlock
   proposal {
     id
     title
@@ -14,6 +15,7 @@ fragment ProposalCreatedEventFields on ProposalCreatedEvent {
 fragment ProposalCancelledEventFields on ProposalCancelledEvent {
   id
   createdAt
+  inBlock
   proposal {
     id
     title
@@ -27,6 +29,7 @@ fragment ProposalCancelledEventFields on ProposalCancelledEvent {
 fragment ProposalStatusUpdatedEventFields on ProposalStatusUpdatedEvent {
   id
   createdAt
+  inBlock
   proposal {
     id
     title
@@ -39,6 +42,7 @@ fragment ProposalStatusUpdatedEventFields on ProposalStatusUpdatedEvent {
 fragment ProposalDecisionMadeEventFields on ProposalDecisionMadeEvent {
   id
   createdAt
+  inBlock
   proposal {
     id
     title
@@ -48,6 +52,7 @@ fragment ProposalDecisionMadeEventFields on ProposalDecisionMadeEvent {
 fragment ProposalDiscussionModeChangedEventFields on ProposalDiscussionThreadModeChangedEvent {
   id
   createdAt
+  inBlock
   thread {
     proposal {
       id
@@ -62,6 +67,7 @@ fragment ProposalDiscussionModeChangedEventFields on ProposalDiscussionThreadMod
 fragment ProposalExecutedEventFields on ProposalExecutedEvent {
   id
   createdAt
+  inBlock
   proposal {
     id
     title
@@ -74,6 +80,7 @@ fragment ProposalExecutedEventFields on ProposalExecutedEvent {
 fragment ProposalVotedEventFields on ProposalVotedEvent {
   id
   createdAt
+  inBlock
   proposal {
     id
     title
@@ -87,6 +94,7 @@ fragment ProposalVotedEventFields on ProposalVotedEvent {
 fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreatedEvent {
   id
   createdAt
+  inBlock
   post {
     id
     author {
@@ -105,6 +113,7 @@ fragment ProposalDiscussionPostCreatedEventFields on ProposalDiscussionPostCreat
 fragment ProposalDiscussionPostUpdatedEventFields on ProposalDiscussionPostUpdatedEvent {
   id
   createdAt
+  inBlock
   post {
     id
     author {
@@ -123,6 +132,7 @@ fragment ProposalDiscussionPostUpdatedEventFields on ProposalDiscussionPostUpdat
 fragment ProposalDiscussionPostDeletedEventFields on ProposalDiscussionPostDeletedEvent {
   id
   createdAt
+  inBlock
   post {
     id
     author {
@@ -139,52 +149,34 @@ fragment ProposalDiscussionPostDeletedEventFields on ProposalDiscussionPostDelet
 }
 
 query GetProposalsEvents {
-  events(
-    where: {
-      type_in: [
-        ProposalCreatedEvent
-        ProposalStatusUpdatedEvent
-        ProposalDecisionMadeEvent
-        ProposalCancelledEvent
-        ProposalDiscussionThreadModeChangedEvent
-        ProposalExecutedEvent
-        ProposalVotedEvent
-        ProposalDiscussionPostCreatedEvent
-        ProposalDiscussionPostUpdatedEvent
-        ProposalDiscussionPostDeletedEvent
-      ]
-    }
-    orderBy: [createdAt_DESC]
-  ) {
-    ... on ProposalCreatedEvent {
-      ...ProposalCreatedEventFields
-    }
-    ... on ProposalCancelledEvent {
-      ...ProposalCancelledEventFields
-    }
-    ... on ProposalStatusUpdatedEvent {
-      ...ProposalStatusUpdatedEventFields
-    }
-    ... on ProposalDecisionMadeEvent {
-      ...ProposalDecisionMadeEventFields
-    }
-    ... on ProposalDiscussionThreadModeChangedEvent {
-      ...ProposalDiscussionModeChangedEventFields
-    }
-    ... on ProposalExecutedEvent {
-      ...ProposalExecutedEventFields
-    }
-    ... on ProposalVotedEvent {
-      ...ProposalVotedEventFields
-    }
-    ... on ProposalDiscussionPostCreatedEvent {
-      ...ProposalDiscussionPostCreatedEventFields
-    }
-    ... on ProposalDiscussionPostUpdatedEvent {
-      ...ProposalDiscussionPostUpdatedEventFields
-    }
-    ... on ProposalDiscussionPostDeletedEvent {
-      ...ProposalDiscussionPostDeletedEventFields
-    }
+  proposalCreatedEvents(orderBy: inBlock_DESC) {
+    ...ProposalCreatedEventFields
+  }
+  proposalCancelledEvents(orderBy: inBlock_DESC) {
+    ...ProposalCancelledEventFields
+  }
+  proposalStatusUpdatedEvents(orderBy: inBlock_DESC) {
+    ...ProposalStatusUpdatedEventFields
+  }
+  proposalDecisionMadeEvents(orderBy: inBlock_DESC) {
+    ...ProposalDecisionMadeEventFields
+  }
+  proposalDiscussionThreadModeChangedEvents(orderBy: inBlock_DESC) {
+    ...ProposalDiscussionModeChangedEventFields
+  }
+  proposalExecutedEvents(orderBy: inBlock_DESC) {
+    ...ProposalExecutedEventFields
+  }
+  proposalVotedEvents(orderBy: inBlock_DESC) {
+    ...ProposalVotedEventFields
+  }
+  proposalDiscussionPostCreatedEvents(orderBy: inBlock_DESC) {
+    ...ProposalDiscussionPostCreatedEventFields
+  }
+  proposalDiscussionPostUpdatedEvents(orderBy: inBlock_DESC) {
+    ...ProposalDiscussionPostUpdatedEventFields
+  }
+  proposalDiscussionPostDeletedEvents(orderBy: inBlock_DESC) {
+    ...ProposalDiscussionPostDeletedEventFields
   }
 }

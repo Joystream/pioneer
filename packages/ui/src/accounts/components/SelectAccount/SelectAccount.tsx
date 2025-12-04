@@ -25,6 +25,7 @@ interface SelectAccountProps extends Pick<SelectProps<AccountOption>, 'id' | 'se
   filter?: (option: AccountOption) => boolean
   name?: string
   variant?: 's' | 'm' | 'l'
+  placeholder?: string
 }
 
 interface SelectStakingAccountProps extends SelectAccountProps {
@@ -39,7 +40,18 @@ interface BaseSelectAccountProps extends SelectAccountProps {
 }
 
 const BaseSelectAccount = React.memo(
-  ({ id, onChange, accounts, filter, selected, disabled, onBlur, isForStaking, variant }: BaseSelectAccountProps) => {
+  ({
+    id,
+    onChange,
+    accounts,
+    filter,
+    selected,
+    disabled,
+    onBlur,
+    isForStaking,
+    variant,
+    placeholder,
+  }: BaseSelectAccountProps) => {
     const options = !filter
       ? accounts
       : accounts.filter(
@@ -73,7 +85,7 @@ const BaseSelectAccount = React.memo(
         onBlur={onBlur}
         disabled={disabled}
         renderSelected={renderSelected(isForStaking, variant)}
-        placeholder="Select account or paste account address"
+        placeholder={placeholder || 'Select account or paste account address'}
         renderList={(onOptionClick) => (
           <OptionListAccount
             className="select-account-boundary"

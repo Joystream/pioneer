@@ -224,7 +224,14 @@ export type ForumThreadFieldsFragment = {
   categoryId: string
   title: string
   visiblePostsCount: number
-  category: { __typename: 'ForumCategory'; title: string }
+  category: {
+    __typename: 'ForumCategory'
+    title: string
+    status:
+      | { __typename: 'CategoryStatusActive' }
+      | { __typename: 'CategoryStatusArchived' }
+      | { __typename: 'CategoryStatusRemoved' }
+  }
   initialPost?: { __typename: 'ForumPost'; text: string } | null
   author: {
     __typename: 'Membership'
@@ -592,7 +599,14 @@ export type ForumThreadDetailedFieldsFragment = {
   categoryId: string
   title: string
   visiblePostsCount: number
-  category: { __typename: 'ForumCategory'; title: string }
+  category: {
+    __typename: 'ForumCategory'
+    title: string
+    status:
+      | { __typename: 'CategoryStatusActive' }
+      | { __typename: 'CategoryStatusArchived' }
+      | { __typename: 'CategoryStatusRemoved' }
+  }
   initialPost?: { __typename: 'ForumPost'; text: string } | null
   author: {
     __typename: 'Membership'
@@ -989,7 +1003,14 @@ export type GetForumThreadsQuery = {
     categoryId: string
     title: string
     visiblePostsCount: number
-    category: { __typename: 'ForumCategory'; title: string }
+    category: {
+      __typename: 'ForumCategory'
+      title: string
+      status:
+        | { __typename: 'CategoryStatusActive' }
+        | { __typename: 'CategoryStatusArchived' }
+        | { __typename: 'CategoryStatusRemoved' }
+    }
     initialPost?: { __typename: 'ForumPost'; text: string } | null
     author: {
       __typename: 'Membership'
@@ -1072,7 +1093,14 @@ export type GetForumThreadQuery = {
     categoryId: string
     title: string
     visiblePostsCount: number
-    category: { __typename: 'ForumCategory'; title: string }
+    category: {
+      __typename: 'ForumCategory'
+      title: string
+      status:
+        | { __typename: 'CategoryStatusActive' }
+        | { __typename: 'CategoryStatusArchived' }
+        | { __typename: 'CategoryStatusRemoved' }
+    }
     initialPost?: { __typename: 'ForumPost'; text: string } | null
     author: {
       __typename: 'Membership'
@@ -1405,6 +1433,8 @@ export type SearchForumPostQuery = {
     __typename: 'ForumPost'
     id: string
     text: string
+    createdAt: any
+    author: { __typename: 'Membership'; id: string; handle: string }
     thread: { __typename: 'ForumThread'; id: string; title: string; categoryId: string }
   }>
 }
@@ -1531,6 +1561,141 @@ export type GetForumThreadMentionQuery = {
     }
     initialPost?: { __typename: 'ForumPost'; text: string } | null
   } | null
+}
+
+export type ForumPostWithThreadFieldsFragment = {
+  __typename: 'ForumPost'
+  id: string
+  createdAt: any
+  updatedAt?: any | null
+  text: string
+  threadId: string
+  author: {
+    __typename: 'Membership'
+    id: string
+    rootAccount: string
+    controllerAccount: string
+    boundAccounts: Array<string>
+    handle: string
+    isVerified: boolean
+    isFoundingMember: boolean
+    isCouncilMember: boolean
+    inviteCount: number
+    createdAt: any
+    metadata: {
+      __typename: 'MemberMetadata'
+      name?: string | null
+      about?: string | null
+      isVerifiedValidator?: boolean | null
+      avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+    }
+    roles: Array<{
+      __typename: 'Worker'
+      id: string
+      createdAt: any
+      isLead: boolean
+      isActive: boolean
+      group: { __typename: 'WorkingGroup'; name: string }
+    }>
+    stakingaccountaddedeventmember?: Array<{
+      __typename: 'StakingAccountAddedEvent'
+      createdAt: any
+      inBlock: number
+      network: Types.Network
+      account: string
+    }> | null
+  }
+  thread: {
+    __typename: 'ForumThread'
+    id: string
+    title: string
+    categoryId: string
+    status:
+      | { __typename: 'ThreadStatusActive' }
+      | { __typename: 'ThreadStatusLocked' }
+      | { __typename: 'ThreadStatusModerated' }
+      | { __typename: 'ThreadStatusRemoved' }
+    category: {
+      __typename: 'ForumCategory'
+      title: string
+      status:
+        | { __typename: 'CategoryStatusActive' }
+        | { __typename: 'CategoryStatusArchived' }
+        | { __typename: 'CategoryStatusRemoved' }
+    }
+  }
+}
+
+export type GetLatestForumPostsQueryVariables = Types.Exact<{
+  where: Types.ForumPostWhereInput
+  orderBy?: Types.InputMaybe<Array<Types.ForumPostOrderByInput> | Types.ForumPostOrderByInput>
+  limit?: Types.InputMaybe<Types.Scalars['Int']>
+}>
+
+export type GetLatestForumPostsQuery = {
+  __typename: 'Query'
+  forumPosts: Array<{
+    __typename: 'ForumPost'
+    id: string
+    createdAt: any
+    updatedAt?: any | null
+    text: string
+    threadId: string
+    author: {
+      __typename: 'Membership'
+      id: string
+      rootAccount: string
+      controllerAccount: string
+      boundAccounts: Array<string>
+      handle: string
+      isVerified: boolean
+      isFoundingMember: boolean
+      isCouncilMember: boolean
+      inviteCount: number
+      createdAt: any
+      metadata: {
+        __typename: 'MemberMetadata'
+        name?: string | null
+        about?: string | null
+        isVerifiedValidator?: boolean | null
+        avatar?: { __typename: 'AvatarObject' } | { __typename: 'AvatarUri'; avatarUri: string } | null
+      }
+      roles: Array<{
+        __typename: 'Worker'
+        id: string
+        createdAt: any
+        isLead: boolean
+        isActive: boolean
+        group: { __typename: 'WorkingGroup'; name: string }
+      }>
+      stakingaccountaddedeventmember?: Array<{
+        __typename: 'StakingAccountAddedEvent'
+        createdAt: any
+        inBlock: number
+        network: Types.Network
+        account: string
+      }> | null
+    }
+    thread: {
+      __typename: 'ForumThread'
+      id: string
+      title: string
+      categoryId: string
+      status:
+        | { __typename: 'ThreadStatusActive' }
+        | { __typename: 'ThreadStatusLocked' }
+        | { __typename: 'ThreadStatusModerated' }
+        | { __typename: 'ThreadStatusRemoved' }
+      category: {
+        __typename: 'ForumCategory'
+        title: string
+        status:
+          | { __typename: 'CategoryStatusActive' }
+          | { __typename: 'CategoryStatusArchived' }
+          | { __typename: 'CategoryStatusRemoved' }
+      }
+    }
+  }>
 }
 
 export const ForumBaseCategoryFieldsFragmentDoc = gql`
@@ -1701,6 +1866,9 @@ export const ForumThreadFieldsFragmentDoc = gql`
     categoryId
     category {
       title
+      status {
+        __typename
+      }
     }
     title
     initialPost {
@@ -1765,6 +1933,33 @@ export const ForumPostMentionFieldsFragmentDoc = gql`
     createdAt
     author {
       ...MemberFields
+    }
+  }
+  ${MemberFieldsFragmentDoc}
+`
+export const ForumPostWithThreadFieldsFragmentDoc = gql`
+  fragment ForumPostWithThreadFields on ForumPost {
+    id
+    createdAt
+    updatedAt
+    author {
+      ...MemberFields
+    }
+    text
+    threadId
+    thread {
+      id
+      title
+      categoryId
+      status {
+        __typename
+      }
+      category {
+        title
+        status {
+          __typename
+        }
+      }
     }
   }
   ${MemberFieldsFragmentDoc}
@@ -2474,6 +2669,11 @@ export const SearchForumPostDocument = gql`
     forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
       id
       text
+      createdAt
+      author {
+        id
+        handle
+      }
       thread {
         id
         title
@@ -2717,4 +2917,55 @@ export type GetForumThreadMentionLazyQueryHookResult = ReturnType<typeof useGetF
 export type GetForumThreadMentionQueryResult = Apollo.QueryResult<
   GetForumThreadMentionQuery,
   GetForumThreadMentionQueryVariables
+>
+export const GetLatestForumPostsDocument = gql`
+  query GetLatestForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $limit: Int) {
+    forumPosts(where: $where, orderBy: $orderBy, limit: $limit) {
+      ...ForumPostWithThreadFields
+    }
+  }
+  ${ForumPostWithThreadFieldsFragmentDoc}
+`
+
+/**
+ * __useGetLatestForumPostsQuery__
+ *
+ * To run a query within a React component, call `useGetLatestForumPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLatestForumPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLatestForumPostsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetLatestForumPostsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetLatestForumPostsQuery, GetLatestForumPostsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetLatestForumPostsQuery, GetLatestForumPostsQueryVariables>(
+    GetLatestForumPostsDocument,
+    options
+  )
+}
+export function useGetLatestForumPostsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetLatestForumPostsQuery, GetLatestForumPostsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetLatestForumPostsQuery, GetLatestForumPostsQueryVariables>(
+    GetLatestForumPostsDocument,
+    options
+  )
+}
+export type GetLatestForumPostsQueryHookResult = ReturnType<typeof useGetLatestForumPostsQuery>
+export type GetLatestForumPostsLazyQueryHookResult = ReturnType<typeof useGetLatestForumPostsLazyQuery>
+export type GetLatestForumPostsQueryResult = Apollo.QueryResult<
+  GetLatestForumPostsQuery,
+  GetLatestForumPostsQueryVariables
 >

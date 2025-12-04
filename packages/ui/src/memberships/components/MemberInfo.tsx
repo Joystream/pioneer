@@ -14,6 +14,7 @@ import { Colors, Fonts } from '@/common/constants'
 import { isString } from '@/common/utils'
 import { useShowMemberModal } from '@/memberships/hooks/useShowMemberModal'
 
+import { useMember } from '../hooks/useMembership'
 import { Member } from '../types'
 
 import { Avatar } from './Avatar'
@@ -62,6 +63,8 @@ export const MemberInfo = React.memo(
     const showMemberModal = useShowMemberModal(member.id)
     const showRoles = !onlyTop && !hideGroup && !showIdOrText
     const showId = !onlyTop && !!showIdOrText
+
+    const { member: memberDetails } = useMember(member.id)
 
     return (
       <MemberInfoWrap
@@ -121,7 +124,15 @@ export const MemberInfo = React.memo(
             </IdHeader>
           )}
         </MemberHeaderWrapper>
-        {showRoles && <MemberRoles roles={member.roles} size={roleSize} max={maxRoles} />}
+        {showRoles && memberDetails && (
+          <MemberRoles
+            isOnDark={isOnDark}
+            roles={member.roles}
+            memberDetails={memberDetails}
+            size={roleSize}
+            max={maxRoles}
+          />
+        )}
         {showId && <MemberId>{isString(showIdOrText) ? showIdOrText : `Member ID: ${member.id}`}</MemberId>}
       </MemberInfoWrap>
     )

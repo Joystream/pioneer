@@ -21,7 +21,7 @@ export const Members = () => {
   }, [id])
 
   const [filter, setFilter] = useState(MemberListEmptyFilter)
-  const { order, getSortProps } = useSort<MembershipOrderByInput>('createdAt')
+  const { order, getSortProps } = useSort<MembershipOrderByInput>('totalChannelsCreated')
 
   const { members, isLoading, totalCount, pagination } = useMembers({ order, filter })
 

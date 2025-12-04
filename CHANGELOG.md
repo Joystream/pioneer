@@ -7,6 +7,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.9.1] - 2025-12-01
+### Added
+- Social links + validation
+- Validator nomination, stake management, rewards payout
+- WGL: Vested / Discretionary spending
+- Forum: Group search results
+- Proposal whitelist limit
+
+### Fixed
+- Use root account to change controller
+- Remove unused proposal types
+- Fix proposal activities
+- Fix Tooltip: div -> span
+- Fix buttons on My Memberships
+- Fix past council Total Spent
+- Fix OpeningFormPreview
+- Sort WG Openings
+- Past Votes: Show one vote per stake
+- Members: Fix role filter
+- Sort members by 'totalChannelsCreated'
+- Forum: Don't Truncate Thread Title
+- Forum: Remove post confirmation modal
+- Hide archived Latest Threads / Posts
+- Hide input field for archived threads
+- Hide `Coming Soon`
+- Update rivalrous lock handbook link
+
+### Contributors
+- [Create](/goldstarhigher)
+- [L1 Media](/traumschule)
+- [Glisten](/glisten-star)
+
+## [3.9.0] - 2025-11-01
+### Added
+- Latest Posts
+- Mythreads counter
+- My role tooltip
+- Add proposal tooltip
+- Move forum action buttions
+
+### Fixed
+- Update JSG mainnet RPC
+- Restore votes fix
+- Balance tooltip orientation
+- Show 50 Validators per page
+- Icon attributes
+- External links validation
+
+### Contributors
+- [Create](/goldstarhigher)
+- [L1 Media](/traumschule)
+- [Lezek Wiesner](/lezek123)
+- [Mkbeefcake](/Mkbeefcake)
+- [Oleksander Korn](/oleksanderkorn)
+- [Theophile Sandoz](/thesan)
+
 ## [3.8.0] - 2025-04-15
 
 ### Added

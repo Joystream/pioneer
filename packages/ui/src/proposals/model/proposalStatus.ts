@@ -3,7 +3,6 @@ import { ProposalStatus } from '../types'
 
 export const proposalActiveStatuses: ProposalStatus[] = ['deciding', 'gracing', 'dormant']
 export const proposalPastStatuses: ProposalStatus[] = [
-  'vetoed',
   'executed',
   'executionFailed',
   'slashed',

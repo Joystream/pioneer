@@ -37,7 +37,6 @@ const extendsProposalPallet = (
 const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['proposalsCodex']>([
   ['updateChannelPayouts', 'updateChannelPayoutsProposalParameters'],
   ['updatePalletFrozenStatus', 'setPalletFozenStatusProposalParameters'],
-  ['amendConstitution', 'amendConstitutionProposalParameters'],
   ['cancelWorkingGroupLeadOpening', 'cancelWorkingGroupLeadOpeningProposalParameters'],
   ['createWorkingGroupLeadOpening', 'createWorkingGroupLeadOpeningProposalParameters'],
   ['decreaseWorkingGroupLeadStake', 'decreaseWorkingGroupLeadStakeProposalParameters'],
@@ -57,7 +56,6 @@ const proposalTypeToConstantKey = new Map<ProposalType, keyof Api['consts']['pro
   ['slashWorkingGroupLead', 'slashWorkingGroupLeadProposalParameters'],
   ['terminateWorkingGroupLead', 'terminateWorkingGroupLeadProposalParameters'],
   ['updateWorkingGroupBudget', 'updateWorkingGroupBudgetProposalParameters'],
-  ['veto', 'vetoProposalProposalParameters'],
   ['setEraPayoutDampingFactor', 'setEraPayoutDampingFactorProposalParameters'],
   ['decreaseCouncilBudget', 'decreaseCouncilBudgetProposalParameters'],
   ['updateTokenPalletTokenConstraints', 'updateTokenPalletTokenConstraints'],

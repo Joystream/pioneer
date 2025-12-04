@@ -127,7 +127,10 @@ export const MyRole = () => {
               {isActive && isOwn && (
                 <TransactionButton style="ghost" size="medium" onClick={showLeaveRoleModal}>
                   Leave this position
-                  <Tooltip tooltipText="Lorem ipsum" tooltipTitle="Lorem ipsum">
+                  <Tooltip
+                    tooltipText="Click on this button and continue the flow to leave the position."
+                    tooltipTitle="Leave this position"
+                  >
                     <TooltipDefault />
                   </Tooltip>
                 </TransactionButton>

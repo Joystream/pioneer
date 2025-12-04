@@ -63,6 +63,7 @@ interface SimpleSelectProps<Option, Value = Option> extends DefaultSelectProps<O
   onApply?: () => void
   onClear?: () => void
   onSearch?: (search: string) => void
+  placeholder?: string
 }
 
 export const SimpleSelect = <Option extends any, Value extends any = Option>({
@@ -79,6 +80,7 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
   onApply,
   onClear,
   onSearch,
+  placeholder = 'Search...',
 }: SimpleSelectProps<Option, Value>) => {
   const [focused, focus] = useReducer(selectFocusReducer as FocusReducer<Option>, valueToOption(value))
 
@@ -173,7 +175,7 @@ export const SimpleSelect = <Option extends any, Value extends any = Option>({
     <SelectContainer selectSize={selectSize}>
       {title && <FilterLabel>{title}</FilterLabel>}
       <Select
-        placeholder=""
+        placeholder={placeholder}
         selected={value}
         onNavigate={navigate}
         onChange={change}

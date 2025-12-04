@@ -98,6 +98,9 @@ fragment ForumThreadFields on ForumThread {
   categoryId
   category {
     title
+    status {
+      __typename
+    }
   }
   title
   initialPost {
@@ -314,6 +317,11 @@ query SearchForumPost($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByI
   forumPosts(where: $where, orderBy: $orderBy, offset: $offset, limit: $limit) {
     id
     text
+    createdAt
+    author {
+      id
+      handle
+    }
     thread {
       id
       title
@@ -348,5 +356,36 @@ query GetForumPostMention($id: ID!) {
 query GetForumThreadMention($id: ID!) {
   forumThread: forumThreadByUniqueInput(where: { id: $id }) {
     ...ForumThreadMentionFields
+  }
+}
+
+fragment ForumPostWithThreadFields on ForumPost {
+  id
+  createdAt
+  updatedAt
+  author {
+    ...MemberFields
+  }
+  text
+  threadId
+  thread {
+    id
+    title
+    categoryId
+    status {
+      __typename
+    }
+    category {
+      title
+      status {
+        __typename
+      }
+    }
+  }
+}
+
+query GetLatestForumPosts($where: ForumPostWhereInput!, $orderBy: [ForumPostOrderByInput!], $limit: Int) {
+  forumPosts(where: $where, orderBy: $orderBy, limit: $limit) {
+    ...ForumPostWithThreadFields
   }
 }

@@ -49,3 +49,16 @@ export const useSort = <Order extends BaseSortKey>(defaultKey: OrderKey<Order>):
     }),
   }
 }
+
+export function sortBy<T, Order extends BaseSortKey>(
+  items: T[],
+  order: SortOrder<Order>,
+  compare: (first: T, second: T, key: OrderKey<Order>) => number
+): T[] {
+  const sorted = [...items]
+  sorted.sort((a, b) => {
+    const comparison = compare(a, b, order.orderKey)
+    return order.isDescending ? -comparison : comparison
+  })
+  return sorted
+}

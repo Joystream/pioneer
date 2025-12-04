@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { generatePath } from 'react-router-dom'
 
+import { CastVoteOrderByInput } from '@/common/api/queries'
 import { MILLISECONDS_PER_BLOCK } from '@/common/model/formatters'
 import { asBlock } from '@/common/types'
 import { ElectionRoutes } from '@/council/constants'
@@ -15,7 +16,13 @@ import { LockDetailsProps } from '../types'
 
 export const VoteLockItem = ({ lock, address, isRecoverable }: LockDetailsProps) => {
   const { election } = useCurrentElection()
-  const { data } = useGetCouncilVotesQuery({ variables: { where: { castBy_eq: address } } })
+  const { data } = useGetCouncilVotesQuery({
+    variables: {
+      where: { castBy_eq: address },
+      orderBy: [CastVoteOrderByInput.CreatedAtDesc],
+      limit: 1,
+    },
+  })
   const vote = data?.castVotes[0]
   const eventData = vote?.castEvent?.[0]
   const createdInEvent = eventData && asBlock(eventData)

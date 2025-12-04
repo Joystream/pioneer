@@ -93,6 +93,7 @@ export const BountyFilters = ({ searchSlot, onApply, periodFilter }: BountyFilte
             title={t('filters.period')}
             options={bountyPeriods.map(camelCaseToText)}
             value={period && camelCaseToText(period)}
+            selectSize="l"
             onChange={(value) => {
               dispatch({ type: 'change', field: 'period', value })
               onApply({ ...filters, period: toCamelCase(value) })

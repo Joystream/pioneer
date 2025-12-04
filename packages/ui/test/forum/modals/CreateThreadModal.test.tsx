@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import BN from 'bn.js'
 import React from 'react'
 import { generatePath, MemoryRouter, Route } from 'react-router-dom'
@@ -76,12 +76,14 @@ describe('CreateThreadModal', () => {
   })
 
   describe('Requirements failed', () => {
-    it('No active member', () => {
+    it('No active member', async () => {
       useMyMemberships.active = undefined
       renderModal()
-      expect(useModal.showModal).toBeCalledWith({
-        modal: 'OnBoardingModal',
-      })
+      await waitFor(() =>
+        expect(useModal.showModal).toBeCalledWith({
+          modal: 'OnBoardingModal',
+        })
+      )
     })
 
     it('Insufficient funds for minimum fee', async () => {

@@ -68,10 +68,10 @@ describe('useProposals', () => {
             stage: 'executed',
           },
         })
-        expect(result.proposals.length).toBe(2)
+        expect(result.proposals.length).toBe(3)
         result.proposals.forEach((proposal) => {
           expect(proposal.status).toBe('executed')
-          expect(['1', '2']).toContain(proposal.id)
+          expect(['1', '2', '3']).toContain(proposal.id)
         })
       })
 
@@ -181,8 +181,8 @@ describe('useProposals', () => {
       })
 
       expect(byProposer.length).toBe(4)
-      expect(byStatus.length).toBe(2)
-      expect(byProposerAndStatus.length).toBe(1)
+      expect(byStatus.length).toBe(3)
+      expect(byProposerAndStatus.length).toBe(2)
 
       const byProposerIntersectByStatus = byProposer.filter((p) => byStatus.find((s) => s.id == p.id))
       expect(byProposerIntersectByStatus).toEqual(byProposerAndStatus)

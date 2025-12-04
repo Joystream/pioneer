@@ -14,7 +14,7 @@ import { Avatar } from '@/memberships/components/Avatar'
 import { ExternalResourceLink } from '@/memberships/constants'
 import { MemberWithDetails } from '@/memberships/types'
 
-interface ValidatorInfoProps {
+export interface ValidatorInfoProps {
   address: Address
   member?: MemberWithDetails
   size?: 's' | 'l'

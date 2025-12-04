@@ -1,5 +1,8 @@
+import { registry } from '@joystream/types'
 import { ApiRx } from '@polkadot/api'
 import { Events } from '@polkadot/api/base/Events'
+import { Metadata } from '@polkadot/types'
+import { MetadataLatest } from '@polkadot/types/interfaces'
 import { distinctUntilChanged, filter, fromEvent, map, Observable, share } from 'rxjs'
 
 import { firstWhere } from '@/common/utils/rx'
@@ -21,6 +24,7 @@ export class ProxyApi extends Events {
   consts: ApiRx['consts']
   genesisHash: ApiRx['genesisHash']
   runtimeVersion: ApiRx['runtimeVersion']
+  runtimeMetadata: MetadataLatest
   _async: AsyncProps
 
   static create(providerEndpoint: string) {
@@ -59,6 +63,9 @@ export class ProxyApi extends Events {
       this.consts = initPayload.consts
       this.genesisHash = initPayload.genesisHash
       this.runtimeVersion = initPayload.runtimeVersion
+      const metadata = new Metadata(registry, initPayload.runtimeMetadata)
+      registry.setMetadata(metadata)
+      this.runtimeMetadata = metadata.asLatest
       this.derive = query('derive', messages, postMessage)
       this.query = query('query', messages, postMessage)
       this.rpc = query('rpc', messages, postMessage)

@@ -2,6 +2,7 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import styled from 'styled-components'
 
+import { useApi } from '@/api/hooks/useApi'
 import { CloseButton } from '@/common/components/buttons'
 import { InlineToggleWrap, InputComponent, Label, ToggleCheckbox, InputNumber } from '@/common/components/forms'
 import { Row } from '@/common/components/Modal'
@@ -15,7 +16,9 @@ import { SelectMember } from '@/memberships/components/SelectMember'
 import { Member } from '@/memberships/types'
 
 export const TriggerAndDiscussionStep = () => {
+  const { api } = useApi()
   const { watch, setValue } = useFormContext()
+
   const [discussionWhitelist, isDiscussionClosed, trigger, triggerBlock] = watch([
     'triggerAndDiscussion.discussionWhitelist',
     'triggerAndDiscussion.isDiscussionClosed',
@@ -23,16 +26,15 @@ export const TriggerAndDiscussionStep = () => {
     'triggerAndDiscussion.triggerBlock',
   ])
 
-  const addMemberToWhitelist = (member: Member) => {
-    setValue('triggerAndDiscussion.discussionWhitelist', [...discussionWhitelist, member], { shouldValidate: true })
-  }
-  const removeMemberFromWhitelist = (member: Member) => {
-    setValue(
-      'triggerAndDiscussion.discussionWhitelist',
-      discussionWhitelist.filter((whitelistMember: Member) => whitelistMember.id !== member.id),
-      { shouldValidate: true }
-    )
-  }
+  const maxWhiteList = api?.consts.proposalsDiscussion.maxWhiteListSize.toNumber() ?? 1
+
+  const addMemberToWhitelist = (member: Member) => updateWhitelist([...discussionWhitelist, member])
+
+  const removeMemberFromWhitelist = (member: Member) =>
+    updateWhitelist(discussionWhitelist.filter((m: Member) => m.id !== member.id))
+
+  const updateWhitelist = (members: Member[]) =>
+    setValue('triggerAndDiscussion.discussionWhitelist', members, { shouldValidate: true })
 
   return (
     <RowGapBlock gap={24}>
@@ -88,14 +90,19 @@ export const TriggerAndDiscussionStep = () => {
               label="Add member to whitelist"
               required
               inputSize="l"
+              disabled={discussionWhitelist.length < maxWhiteList ? false : true}
             >
               <SelectMember
                 onChange={(member) => addMemberToWhitelist(member)}
                 filter={(member) =>
                   !discussionWhitelist.find((whitelistMember: Member) => whitelistMember.id === member.id)
                 }
+                disabled={discussionWhitelist.length < maxWhiteList ? false : true}
               />
             </InputComponent>
+            {discussionWhitelist.length >= maxWhiteList && (
+              <WhitelistMaxinum>Maximum whitelist size of {maxWhiteList} members is reached</WhitelistMaxinum>
+            )}
             <WhitelistContainer>
               {discussionWhitelist.map((member: Member) => (
                 <WhitelistMember key={member.id}>
@@ -138,4 +145,10 @@ const WhitelistRemoveMember = styled(CloseButton)`
   width: 16px;
   height: 16px;
   color: ${Colors.Black[900]};
+`
+const WhitelistMaxinum = styled.div`
+  background-color: ${Colors.Blue[400]};
+  padding: 10px 15px;
+  border-radius: 3px;
+  color: white;
 `

@@ -1,5 +1,6 @@
+import BN from 'bn.js'
 import { useMemo } from 'react'
-import { combineLatest, map, switchMap } from 'rxjs'
+import { combineLatest, map, of, switchMap } from 'rxjs'
 
 import { useApi } from '@/api/hooks/useApi'
 import { BN_ZERO, ERA_PER_MONTH } from '@/common/constants'
@@ -52,18 +53,29 @@ export const useStakingStatistics = ({
 
   const validatorsRewards = useObservable(() => validatorsRewards$, [validatorsRewards$])
 
+  const eraDuration = useObservable(() => api && of(api.consts.babe.expectedBlockTime), [api?.isConnected])
+  const now = useObservable(
+    () => api?.derive.chain.bestNumber().pipe(map((blockNumber) => new BN(blockNumber.toNumber()))),
+    [api?.isConnected]
+  )
+  const allValidatorsCount = useObservable(() => api?.query.staking.counterForValidators(), [api?.isConnected])
+
   return {
     eraIndex: activeEra?.index,
     eraStartedOn: activeEra?.startedOn,
     eraStake: activeEra?.eraStake,
     idealStaking: totalIssuance?.divn(2),
+    currentStaking: activeEra?.eraStake,
     stakingPercentage,
     activeValidatorsCount,
     activeNominatorsCount,
     allNominatorsCount,
+    allValidatorsCount,
     totalRewards: validatorsRewards
       ?.slice(-ERA_PER_MONTH) // Make it explicit that it's per month
       .reduce((sum, { totalReward }) => sum.add(totalReward), BN_ZERO),
     lastRewards: validatorsRewards?.at(-1)?.totalReward,
+    eraDuration,
+    now,
   }
 }

@@ -1,35 +1,33 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { Link } from '@/common/components/Link'
+import { ButtonPrimary } from '@/common/components/buttons'
+import { Checkbox } from '@/common/components/forms'
+import { ArrowRightIcon } from '@/common/components/icons'
+import { Modal, ModalBody, ModalFooter, ModalHeader } from '@/common/components/Modal'
 import { RowGapBlock } from '@/common/components/page/PageContent'
+import { TextMedium } from '@/common/components/typography'
+import { Colors } from '@/common/constants'
 import { useLocalStorage } from '@/common/hooks/useLocalStorage'
-import { useToggle } from '@/common/hooks/useToggle'
-
-import { ButtonPrimary } from '../../common/components/buttons'
-import { Checkbox } from '../../common/components/forms'
-import { ArrowRightIcon } from '../../common/components/icons'
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '../../common/components/Modal'
-import { TextMedium } from '../../common/components/typography'
+import { useModal } from '@/common/hooks/useModal'
 
 export const ValidatorsInfo = () => {
   const title = 'Nominating validators on Joystream'
   const buttonName = 'Start nominating'
-  const [check, setCheck] = useToggle(false)
-  const [notShowAgain, setNotShowAgain] = useLocalStorage<boolean>('ValidatorsPageCheck')
-  const [showModal, setShowModal] = useState<boolean>(true)
+
+  const { hideModal } = useModal()
+  const [pageCheck, showInfo] = useLocalStorage<boolean>('ValidatorsPageCheck')
+
   const closeModal = () => {
-    setShowModal(false)
-  }
-  const checkModal = () => {
-    setNotShowAgain(check)
-    closeModal()
+    hideModal()
+    showInfo(true)
   }
 
-  if (!notShowAgain && showModal)
+  if (!pageCheck)
     return (
-      <Modal modalSize="s" onClose={checkModal}>
-        <ModalHeader title={title} onClick={checkModal} />
+      <Modal modalSize="s" onClose={closeModal}>
+        <ModalHeader title={title} onClick={closeModal} />
         <ModalBody>
           <RowGapBlock gap={16}>
             <RowGapBlock gap={24}>
@@ -46,22 +44,25 @@ export const ValidatorsInfo = () => {
               </TextMedium>
               <TextMedium>
                 To begin, review each validator's performance metrics by clicking on their name in the list. When you're
-                ready to nominate, add the validators you'd like to nominate by clicking the "Nominate" button on the
-                list or directly on the validator’s profile. Once you've selected a validator, click the "Proceed"
+                ready to nominate, add the validators you'd like to nominate to by clicking the "Nominate" button on the
+                list or directly on the validator’s profile. Once you've selected your validators, click the "Proceed"
                 button to initiate the nomination process.
               </TextMedium>
             </RowGapBlock>
             <TextMedium>
               You can learn more about the Pioneer nomination{' '}
-              <Link href="https://handbook.joystream.org/system/nomination">system here</Link>.
+              <Link to="#" style={{ color: Colors.Blue[500], textDecoration: 'underline' }}>
+                system here
+              </Link>
+              .
             </TextMedium>
           </RowGapBlock>
         </ModalBody>
         <InfoModalFooter>
-          <Checkbox id="" onChange={setCheck} isChecked={check}>
+          <Checkbox id="" onChange={() => {}} isChecked={false}>
             Do not show this again.
           </Checkbox>
-          <ButtonPrimary size="medium" onClick={checkModal}>
+          <ButtonPrimary size="medium" onClick={closeModal}>
             {buttonName} <ArrowRightIcon white />
           </ButtonPrimary>
         </InfoModalFooter>

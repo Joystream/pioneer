@@ -1,12 +1,10 @@
 import React, { ReactNode, useCallback } from 'react'
 
-import { ButtonSize } from '@/common/components/buttons'
+import { ButtonSize, ButtonPrimary } from '@/common/components/buttons'
 import { TransactionButtonWrapper } from '@/common/components/buttons/TransactionButton'
 import { useModal } from '@/common/hooks/useModal'
 import { useOnBoarding } from '@/common/hooks/useOnBoarding'
 import { useTransactionStatus } from '@/common/hooks/useTransactionStatus'
-
-import { MembershipActionButton } from './CurrentMember'
 
 interface AddMembershipButtonProps {
   className?: string
@@ -25,9 +23,9 @@ export const AddMembershipButton = ({ className, children, size }: AddMembership
 
   return (
     <TransactionButtonWrapper>
-      <MembershipActionButton onClick={openModal} className={className} size={size} disabled={isTransactionPending}>
+      <ButtonPrimary onClick={openModal} className={className} size={size} disabled={isTransactionPending}>
         {children}
-      </MembershipActionButton>
+      </ButtonPrimary>
     </TransactionButtonWrapper>
   )
 }
