@@ -383,7 +383,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Mainnet network in the setting.
-- Documentation link to the [Joystream Handbook](https://joystream.gitbook.io/testnet-workspace) for each working group.
+- Documentation link to the [Joystream Handbook](https://handbook.joystream.org) for each working group.
 - Refresh auto-conf network button.
 - RPC blockheight and latest processed block in settings.
 
@@ -403,7 +403,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Large election revealing stage (long term fix).
 - Recovering the stake locked when applying to an opening.
-- Some broken [Joystream Handbook](https://joystream.gitbook.io/testnet-workspace) links.
+- Some broken [Joystream Handbook](https://handbook.joystream.org) links.
 - Replace placeholder text on vesting tooltips.
 - Broken text on the insufficient funds modal.
 - Proposal discussion order.
