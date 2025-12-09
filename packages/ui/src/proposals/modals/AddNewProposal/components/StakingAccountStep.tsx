@@ -35,7 +35,7 @@ export const StakingAccountStep = ({ requiredStake }: StakingAccountStepProps) =
           <InputComponent
             label="Select account for Staking"
             tooltipText="The budget is the root resource pool for all token minting in the working group, and the size of the pool is denoted by budget."
-            tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1"
+            tooltipLinkURL="https://handbook.joystream.org/system/accounts-and-staking#locks"
             tooltipLinkText="Learn more"
             inputSize={isMobile ? 'xxl' : 'l'}
             required
