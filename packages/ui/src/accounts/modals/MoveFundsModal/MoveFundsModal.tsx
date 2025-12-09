@@ -80,7 +80,7 @@ export const MoveFundsModal = () => {
               <>
                 Unfortunately, you don’t have any accounts suitable for {actionNameMapper(lock)}. You need at least{' '}
                 <TokenValue value={requiredStake} /> on the balances free from{' '}
-                <a href="https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1">
+                <a href="https://handbook.joystream.org/system/accounts-and-staking#locks">
                   rivalrous locks.
                 </a>
               </>
