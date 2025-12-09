@@ -80,12 +80,12 @@ The application is divided to 4 types of building blocks (located in the `src` d
 * A domain/use-case specific:
   * `accounts` – domain of Polkadot's accounts handling, transferring tokens, balances, etc
   * `api` – domain containing Joystream's API specific code: hooks, providers, utilities, etc
-  * `council` – [council governance](https://joystream.gitbook.io/joystream-handbook/governance/council)
-  * `forum` - [forum subsystem](https://joystream.gitbook.io/joystream-handbook/subsystems/forum)
-  * `memberships` – [memberships management](https://joystream.gitbook.io/joystream-handbook/subsystems/membership)
+  * `council` – [council governance](https://handbook.joystream.org/system/council)
+  * `forum` - [forum subsystem](https://handbook.joystream.org/system/forum)
+  * `memberships` – [memberships management](https://handbook.joystream.org/system/memberships)
   * `working-groups`
-    – [working group governance](https://joystream.gitbook.io/joystream-handbook/governance/working-groups)
-  * `proposals` – [proposal system](https://joystream.gitbook.io/joystream-handbook/governance/proposals)
+    – [working group governance](https://handbook.joystream.org/system/working-groups)
+  * `proposals` – [proposal system](https://handbook.joystream.org/system/proposal-system)
   * `bounty`, `financials`, `overview`: are domains which are not available yet but coming soon.
   * `services` – Contains internationalization utilities.
 * `app` – Anything related to the application

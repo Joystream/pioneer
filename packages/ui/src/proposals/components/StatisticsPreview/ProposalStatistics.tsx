@@ -6,7 +6,7 @@ import { isDefined } from '@/common/utils'
 import { VoteCount } from '@/proposals/hooks/useVotingRounds'
 import { ProposalConstants } from '@/proposals/types'
 
-const tooltipLinkURL = 'https://joystream.gitbook.io/joystream-handbook/governance/proposals#concepts'
+const tooltipLinkURL = 'https://handbook.joystream.org/system/proposal-system#concepts'
 
 interface ProposalStatisticsProps {
   voteCount: VoteCount

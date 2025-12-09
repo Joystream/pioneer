@@ -5,7 +5,7 @@ import { BalanceLock, LockType, WorkerLocks, WorkerLockType } from '../types'
 
 // Mapping from:
 // - [/runtime/src/constants.rs:104](https://github.com/Joystream/joystream/blob/5a153fa18351a8fefd919a7d5230b911f180e13d/runtime/src/constants.rs#L104)
-// - and the [handbook](https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks-1)
+// - and the [handbook](https://handbook.joystream.org/system/accounts-and-staking#locks)
 export const lockTypes: { [key: string]: LockType } = {
   ['staking ']: 'Staking',
   ['vesting ']: 'Vesting',

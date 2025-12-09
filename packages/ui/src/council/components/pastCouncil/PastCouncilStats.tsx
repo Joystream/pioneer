@@ -26,7 +26,7 @@ export const PastCouncilStats = ({
       title="Total missed rewards"
       value={totalMissedRewards}
       tooltipText="Total rewards missed. Missed rewards are unallocated rewards from the council budget."
-      tooltipLinkURL="https://joystream.gitbook.io/testnet-workspace/system/council#budget"
+      tooltipLinkURL="https://handbook.joystream.org/system/council#budget"
     />
     <TokenValueStat
       title="Total paid rewards"
@@ -37,7 +37,7 @@ export const PastCouncilStats = ({
       title="Total spent on proposals"
       value={totalSpentOnProposals}
       tooltipText="Total council budget spent on proposals, including funding proposals. More details on proposals spending can be found in the Overview module."
-      tooltipLinkURL="https://joystream.gitbook.io/joystream-handbook/governance/council#council"
+      tooltipLinkURL="https://handbook.joystream.org/system/council"
     />
   </Statistics>
 )
