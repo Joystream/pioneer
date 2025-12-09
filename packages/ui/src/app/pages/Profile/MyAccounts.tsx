@@ -25,7 +25,7 @@ const hints = {
   },
   locked: {
     title: 'Total locked balance',
-    tooltipLinkURL: 'https://joystream.gitbook.io/joystream-handbook/key-concepts/staking#locks',
+    tooltipLinkURL: 'https://handbook.joystream.org/system/accounts-and-staking#locks',
     tooltipText:
       'Staking, or bonding, is the act of locking up funds under some terms so that they are not transferable and otherwise not entirely usable as they otherwise would be. The terms, referred to as unstaking terms describe the circumstances under which the funds may begin to cease being staked. The way staking is implemented is with the use of account.',
   },
