@@ -20,7 +20,6 @@ import {
   ProposalType,
   SignalTextDetail,
   CountDetail,
-  ProposalDetail,
   OpeningLinkDetail,
   UpdateChannelPayoutsDetail,
   UpdatePalletFrozenStatusDetail,
@@ -260,15 +259,6 @@ const hashMapper =
     return [{ label, value, tooltip, renderType: 'Hash' }]
   }
 
-const proposalLinkMapper: Mapper<ProposalDetail, 'proposal'> = (value) => {
-  return [
-    {
-      label: 'Proposal',
-      value,
-      renderType: 'ProposalLink',
-    },
-  ]
-}
 const openingLinkMapper: Mapper<OpeningLinkDetail, 'openingId'> = (value) => {
   return [
     {
@@ -328,7 +318,6 @@ const mappers: Partial<Record<ProposalDetailsKeys, Mapper<any, any>>> = {
   member: memberMapper,
   amount: amountMapper(),
   count: countMapper(),
-  proposal: proposalLinkMapper,
   openingId: openingLinkMapper,
   channelCashoutsEnabled: booleanMapper,
   minCashoutAllowed: amountMapper('Minimal Cashout'),

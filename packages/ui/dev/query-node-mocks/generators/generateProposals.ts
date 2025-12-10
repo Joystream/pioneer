@@ -42,8 +42,7 @@ const randomLastStatuses = randomFromWeightedSet<ProposalStatus[]>(
   [1, ['gracing', 'canceledByRuntime']],
   [2, ['expired']],
   [1, ['cancelled']],
-  [1, ['canceledByRuntime']],
-  [1, ['vetoed']]
+  [1, ['canceledByRuntime']]
 )
 const isIntermediateStatus = (status: ProposalStatus) => proposalActiveStatuses.includes(status)
 
@@ -252,13 +251,7 @@ const ProposalDetailsGenerator: Partial<Record<ProposalType, (mocks: MocksForPro
     data: {
       newRewardPerBlock: randomFromRange(100, 500),
     }
-  }),
-  veto: () => ({
-    type: 'veto',
-    data: {
-      proposalId: '0',
-    }
-  }),
+  })
 }
 
 const getLeadStakeData = (mocks: MocksForProposals) => ({

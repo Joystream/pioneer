@@ -1,6 +1,6 @@
 import escapeStringRegexp from 'escape-string-regexp'
 import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react'
-import { generatePath, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Close, CloseButton } from '@/common/components/buttons'
@@ -8,7 +8,7 @@ import { Input, InputComponent, InputIcon, InputNotification, InputText } from '
 import { SearchIcon } from '@/common/components/icons'
 import { Loading } from '@/common/components/Loading'
 import { RowGapBlock } from '@/common/components/page/PageContent'
-import { SearchResultItem } from '@/common/components/Search/SearchResultItem'
+import { ThreadGroupResult } from '@/common/components/Search/ThreadGroupResult'
 import { SidePane, SidePaneBody, SidePaneGlass } from '@/common/components/SidePane'
 import { Tabs } from '@/common/components/Tabs'
 import { Fonts } from '@/common/constants'
@@ -17,7 +17,6 @@ import { useModal } from '@/common/hooks/useModal'
 import { useResponsive } from '@/common/hooks/useResponsive'
 import { SearchKind, useSearch } from '@/common/hooks/useSearch'
 import { ModalWithDataCall } from '@/common/providers/modal/types'
-import { ThreadItemBreadcrumbs } from '@/forum/components/threads/ThreadItemBreadcrumbs'
 import { ForumRoutes } from '@/forum/constant'
 
 import { useDebounce } from '../../hooks/useDebounce'
@@ -32,7 +31,7 @@ export const SearchResultsModal = () => {
   const isValid = () => !debouncedSearch || debouncedSearch.length === 0 || debouncedSearch.length > 2
   const debouncedSearch = useDebounce(search, 400)
   const [validSearch, setLastValidSearch] = useState(debouncedSearch)
-  const { forum, forumPostCount, isLoading } = useSearch(validSearch, activeTab)
+  const { forumGrouped, forumPostCount, isLoading } = useSearch(validSearch, activeTab)
   const pattern = useMemo(() => (validSearch ? RegExp(escapeStringRegexp(validSearch), 'ig') : null), [validSearch])
   useEffect(() => {
     if (isValid() && debouncedSearch.length !== 0) {
@@ -90,18 +89,16 @@ export const SearchResultsModal = () => {
             {isLoading ? (
               <Loading />
             ) : activeTab === 'FORUM' ? (
-              forum.map(({ id, text, thread }, index) => (
-                <SearchResultItem
-                  key={index}
-                  pattern={pattern}
-                  breadcrumbs={<ThreadItemBreadcrumbs id={thread.categoryId} />}
-                  to={`${generatePath(ForumRoutes.thread, { id: thread.id })}?post=${id}`}
-                  title={thread.title}
-                  onClick={() => (size === 'xxs' || size === 'xs') && hideModal()}
-                >
-                  {text}
-                </SearchResultItem>
-              ))
+              forumGrouped && forumGrouped.length > 0 ? (
+                forumGrouped.map((group) => (
+                  <ThreadGroupResult
+                    key={group.threadId}
+                    group={group}
+                    pattern={pattern}
+                    onItemClick={() => (size === 'xxs' || size === 'xs') && hideModal()}
+                  />
+                ))
+              ) : null
             ) : null}
           </RowGapBlock>
         </SidePaneBody>

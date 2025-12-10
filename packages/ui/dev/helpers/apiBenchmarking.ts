@@ -7,7 +7,7 @@ import { benchmark } from '../../src/common/utils/benchmark'
 import { ALICE } from '../node-mocks/data/addresses'
 import { withPromiseApi, withRxApi } from '../node-mocks/lib/api'
 
-const ENDPOINT = 'wss://rpc.joystream.org:9944' // TODO pass as a parameter
+const ENDPOINT = 'wss://rpc.joystream.org' // TODO pass as a parameter
 const DEFAULT_DURATION = 5_000
 
 export const apiBenchmarking = {

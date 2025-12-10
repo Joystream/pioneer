@@ -10,12 +10,13 @@ import { AccountInfo } from '../AccountInfo'
 
 interface SelectedAccountProps {
   account: Account
+  onDoubleClick?: () => void
 }
-export const SelectedAccount = ({ account }: SelectedAccountProps) => {
+export const SelectedAccount = ({ account, onDoubleClick }: SelectedAccountProps) => {
   const { transferable } = useBalance(account.address) || {}
 
   return (
-    <LockedAccount>
+    <LockedAccount onDoubleClick={onDoubleClick} style={{ cursor: onDoubleClick ? 'pointer' : 'default' }}>
       <AccountInfo account={account} />
       <BalanceInfoInRow>
         <InfoTitle>Transferable balance</InfoTitle>

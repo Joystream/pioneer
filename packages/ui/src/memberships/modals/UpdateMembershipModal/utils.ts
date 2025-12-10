@@ -73,10 +73,12 @@ const hasEdits = (object: Record<string, any>, fields: string[]) => {
 export function createBatch(
   transactionParams: WithNullableValues<UpdateMemberForm>,
   api: Api | undefined,
-  member: Member
+  member: Member,
+  setControllerChange: (arg0: boolean) => void
 ) {
   const hasProfileEdits = hasEdits(transactionParams, ['about', 'handle', 'avatarUri', 'name', 'externalResources'])
   const hasAccountsEdits = hasEdits(transactionParams, ['rootAccount', 'controllerAccount'])
+  const hasControllerChange = hasEdits(transactionParams, ['controllerAccount'])
 
   const transactions: SubmittableExtrinsic<'rxjs'>[] = []
 
@@ -107,6 +109,10 @@ export function createBatch(
       transactionParams.controllerAccount?.address || null
     )
     transactions.push(updateAccounts)
+    if (hasControllerChange) {
+      setControllerChange(true)
+      return updateAccounts
+    }
   }
 
   return api.tx.utility.batch(transactions)

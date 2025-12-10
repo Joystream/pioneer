@@ -163,8 +163,6 @@ export type SetInitialInvitationCountDetails = ProposalDetailsNew<'setInitialInv
 
 export type SetCouncilorRewardDetails = ProposalDetailsNew<'setCouncilorReward', AmountDetail>
 
-export type VetoDetails = ProposalDetailsNew<'veto', ProposalDetail>
-
 export type UpdateChannelPayoutsDetails = ProposalDetailsNew<'updateChannelPayouts', UpdateChannelPayoutsDetail>
 
 export type UpdatePalletFrozenStatusProposalDetails = ProposalDetailsNew<
@@ -210,7 +208,6 @@ export type ProposalDetails =
   | SetInitialInvitationBalanceDetails
   | SetInitialInvitationCountDetails
   | SetCouncilorRewardDetails
-  | VetoDetails
   | UpdateChannelPayoutsDetails
   | UpdatePalletFrozenStatusProposalDetails
   | SetEraPayoutDampingFactorProposalDetails
@@ -396,11 +393,6 @@ const asSetCouncilorReward: DetailsCast<'SetCouncilorRewardProposalDetails'> = (
   amount: asBN(fragment.newRewardPerBlock),
 })
 
-const asVeto: DetailsCast<'VetoProposalDetails'> = (fragment): VetoDetails => ({
-  type: 'veto',
-  proposal: fragment.proposal ?? undefined,
-})
-
 const asUpdateChannelPayouts: DetailsCast<'UpdateChannelPayoutsProposalDetails'> = (
   fragment,
   extra
@@ -480,7 +472,6 @@ const detailsCasts: Partial<Record<ProposalDetailsTypename, DetailsCast<any>>> =
   SetInitialInvitationBalanceProposalDetails: asSetInitialInvitationBalance,
   SetInitialInvitationCountProposalDetails: asSetInitialInvitationCount,
   SetCouncilorRewardProposalDetails: asSetCouncilorReward,
-  VetoProposalDetails: asVeto,
   SetMembershipLeadInvitationQuotaProposalDetails: asSetMembershipLeadInvitationQuota,
   UpdateChannelPayoutsProposalDetails: asUpdateChannelPayouts,
   UpdatePalletFrozenStatusProposalDetails: asUpdatePalletFrozenStatus,

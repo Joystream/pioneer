@@ -10,8 +10,8 @@ import { Era } from '@/validators/components/statistics/Era'
 import { Rewards } from '@/validators/components/statistics/Rewards'
 import { Staking } from '@/validators/components/statistics/Staking'
 import { ValidatorsState } from '@/validators/components/statistics/ValidatorsState'
-import { ValidatorsFilter } from '@/validators/components/ValidatorsFilter'
 import { ValidatorsList } from '@/validators/components/ValidatorsList'
+import { SelectedValidatorsProvider } from '@/validators/context/SelectedValidatorsContext'
 import { useStakingStatistics } from '@/validators/hooks/useStakingStatistics'
 import { useValidatorsList } from '@/validators/hooks/useValidatorsList'
 
@@ -33,38 +33,40 @@ export const ValidatorList = () => {
   } = useStakingStatistics(validatorsQueries)
 
   return (
-    <PageLayout
-      header={
-        <RowGapBlock gap={24}>
-          <PageHeader title="Validators" tabs={<ValidatorsTabs />} />
+    <SelectedValidatorsProvider maxSelection={16}>
+      <PageLayout
+        header={
+          <RowGapBlock gap={24}>
+            <PageHeader title="Validators" tabs={<ValidatorsTabs />} />
 
-          <StatisticsStyle>
-            <ValidatorsState
-              activeValidatorsCount={activeValidatorsCount}
-              allValidatorsCount={allValidatorsCount ?? 0}
-              activeNominatorsCount={activeNominatorsCount ?? 0}
-              allNominatorsCount={allNominatorsCount ?? 0}
-            />
-            <Staking
-              idealStaking={idealStaking ?? BN_ZERO}
-              currentStaking={eraStake ?? BN_ZERO}
-              stakingPercentage={stakingPercentage}
-            />
-            <Era eraStartedOn={eraStartedOn} />
-            <Rewards totalRewards={totalRewards} lastRewards={lastRewards} />
-          </StatisticsStyle>
-          <ValidatorsFilter filter={format.filter} />
-        </RowGapBlock>
-      }
-      main={
-        <ValidatorsList
-          validators={validatorsWithDetails}
-          eraIndex={eraIndex}
-          order={format.order}
-          pagination={format.pagination}
-        />
-      }
-    />
+            <StatisticsStyle>
+              <ValidatorsState
+                activeValidatorsCount={activeValidatorsCount}
+                allValidatorsCount={allValidatorsCount ?? 0}
+                activeNominatorsCount={activeNominatorsCount ?? 0}
+                allNominatorsCount={allNominatorsCount ?? 0}
+              />
+              <Staking
+                idealStaking={idealStaking ?? BN_ZERO}
+                currentStaking={eraStake ?? BN_ZERO}
+                stakingPercentage={stakingPercentage}
+              />
+              <Era eraStartedOn={eraStartedOn} />
+              <Rewards totalRewards={totalRewards} lastRewards={lastRewards} />
+            </StatisticsStyle>
+          </RowGapBlock>
+        }
+        main={
+          <ValidatorsList
+            validators={validatorsWithDetails}
+            eraIndex={eraIndex}
+            order={format.order}
+            pagination={format.pagination}
+          />
+        }
+        fullWidth
+      />
+    </SelectedValidatorsProvider>
   )
 }
 

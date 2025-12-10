@@ -71,7 +71,7 @@ export const TransactionInfoContainer = styled.div`
 export const BalanceInfo = styled.div`
   display: inline-grid;
   position: relative;
-  grid-template-columns: 1fr 168px;
+  grid-template-columns: 1fr 158px;
   grid-template-rows: 1fr;
   align-items: center;
 `

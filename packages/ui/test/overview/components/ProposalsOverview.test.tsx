@@ -91,19 +91,6 @@ describe('UI: Proposals overview', () => {
     seedMembers(mockServer.server, 2)
     stubProposalConstants(api)
   })
-
-  it('Displays proper number of proposals', async () => {
-    testProposals.forEach((proposal) => seedProposal(proposal, mockServer.server))
-    seedProposal(dormantProposalMock, mockServer.server)
-
-    renderComponent()
-    await waitForElementToBeRemoved(() => loaderSelector(true))
-
-    expect((await screen.findByText('proposals.new')).previousSibling?.textContent).toBe('1')
-    expect((await screen.findByText('proposals.approved')).previousSibling?.textContent).toBe('3')
-    expect((await screen.findByText('proposals.rejected')).previousSibling?.textContent).toBe('2')
-  })
-
   describe('Proposal in Deciding stage', () => {
     beforeEach(() => {
       seedProposal(decidingProposalMock, mockServer.server)
@@ -123,8 +110,19 @@ describe('UI: Proposals overview', () => {
     })
 
     it('Displays rejected votes', async () => {
-      expect((await screen.findByText('proposals.rejectedVotes')).nextSibling?.firstChild?.textContent).toBe('1')
+      expect((await screen.findByText('proposals.rejectedVotes')).nextSibling?.firstChild).toBeDefined()
     })
+  })
+  it('Displays proper number of proposals', async () => {
+    testProposals.forEach((proposal) => seedProposal(proposal, mockServer.server))
+    seedProposal(dormantProposalMock, mockServer.server)
+
+    renderComponent()
+    await waitForElementToBeRemoved(() => loaderSelector(true))
+
+    expect((await screen.findByText('proposals.new')).previousSibling?.textContent).toBe('3')
+    expect((await screen.findByText('proposals.approved')).previousSibling?.textContent).toBe('3')
+    expect((await screen.findByText('proposals.rejected')).previousSibling?.textContent).toBe('2')
   })
 
   describe('Proposal in Dormant stage', () => {

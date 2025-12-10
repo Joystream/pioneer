@@ -3,7 +3,7 @@ import { useContext, useEffect, useMemo, useReducer, useState } from 'react'
 import { ValidatorsContext } from '../providers/context'
 import { ValidatorDetailsOrder } from '../types'
 
-const VALIDATOR_PER_PAGE = 7
+const VALIDATOR_PER_PAGE = 50
 const DESCENDING_KEYS: ValidatorDetailsOrder['key'][] = ['apr']
 
 export const useValidatorsList = () => {

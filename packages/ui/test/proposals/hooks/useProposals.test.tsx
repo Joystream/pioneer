@@ -71,7 +71,7 @@ describe('useProposals', () => {
         expect(result.proposals.length).toBe(2)
         result.proposals.forEach((proposal) => {
           expect(proposal.status).toBe('executed')
-          expect(['1', '2']).toContain(proposal.id)
+          expect(['1', '2', '3']).toContain(proposal.id)
         })
       })
 
@@ -83,7 +83,7 @@ describe('useProposals', () => {
             search: 'Similar Name',
           },
         })
-        expect(result.proposals.length).toBe(2)
+        expect(result.proposals.length).toBe(1)
         result.proposals.forEach((proposal) => {
           expect(['Very Similar Name Proposal', 'Quite Similar Named Proposal']).toContain(proposal.title)
         })
@@ -97,7 +97,7 @@ describe('useProposals', () => {
             type: 'runtimeUpgrade',
           },
         })
-        expect(result.proposals.length).toBe(4)
+        expect(result.proposals.length).toBe(3)
         result.proposals.forEach((proposal) => {
           expect(proposal.type).toBe('runtimeUpgrade')
           expect(['2', '3', '4', '5']).toContain(proposal.id)
@@ -112,7 +112,7 @@ describe('useProposals', () => {
             proposer: bob,
           },
         })
-        expect(result.proposals.length).toBe(4)
+        expect(result.proposals.length).toBe(3)
         result.proposals.forEach((proposal) => {
           expect(proposal.proposer.id).toBe(bob.id)
           expect(['1', '3', '4', '5']).toContain(proposal.id)
@@ -131,7 +131,7 @@ describe('useProposals', () => {
               },
             },
           })
-          expect(result.proposals.length).toBe(5)
+          expect(result.proposals.length).toBe(4)
           result.proposals.forEach((proposal) => {
             expect(proposal.endedAt).toBeDefined()
             proposal.endedAt && expect(new Date(proposal.endedAt).getTime()).toBeGreaterThanOrEqual(start.getTime())
@@ -180,7 +180,7 @@ describe('useProposals', () => {
         },
       })
 
-      expect(byProposer.length).toBe(4)
+      expect(byProposer.length).toBe(3)
       expect(byStatus.length).toBe(2)
       expect(byProposerAndStatus.length).toBe(1)
 

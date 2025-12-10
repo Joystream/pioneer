@@ -1,12 +1,19 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const PageContent = styled.div`
+export const PageContent = styled.div<{ fullWidth?: boolean }>`
   position: relative;
   height: 100%;
-  margin-left: max(calc(50% - 583px), 24px);
+  ${({ fullWidth }) =>
+    fullWidth
+      ? css`
+          margin-left: 64px;
+          margin-right: 64px;
+        `
+      : css`
+          margin-left: max(calc(50% - 583px), 24px);
+          margin-right: max(calc(50% - 607px), 0px);
+        `}
   padding: 40px 24px 8px 0;
-  margin-right: max(calc(50% - 607px), 0px);
-
   @media (max-width: 767px) {
     margin-left: 16px;
     padding: 40px 16px 8px 0;

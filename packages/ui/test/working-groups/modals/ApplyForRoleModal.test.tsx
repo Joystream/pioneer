@@ -134,9 +134,11 @@ describe('UI: ApplyForRoleModal', () => {
 
       await renderModal()
 
-      expect(showModal).toBeCalledWith({
-        modal: 'OnBoardingModal',
-      })
+      await waitFor(() =>
+        expect(showModal).toBeCalledWith({
+          modal: 'OnBoardingModal',
+        })
+      )
       showModal.mockClear()
     })
 

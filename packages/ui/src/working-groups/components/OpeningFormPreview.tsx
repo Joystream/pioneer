@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 
 import { BadgesRow, BadgeStatus } from '@/common/components/BadgeStatus'
 import { ButtonLink } from '@/common/components/buttons'
-import { PercentageChart } from '@/common/components/charts/PercentageChart'
 import { MarkdownPreview } from '@/common/components/MarkdownPreview/MarkdownPreview'
 import { MarkdownCollapsibleContainer } from '@/common/components/MarkdownPreview/MarkdownPreviewStyles'
 import { Row } from '@/common/components/Modal'
@@ -11,8 +9,6 @@ import { RowGapBlock } from '@/common/components/page/PageContent'
 import { Label, TextInlineHuge, TextMedium, TextSmall, TokenValue } from '@/common/components/typography'
 import { Fraction } from '@/common/components/typography/Fraction'
 import { formatDateString } from '@/common/model/formatters'
-import { percentTimeLeft } from '@/common/model/percentTimeLeft'
-import { relativeTime } from '@/common/model/relativeTime'
 
 import { useRewardPeriod } from '../hooks/useRewardPeriod'
 import { WorkingGroupOpening } from '../types'
@@ -47,20 +43,13 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
       </Row>
       <Row>
         <RowGapBlock gap={4}>
-          <TimeLeftWrap>
-            <Row>
-              <Label>Time left</Label>
-              {relativeTime(opening.expectedEnding)}
-            </Row>
-            <PercentageChart percentage={percentTimeLeft(opening.expectedEnding, opening.createdAtBlock.timestamp)} />
-          </TimeLeftWrap>
           <TextSmall>Created: {formatDateString(opening.createdAtBlock.timestamp)}</TextSmall>
         </RowGapBlock>
       </Row>
       <Row>
         <RowGapBlock gap={4}>
           <Label>Applicants</Label>
-          <Fraction numerator={opening.hiring.limit} denominator={opening.hiring.current} />
+          <Fraction numerator={opening.hiring.current} denominator={opening.hiring.limit} />
         </RowGapBlock>
       </Row>
       <Row>
@@ -85,8 +74,3 @@ export const OpeningFormPreview = React.memo(({ opening }: OpeningFormPreviewPro
     </RowGapBlock>
   )
 })
-
-const TimeLeftWrap = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 40px;
-`

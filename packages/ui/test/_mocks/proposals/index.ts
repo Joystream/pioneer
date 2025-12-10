@@ -79,7 +79,7 @@ export const testProposals: ProposalMock[] = [
     ...baseMock,
     id: '3',
     title: 'Quite Similar Named Proposal',
-    status: 'vetoed',
+    status: 'dormant',
     createdAt: '2021-07-08T10:00:00.000Z',
     statusSetAtTime: '2021-07-14T10:00:00.000Z',
     details: {
@@ -126,6 +126,27 @@ export const testProposals: ProposalMock[] = [
     id: '6',
     title: 'Gracing Proposal One',
     status: 'gracing',
+    createdAt: '2021-07-21T10:00:00.000Z',
+    statusSetAtTime: '2021-07-24T10:00:00.000Z',
+    details: {
+      type: 'fundingRequest',
+      data: {
+        destinationsList: {
+          destinations: [
+            {
+              account: '5GETSBUMwbLJgUTWMQgU8B2CP7E8kDHR8NoNNZh5tqums9AF',
+              amount: 5000,
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    ...baseMock,
+    id: '8',
+    title: 'Deciding Proposal Two',
+    status: 'deciding',
     createdAt: '2021-07-21T10:00:00.000Z',
     statusSetAtTime: '2021-07-24T10:00:00.000Z',
     details: {

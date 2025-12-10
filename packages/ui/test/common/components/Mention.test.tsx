@@ -74,7 +74,11 @@ describe('UI: Mention', () => {
 
     beforeEach(() => {
       jest.clearAllMocks()
-      render(<ApplicationTooltip {...props} />)
+      render(
+        <MockApolloProvider>
+          <ApplicationTooltip {...props} />
+        </MockApolloProvider>
+      )
     })
 
     it('should render component', () => {
@@ -82,12 +86,20 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      render(<ApplicationTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <ApplicationTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
-      render(<ApplicationTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <ApplicationTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(onMount).toHaveBeenCalledTimes(1)
     })
 
@@ -127,7 +139,11 @@ describe('UI: Mention', () => {
 
     beforeEach(() => {
       jest.clearAllMocks()
-      render(<ForumPostTooltip {...props} />)
+      render(
+        <MockApolloProvider>
+          <ForumPostTooltip {...props} />
+        </MockApolloProvider>
+      )
     })
 
     it('should render component', () => {
@@ -135,12 +151,20 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      render(<ForumPostTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <ForumPostTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
-      render(<ForumPostTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <ForumPostTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(onMount).toHaveBeenCalledTimes(1)
     })
 
@@ -176,7 +200,11 @@ describe('UI: Mention', () => {
 
     beforeEach(() => {
       jest.clearAllMocks()
-      render(<ForumThreadTooltip {...props} />)
+      render(
+        <MockApolloProvider>
+          <ForumThreadTooltip {...props} />
+        </MockApolloProvider>
+      )
     })
 
     it('should render component', () => {
@@ -184,12 +212,20 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      render(<ForumThreadTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <ForumPostTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
-      render(<ForumThreadTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <ForumPostTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(onMount).toHaveBeenCalledTimes(1)
     })
 
@@ -237,7 +273,11 @@ describe('UI: Mention', () => {
 
     beforeEach(() => {
       jest.clearAllMocks()
-      renderResult = render(<OpeningTooltip {...props} />)
+      renderResult = render(
+        <MockApolloProvider>
+          <OpeningTooltip {...props} />
+        </MockApolloProvider>
+      )
     })
 
     it('should render component', () => {
@@ -245,12 +285,20 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      render(<OpeningTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <OpeningTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
-      render(<OpeningTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <OpeningTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(onMount).toHaveBeenCalledTimes(1)
     })
 
@@ -261,7 +309,11 @@ describe('UI: Mention', () => {
 
     it('should render correct distance to the ending date in the future', () => {
       const futureDate = addYears(new Date(), 3).toISOString()
-      renderResult.rerender(<OpeningTooltip {...props} mention={{ ...mention, expectedEnding: futureDate }} />)
+      renderResult.rerender(
+        <MockApolloProvider>
+          <OpeningTooltip {...props} mention={{ ...mention, expectedEnding: futureDate }} />
+        </MockApolloProvider>
+      )
       const expected = formatDistanceToNowStrict(new Date(futureDate))
       expect(screen.getByText(`mentions.tooltips.opening.duration ${expected}`)).toBeInTheDocument()
     })
@@ -320,7 +372,11 @@ describe('UI: Mention', () => {
 
     beforeEach(() => {
       jest.clearAllMocks()
-      render(<ProposalTooltip {...props} />)
+      render(
+        <MockApolloProvider>
+          <ProposalTooltip {...props} />
+        </MockApolloProvider>
+      )
     })
 
     it('should render component', () => {
@@ -328,12 +384,20 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      render(<ProposalTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <ProposalTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
-      render(<ProposalTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <ProposalTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(onMount).toHaveBeenCalledTimes(1)
     })
 
@@ -374,7 +438,11 @@ describe('UI: Mention', () => {
 
     beforeEach(() => {
       jest.clearAllMocks()
-      render(<ProposalDiscussionEntryTooltip {...props} />)
+      render(
+        <MockApolloProvider>
+          <ProposalDiscussionEntryTooltip {...props} />
+        </MockApolloProvider>
+      )
     })
 
     it('should render component', () => {
@@ -382,12 +450,20 @@ describe('UI: Mention', () => {
     })
 
     it('should mount loader when no mention was provided', () => {
-      render(<ProposalDiscussionEntryTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <ProposalDiscussionEntryTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(loaderSelector()).toBeInTheDocument()
     })
 
     it('should call onMount when no mention was provided', () => {
-      render(<ProposalDiscussionEntryTooltip {...props} mention={undefined} />)
+      render(
+        <MockApolloProvider>
+          <ProposalDiscussionEntryTooltip {...props} mention={undefined} />
+        </MockApolloProvider>
+      )
       expect(onMount).toHaveBeenCalledTimes(1)
     })
 

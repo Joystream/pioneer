@@ -129,10 +129,54 @@ const proposalCastByType: Record<
   ProposalDiscussionPostDeletedEvent: asDiscussionPostActivity,
 }
 
-type EventsQueryResult = GetProposalsEventsQuery['events'][0]
+type EventsQueryResult =
+  | GetProposalsEventsQuery['proposalCreatedEvents'][number]
+  | GetProposalsEventsQuery['proposalCancelledEvents'][number]
+  | GetProposalsEventsQuery['proposalStatusUpdatedEvents'][number]
+  | GetProposalsEventsQuery['proposalDecisionMadeEvents'][number]
+  | GetProposalsEventsQuery['proposalDiscussionThreadModeChangedEvents'][number]
+  | GetProposalsEventsQuery['proposalExecutedEvents'][number]
+  | GetProposalsEventsQuery['proposalVotedEvents'][number]
+  | GetProposalsEventsQuery['proposalDiscussionPostCreatedEvents'][number]
+  | GetProposalsEventsQuery['proposalDiscussionPostUpdatedEvents'][number]
+  | GetProposalsEventsQuery['proposalDiscussionPostDeletedEvents'][number]
 
 const isProposalEvent = (fields: EventsQueryResult): fields is ProposalEventFieldsFragment =>
   fields.__typename in proposalCastByType
 
-export const asProposalActivities = (events: EventsQueryResult[]) =>
-  events.filter(isProposalEvent).map((eventFields) => proposalCastByType[eventFields.__typename](eventFields))
+type ProposalsEventsData = {
+  proposalCreatedEvents: GetProposalsEventsQuery['proposalCreatedEvents']
+  proposalCancelledEvents: GetProposalsEventsQuery['proposalCancelledEvents']
+  proposalStatusUpdatedEvents: GetProposalsEventsQuery['proposalStatusUpdatedEvents']
+  proposalDecisionMadeEvents: GetProposalsEventsQuery['proposalDecisionMadeEvents']
+  proposalDiscussionThreadModeChangedEvents: GetProposalsEventsQuery['proposalDiscussionThreadModeChangedEvents']
+  proposalExecutedEvents: GetProposalsEventsQuery['proposalExecutedEvents']
+  proposalVotedEvents: GetProposalsEventsQuery['proposalVotedEvents']
+  proposalDiscussionPostCreatedEvents: GetProposalsEventsQuery['proposalDiscussionPostCreatedEvents']
+  proposalDiscussionPostUpdatedEvents: GetProposalsEventsQuery['proposalDiscussionPostUpdatedEvents']
+  proposalDiscussionPostDeletedEvents: GetProposalsEventsQuery['proposalDiscussionPostDeletedEvents']
+}
+
+export const asProposalActivities = (data: ProposalsEventsData) => {
+  // Merge all event arrays
+  const allEvents: EventsQueryResult[] = [
+    ...data.proposalCreatedEvents,
+    ...data.proposalCancelledEvents,
+    ...data.proposalStatusUpdatedEvents,
+    ...data.proposalDecisionMadeEvents,
+    ...data.proposalDiscussionThreadModeChangedEvents,
+    ...data.proposalExecutedEvents,
+    ...data.proposalVotedEvents,
+    ...data.proposalDiscussionPostCreatedEvents,
+    ...data.proposalDiscussionPostUpdatedEvents,
+    ...data.proposalDiscussionPostDeletedEvents,
+  ]
+
+  // Sort by inBlock descending (most recent first)
+  const sortedEvents = allEvents.sort((a, b) => b.inBlock - a.inBlock)
+
+  // Convert to activities
+  return sortedEvents
+    .filter(isProposalEvent)
+    .map((eventFields) => proposalCastByType[eventFields.__typename](eventFields))
+}

@@ -27,7 +27,7 @@ export const useOpeningsPagination = ({ groupId, type, page = 1 }: UseOpeningsPa
     limit: OPENINGS_PER_PAGE,
     offset: (page - 1) * OPENINGS_PER_PAGE,
     where,
-    order: [WorkingGroupOpeningOrderByInput.CreatedAtDesc, WorkingGroupOpeningOrderByInput.RuntimeIdDesc],
+    order: WorkingGroupOpeningOrderByInput.CreatedAtDesc,
   }
 
   const { data, loading, error } = useGetWorkingGroupOpeningsQuery({ variables })

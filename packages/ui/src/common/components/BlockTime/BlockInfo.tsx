@@ -62,4 +62,6 @@ export const BlockInfoContainer = styled.span<Omit<BlockInfoProp, 'block'>>`
     `};
 `
 
-export const BlockNetworkInfo = styled(TextSmall).attrs({ lighter: true })``
+export const BlockNetworkInfo = styled(TextSmall).attrs({ lighter: true })`
+  font-size: 12px;
+`

@@ -1,4 +1,4 @@
-import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
+import { AnimateSharedLayout } from 'framer-motion'
 import React from 'react'
 import { generatePath } from 'react-router-dom'
 import styled from 'styled-components'
@@ -6,35 +6,29 @@ import styled from 'styled-components'
 import { useMyAccounts } from '@/accounts/hooks/useMyAccounts'
 import { SidebarConnections } from '@/app/components/SidebarConnections'
 import { MembersRoutes, ProfileRoutes } from '@/app/constants/routes'
-import { BountyRoutes } from '@/bounty/constants'
-import { Arrow } from '@/common/components/icons'
 import { LinkSymbol, LinkSymbolStyle, PolkadotSymbol } from '@/common/components/icons/symbols'
 import { ExplorerSymbol } from '@/common/components/icons/symbols/ExplorerSymbol'
-import { AppsIcon } from '@/common/components/page/Sidebar/LinksIcons/AppsIcon'
-import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
-import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
-import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
-import { ContentIcon } from '@/common/components/page/Sidebar/LinksIcons/ContentIcon'
+//import { AppsIcon } from '@/common/components/page/Sidebar/LinksIcons/AppsIcon'
+//import { BandwidthIcon } from '@/common/components/page/Sidebar/LinksIcons/BandwidthIcon'
+//import { BountyIcon } from '@/common/components/page/Sidebar/LinksIcons/BountyIcon'
+//import { ConstitutionIcon } from '@/common/components/page/Sidebar/LinksIcons/ConstitutionIcon'
+//import { ContentIcon } from '@/common/components/page/Sidebar/LinksIcons/ContentIcon'
 import { CouncilIcon } from '@/common/components/page/Sidebar/LinksIcons/CouncilIcon'
 import { ElectionIcon } from '@/common/components/page/Sidebar/LinksIcons/ElectionIcon'
-import { FinancialsIcon } from '@/common/components/page/Sidebar/LinksIcons/FinancialsIcon'
 import { ForumIcon } from '@/common/components/page/Sidebar/LinksIcons/ForumIcon'
 import { MembersIcon } from '@/common/components/page/Sidebar/LinksIcons/MembersIcon'
 import { MyProfileIcon } from '@/common/components/page/Sidebar/LinksIcons/MyProfileIcon'
 import { ProposalsIcon } from '@/common/components/page/Sidebar/LinksIcons/ProposalsIcon'
 import { SettingsIcon } from '@/common/components/page/Sidebar/LinksIcons/SettingsIcon'
-import { StorageIcon } from '@/common/components/page/Sidebar/LinksIcons/StorageIcon'
 import { ValidatorsIcon } from '@/common/components/page/Sidebar/LinksIcons/ValidatorsIcon'
 import { WorkingGroupsIcon } from '@/common/components/page/Sidebar/LinksIcons/WorkingGroupsIcon'
 import { LogoLink } from '@/common/components/page/Sidebar/LogoLink'
 import { Navigation, NavigationInnerWrapper } from '@/common/components/page/Sidebar/Navigation'
-import { NavigationExpandButton } from '@/common/components/page/Sidebar/NavigationExpandButton'
 import { NavigationHeader } from '@/common/components/page/Sidebar/NavigationHeader'
 import { NAVIGATION_LINK_GAP, NavigationLink } from '@/common/components/page/Sidebar/NavigationLink'
 import { Colors, RemoveScrollbar } from '@/common/constants'
 import { useNetworkEndpoints } from '@/common/hooks/useNetworkEndpoints'
 import { useResponsive } from '@/common/hooks/useResponsive'
-import { useToggle } from '@/common/hooks/useToggle'
 import { CouncilRoutes, ElectionRoutes } from '@/council/constants'
 import { ForumRoutes } from '@/forum/constant'
 import { ProfileComponent } from '@/memberships/components/ProfileComponent'
@@ -65,7 +59,6 @@ export const SideBar = () => {
 export const SideBarContent = () => {
   const { wallet } = useMyAccounts()
   const { isMobileWallet } = useResponsive()
-  const [comingSoonListActive, toggleComingSoonListActive] = useToggle(false)
   const [endpoints] = useNetworkEndpoints()
 
   const electionLink = ElectionRoutes.currentElection
@@ -142,6 +135,7 @@ export const SideBarContent = () => {
               Settings
             </NavigationLink>
           </NavigationLinksItem>
+          {/**
           <NavigationLinksItem>
             <NavigationExpandButton active={comingSoonListActive} onClick={toggleComingSoonListActive}>
               <Arrow direction="down" size="20" className="nav-icon" />
@@ -172,11 +166,6 @@ export const SideBarContent = () => {
                   </NavigationLink>
                 </NavigationLinksItem>
                 <NavigationLinksItem>
-                  <NavigationLink to="/inexisting" icon={<ValidatorsIcon />} disabled>
-                    Validators
-                  </NavigationLink>
-                </NavigationLinksItem>
-                <NavigationLinksItem>
                   <NavigationLink to="/inexisting" icon={<AppsIcon />} disabled>
                     Apps
                   </NavigationLink>
@@ -199,6 +188,7 @@ export const SideBarContent = () => {
               </motion.div>
             )}
           </AnimatePresence>
+	  **/}
         </NavigationLinks>
       </AnimateSharedLayout>
       <ProfileComponent />

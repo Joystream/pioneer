@@ -19,7 +19,7 @@ To deploy Pioneer on Vercel click on the button bellow:
    For example, for the Joystream mainnet:
 
    ```shell
-   REACT_APP_MAINNET_NODE_SOCKET=wss://rpc.joystream.org:9944
+   REACT_APP_MAINNET_NODE_SOCKET=wss://rpc.joystream.org
    REACT_APP_MAINNET_QUERY_NODE=https://query.joystream.org/graphql
    REACT_APP_MAINNET_QUERY_NODE_SOCKET=wss://query.joystream.org/graphql
    ```

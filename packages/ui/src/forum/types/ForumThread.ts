@@ -6,7 +6,7 @@ import {
 } from '@/forum/queries'
 import { asMember, Member } from '@/memberships/types'
 
-import { asCategoryBreadcrumbs, CategoryBreadcrumb } from './ForumCategory'
+import { asCategoryBreadcrumbs, CategoryBreadcrumb, CategoryStatusType } from './ForumCategory'
 
 export type ThreadStatusType = ThreadStatus['__typename']
 interface ThreadStatus extends Pick<ForumThreadFieldsFragment['status'], '__typename'> {
@@ -22,6 +22,7 @@ export interface ForumThread {
   isSticky: boolean
   categoryId: string
   categoryTitle: string
+  categoryStatus?: CategoryStatusType
   tags: ForumThreadTag[]
   visiblePostsCount: number
   status: ThreadStatus
@@ -53,6 +54,7 @@ export const asForumThread = (fields: ForumThreadFieldsFragment): ForumThread =>
   isSticky: fields.isSticky,
   categoryId: fields.categoryId,
   categoryTitle: fields.category.title,
+  categoryStatus: fields.category.status?.__typename,
   tags: [],
   visiblePostsCount: fields.visiblePostsCount,
   status: asForumThreadStatus(fields.status),
